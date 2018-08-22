@@ -1,0 +1,23 @@
+﻿<Window x:Class="test.MainScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:test"
+        mc:Ignorable="d"
+        Title="AllCle" Height="450" Width="800">
+    <Grid>
+        <Grid Margin="152,224,-0.4,0">
+
+            <DataGrid Name="g1" AutomationProperties.Name="search_screen">
+                <DataGrid.Columns>
+
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <TextBox Name="Search_Box" HorizontalAlignment="Left" Height="19" Margin="152,205,0,0" TextWrapping="Wrap" Text="과목명" VerticalAlignment="Top" Width="117"/>
+        <Button Name="Search_btn" Content="검색" HorizontalAlignment="Left" Height="19" Margin="269,205,0,0" VerticalAlignment="Top" Width="43" Click="Search_btn_Click"/>
+
+    </Grid>
+</Window>

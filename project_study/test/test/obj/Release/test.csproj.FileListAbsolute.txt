@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\test\test\bin\Release\test.exe.config
+C:\Users\user\source\repos\test\test\bin\Release\test.exe
+C:\Users\user\source\repos\test\test\bin\Release\test.pdb
+C:\Users\user\source\repos\test\test\obj\Release\test.csprojAssemblyReference.cache
+C:\Users\user\source\repos\test\test\obj\Release\MainWindow.g.cs
+C:\Users\user\source\repos\test\test\obj\Release\App.g.cs
+C:\Users\user\source\repos\test\test\obj\Release\test_MarkupCompile.cache
+C:\Users\user\source\repos\test\test\obj\Release\test_MarkupCompile.lref
+C:\Users\user\source\repos\test\test\obj\Release\MainWindow.baml
+C:\Users\user\source\repos\test\test\obj\Release\test.g.resources
+C:\Users\user\source\repos\test\test\obj\Release\test.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\test\test\obj\Release\test.exe
+C:\Users\user\source\repos\test\test\obj\Release\test.pdb
+C:\Users\user\source\repos\test\test\obj\Release\search.g.cs
+C:\Users\user\source\repos\test\test\obj\Release\search.baml
+C:\Users\user\source\repos\test\test\obj\Release\MainScreen.g.cs
+C:\Users\user\source\repos\test\test\obj\Release\MainScreen.baml

@@ -1,0 +1,11 @@
+C:\Users\user\source\repos\WebApplication6\WebApplication6\bin\Release\netcoreapp2.0\WebApplication6.deps.json
+C:\Users\user\source\repos\WebApplication6\WebApplication6\bin\Release\netcoreapp2.0\WebApplication6.runtimeconfig.json
+C:\Users\user\source\repos\WebApplication6\WebApplication6\bin\Release\netcoreapp2.0\WebApplication6.runtimeconfig.dev.json
+C:\Users\user\source\repos\WebApplication6\WebApplication6\bin\Release\netcoreapp2.0\WebApplication6.dll
+C:\Users\user\source\repos\WebApplication6\WebApplication6\bin\Release\netcoreapp2.0\WebApplication6.pdb
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.AssemblyInfo.cs
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.dll
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.pdb
+C:\Users\user\source\repos\WebApplication6\WebApplication6\obj\Release\netcoreapp2.0\WebApplication6.csprojAssemblyReference.cache

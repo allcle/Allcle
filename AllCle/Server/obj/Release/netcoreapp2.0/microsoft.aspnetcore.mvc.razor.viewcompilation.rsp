@@ -1,0 +1,5 @@
+c:\Users\user\source\repos\AllCle\Server
+--output-path=obj\Release\netcoreapp2.0\
+--application-name=Server
+--content-root=c:\Users\user\source\repos\AllCle\Server
+--file=

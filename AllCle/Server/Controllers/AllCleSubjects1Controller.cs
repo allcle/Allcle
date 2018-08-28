@@ -18,6 +18,7 @@ namespace Server.Controllers
     public class AllCleSubjects1Controller : Controller
     {
         private ISubjectRepository1 _repo;   // ISubjectRepository class의 객체 _repo 생성.
+        
 
         // 의존성 주입: ISubjectRepository의 인스턴스를 SubjectRepository의 인스턴스로
         // Startup.cs에서 설정한 DI를 생성자를 이용하여 받는 코드 구현이다.
@@ -25,7 +26,59 @@ namespace Server.Controllers
         {
             _repo = repo;
         }
+        [Route("{time}/{subject}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOnSubjectOnSearchOff(string time, string subject)  //남은시간에서만, 담은과목 제외
+        {
+            return _repo.GetTimeOnSubjectOnSearchOff(time, subject);
+        }
+        [Route("{time}/subjectfilteroff")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOnSubjectOffSearchOff(string time)               //담은 과목만 제외
+        {
+            return _repo.GetTimeOnSubjectOffSearchOff(time);
+        }
+        [Route("timefilteroff/{subject}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOffSubjectOnSearchOff(string subject)                  //남은 시간만에서만
+        {
+            return _repo.GetTimeOffSubjectOnSearchOff(subject);
+        }
+        [Route("timefilteroff/subjectfilteroff")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOffSubjectOffSearchOff()                             //전체 모든 과목 보기
+        {
+            return _repo.GetTimeOffSubjectOffSearchOff();
+        }
+        [Route("{time}/{subject}/{search}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOnSubjectOnSearchOn(string time, string subject, string search) //남은시간에서만, 담은과목제외, 검색
+        {
+            return _repo.GetTimeOnSubjectOnSearchOn(time, subject, search);
+        }
+        [Route("timefilteroff/{subject}/{search}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOffSubjectOnSearchOn(string subject, string search)              //담은 과목 제외하고 검색
+        {
+            return _repo.GetTimeOffSubjectOnSearchOn(subject, search);
+        }
+        [Route("{time}/subjectfilteroff/{search}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOnSubjectOffSearchOn(string time, string search)                 //남은 시간에서만 검색
+        {
+            return _repo.GetTimeOnSubjectOffSearchOn(time, search);
+        }
+        [Route("timefilteroff/subjectfilteroff/{search}")]
+        [HttpGet]
+        public IEnumerable<Subject> GetTimeOffSubjectOffSearchOn(string search)                              //그냥 과목검색
+        {
+            return _repo.GetTimeOffSubjectOffSearchOn(search);
+        }
 
+
+
+
+        /*
         [HttpGet]
         public IEnumerable<Subject> Get()   // 실행 시 기본으로 출력되는 url. 기본적인 localhost 주소에 의해 출력되는 코드이다.
         {
@@ -64,6 +117,9 @@ namespace Server.Controllers
         {
             _repo.AddSubject(Subject);                                      // 로그인할 때 사용하는 메소드
             return Subject;
-        }
+        }*/
+
+
+
     }
 }

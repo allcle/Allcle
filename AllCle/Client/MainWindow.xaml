@@ -5,16 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="AllCle" Height="450" Width="800">
-    <Grid OpacityMask="#FFFFF4F4">
-        <Grid Margin="176,204,163.6,78">
-            <PasswordBox x:Name="PW_Box" HorizontalAlignment="Left" Height="40" Margin="0,46,0,0" VerticalAlignment="Top" Width="302" UseLayoutRounding="False"/>
-            <TextBox x:Name="ID_Box" HorizontalAlignment="Left" Height="40" TextWrapping="Wrap" Text="ID" VerticalAlignment="Top" Width="302" AcceptsTab="True"/>
-            <Button x:Name="Login_btn" Content="Log in" HorizontalAlignment="Left" Height="86" Margin="319,0,0,0" VerticalAlignment="Top" Width="123" Click="Login_btn_Click" Background="#FFCBC1C1" Foreground="#FFDF2525" BorderBrush="Black" HorizontalContentAlignment="Center" Padding="0"/>
-            <Button x:Name="Geust_Login" Content="Guest Log in" HorizontalAlignment="Left" Margin="272,104,0,0" Width="88" Click="Button_Click" Background="White" BorderBrush="White" Height="21" VerticalAlignment="Top"/>
-            <Button x:Name="Forget_btn" Content="Forget btn" HorizontalAlignment="Left" Margin="73,102,0,0" Width="90" Click="Button_Click" Background="#FFFCFCFC" BorderBrush="White" Height="21" VerticalAlignment="Top"/>
+        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="screen" Text="홍익대학교 시간표 도우미 올클" Grid.Row="1" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="36" BorderThickness="0"></TextBox>
+        <Grid Grid.Row="3" Width="450" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="ID_Box" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="ID" AcceptsTab="True" Margin="0,3,5,3"/>
+            <PasswordBox x:Name="PW_Box" Grid.Row="1" Grid.Column="0" UseLayoutRounding="False" Margin="0,3,5,3"/>
+            <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Margin="3" Click="Login_btn_Click"/>
+            <Grid Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Row="0" Grid.Column="0" Click="Geust_Login_Button_Click" Background="White" BorderThickness="0" Margin="50,3"/>
+                <Button x:Name="Forget_btn" Content="Forget btn" Grid.Row="0" Grid.Column="1" Click="Forget_btn_Button_Click" Background="White" BorderThickness="0" Margin="50,3"/>
+            </Grid>
         </Grid>
-        <TextBlock x:Name="screen" Height="50" Margin="143,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="514" FontSize="36" HorizontalAlignment="Left"><Run Text="홍익대학교 시간표 도우미 올클"/><LineBreak/><Run Text=""/></TextBlock>
+        
     </Grid>
 
 </Window>

@@ -18,3 +18,5 @@ c:\Users\user\source\repos\AllCle\Client\obj\Debug\Client.csproj.CoreCompileInpu
 c:\Users\user\source\repos\AllCle\Client\obj\Debug\Client.csproj.CopyComplete
 c:\Users\user\source\repos\AllCle\Client\obj\Debug\Client.exe
 c:\Users\user\source\repos\AllCle\Client\obj\Debug\Client.pdb
+C:\Users\user\source\repos\AllCle\Client\obj\Debug\FilterOption.g.cs
+C:\Users\user\source\repos\AllCle\Client\obj\Debug\FilterOption.baml

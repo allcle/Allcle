@@ -24,7 +24,6 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string text1 = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -37,11 +36,17 @@ namespace Client
             MS.Show();
 
         }
+        
+        private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)         // 그 외 버튼은 미구현
+        private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
 
         }
+
+       
     }
 }

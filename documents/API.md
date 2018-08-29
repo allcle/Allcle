@@ -8,7 +8,19 @@
   * Get
   * Post
 - Listview
-  * Get
-  1.  a
-  2.  b
-  * Post
+  * Get</br>
+ &nbsp;1  전체를 보여주기</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 남은시간 on 일때 :  /timefilteton/</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 담은과목 제거 on : /{time}/{subject}</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 담은과목 제거 off : /{time}/subjectfilteroff</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 남은시간 off 일때 :  /timefiltetoff/</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 담은과목 제거 on : /timefilteroff/{subject}</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 담은과목 제거 off : /timefilteroff/subjectfilterff</br>
+ &nbsp;2  검색한 결과를 보여주기</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 남은시간 on 일때 :  /subjectfilteton/</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 담은과목 제거 on : /{time}/{subject}/{search}</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 담은과목 제거 off : /{time}/subjectfilteroff/{search}</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 남은시간 off 일때 :  /subjectfiltetoff/</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 담은과목 제거 on : /timefilteroff/{subject}/{search}</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 담은과목 제거 off : /timefilteroff/subjectfilterff/{search}</br>
+  * Post</br>

@@ -23,6 +23,7 @@ namespace Client.Models
         public string Time6 { get; set; }
         public string Time7 { get; set; }
         public string Time8 { get; set; }
+        public string LectureRoom { get; set; }
         public string UserName { get; set; }
         public int NumOfTimeTable { get; set; }
     }

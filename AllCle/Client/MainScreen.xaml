@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="AllCle" Height="635.1" Width="951.2" >
+        Title="AllCle" Height="635.1" Width="951.2" WindowStartupLocation="CenterScreen">
     <Grid Name="BigGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -25,6 +25,48 @@
             <ColumnDefinition Width="0.07142857142*"/>
             <ColumnDefinition Width="0.07142857142*"/>
         </Grid.ColumnDefinitions>
+        <Grid Name="LeftGrid" Grid.Row="0" Grid.RowSpan="5" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="UserInfo" Grid.Row="0" Grid.Column="0" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Border  BorderBrush="Gray"   Grid.Row="0" Grid.Column="0" Background="White" BorderThickness="1,1,1,0">
+                    <TextBlock x:Name="UserId" Text="dlrmswn95@gmail.com"/>
+                </Border>
+                <Border  BorderBrush="Gray"   Grid.Row="1"  Grid.Column="0"  Background="White" BorderThickness="1,0,1,0">
+                    <TextBlock x:Name="UserAdmissionYear" Text="학번 : 14" FontSize="20"/>
+                </Border>
+                <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="0" Background="White" BorderThickness="1,0,1,1">
+                    <TextBlock x:Name="UserMajor" Text="과 : 컴퓨터공학과" FontSize="20"/>
+                </Border>                
+            </Grid>
+            <ListView x:Name="TableList" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding List}" Margin="5">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding table}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Menu x:Name="Menu" Grid.Row="2" Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Background="White" FontSize="18" Margin="5">
+                <TextBlock Text="부가기능" Background="White"/>
+                <Separator/>
+                <MenuItem Header="1. 특정시간 검색"/>
+                <Separator/>
+                <MenuItem Header="2. MyGroup 설정" Click="MenuItem2_Click"/>
+                <Separator/>
+                <MenuItem Header="3. 이미지 저장"/>
+            </Menu>
+
+
+        </Grid>
         <ScrollViewer Name="TimTable_scr" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="8" Margin="0,0,4,0">
             <Grid Name="TimeTable" >
                 <Grid.RowDefinitions>
@@ -51,30 +93,31 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox  Text="월" Grid.Row="0" Grid.Column="1" Background="AliceBlue" HorizontalContentAlignment="Center"/>
-                <TextBox  Text="화" Grid.Row="0" Grid.Column="2" Background="AliceBlue" HorizontalContentAlignment="Center"/>
-                <TextBox  Text="수" Grid.Row="0" Grid.Column="3" Background="AliceBlue" HorizontalContentAlignment="Center"/>
-                <TextBox  Text="목" Grid.Row="0" Grid.Column="4" Background="AliceBlue" HorizontalContentAlignment="Center"/>
-                <TextBox  Text="금" Grid.Row="0" Grid.Column="5" Background="AliceBlue" HorizontalContentAlignment="Center"/>
-                <TextBox  Text="토" Grid.Row="0" Grid.Column="6" Background="AliceBlue" HorizontalContentAlignment="Center"/>
+                <TextBox  Text="월" Grid.Row="0" Grid.Column="1" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <TextBox  Text="화" Grid.Row="0" Grid.Column="2" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <TextBox  Text="수" Grid.Row="0" Grid.Column="3" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <TextBox  Text="목" Grid.Row="0" Grid.Column="4" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <TextBox  Text="금" Grid.Row="0" Grid.Column="5" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                <TextBox  Text="토" Grid.Row="0" Grid.Column="6" Background="AliceBlue" HorizontalContentAlignment="Center" IsReadOnly="True"/>
 
                 <!--Button name은 요일+교시-->
                 <!--Button color는 Random 메소드로 넣기. Random Color는 .cs파일에 있음-->
                 <!--Button Content는 ListView에서 클릭할 때, 출력-->
                 <!--Button 내의 Click을 이용해서 삭제 기능 구현-->
-                <TextBox Name="blank"               Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class1" Text="1교시" Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class2" Text="2교시" Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class3" Text="3교시" Grid.Row="3" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class4" Text="4교시" Grid.Row="4" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class5" Text="5교시" Grid.Row="5" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class6" Text="6교시" Grid.Row="6" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class7" Text="7교시" Grid.Row="7" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class8" Text="8교시" Grid.Row="8" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class9" Text="9교시" Grid.Row="9" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class10" Text="10교시" Grid.Row="10" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class11" Text="11교시" Grid.Row="11" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
-                <TextBox Name="class12" Text="12교시" Grid.Row="12" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center"/>
+                
+                <TextBox Name="blank"               Grid.Row="0" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class1" Text="1교시" Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class2" Text="2교시" Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class3" Text="3교시" Grid.Row="3" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class4" Text="4교시" Grid.Row="4" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class5" Text="5교시" Grid.Row="5" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class6" Text="6교시" Grid.Row="6" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class7" Text="7교시" Grid.Row="7" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class8" Text="8교시" Grid.Row="8" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class9" Text="9교시" Grid.Row="9" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class10" Text="10교시" Grid.Row="10" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class11" Text="11교시" Grid.Row="11" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
+                <TextBox Name="class12" Text="12교시" Grid.Row="12" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="1.3 0.5 1 0.5" TextAlignment="Center" IsReadOnly="True"/>
 
 
                 <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="1" BorderThickness="0.5">
@@ -181,7 +224,7 @@
                 <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="3" BorderThickness="0.5">
                     <TextBlock Name="wed1" Background="White" Padding="5,5,0,0" MouseEnter="wed1_MouseEnter" MouseLeave="wed1_MouseLeave"/>
                 </Border>
-                <Button Name="wed1_btn" Content="X" Grid.Row="1" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="mon1_btn_MouseDoubleClick" MouseEnter="mon1_btn_MouseEnter" Click="mon1_btn_Click"/>
+                <Button Name="wed1_btn" Content="X" Grid.Row="1" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="wed1_btn_MouseDoubleClick" MouseEnter="wed1_btn_MouseEnter" Click="mon1_btn_Click"/>
                 <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="3" BorderThickness="0.5">
                     <TextBlock Name="wed2" Background="White" Padding="5,5,0,0" MouseEnter="wed2_MouseEnter" MouseLeave="wed2_MouseLeave"/>
                 </Border>
@@ -377,56 +420,76 @@
                     <TextBlock Name="sat12"  Background="White" Padding="5,5,0,0" MouseEnter="sat12_MouseEnter" MouseLeave="sat12_MouseLeave"/>
                 </Border>
                 <Button Name="sat12_btn" Content="X" Grid.Row="12" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="sat12_btn_MouseDoubleClick" MouseEnter="sat12_btn_MouseEnter" Click="sat12_btn_Click"/>
-
-
-
             </Grid>
         </ScrollViewer>
-        <ComboBox x:Name="MyGroup_cob" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="4"/>
+        <ComboBox x:Name="MyGroup_cob" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="4" Visibility="Collapsed" SelectionChanged="MyGroup_cob_SelectionChanged" Initialized="MyGroup_cob_Initialized"/>
         <TextBox Name="Search_Box" Text="과목명" TextAlignment="Center" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1" Margin="4,4,0,4" KeyDown="Search_Box_KeyDown"/>
         <Button Name="Search_btn" Content="검색" Grid.Row="3" Grid.Column="2" Margin="0,4,4,4" Click="Search_btn_Click"/>
-        <Button x:Name="OnOff_btn" Content="on" Grid.Row="3" Grid.Column="3" Margin="4" Click="OnOff_btn_Click"/>
+        <Button x:Name="Option_btn" Content="옵션" Grid.Row="3" Grid.Column="3" Margin="4" Click="Option_btn_Click"/>
         <Button x:Name="All_btn" Content="전체" Grid.Row="3" Grid.Column="4" Margin="4" Click="All_btn_Click"/>
         <Button x:Name="MyGroup_btn" Content="MyGroup" Grid.Row="3" Grid.Column="5" Margin="4" Click="MyGroup_btn_Click"/>
         <Button x:Name="jol_btn" Content="졸업요건" Grid.Row="3" Grid.Column="6" Margin="4"/>
         <Button Content="Button" Grid.Row="3" Grid.Column="7" Margin="4"/>
         <Button x:Name="save_btn" Content="저장" Grid.Row="3" Grid.Column="8" Margin="4"/>
-
-        <Grid Margin="230,375,-0.2,-0.4"/>
-
-        <!--        <DataGrid x:Name="TimeTable" ItemsSource="{Binding DayList}" HorizontalAlignment="Left" Height="336" Margin="230,10,0,0" VerticalAlignment="Top" Width="650" HorizontalGridLinesBrush="Black" VerticalGridLinesBrush="Black" RowHeight="40" IsReadOnly="True" AutoGenerateColumns="False">
-            <DataGrid.ContextMenu>
-                <ContextMenu/>
-            </DataGrid.ContextMenu>
-            <DataGrid.Resources>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-
-                <DataGridTextColumn Binding="{Binding period}"  Header="교시" Width="40" ></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding mon}" Header="월" Width="100" ></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding tue}" Header="화" Width="100"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding wed}" Header="수" Width="100"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding thu}" Header="목" Width="100"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding fri}" Header="금" Width="100"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding sat}" Header="토" Width="100"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
--->
-        <ListView x:Name="DataListView_All" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="8" ItemsSource="{Binding aList}" MouseDoubleClick="DataListView_All_MouseDoubleClick">
+        <ListView x:Name="DataListView_MyGroup" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="8" ItemsSource="{Binding bList}" Visibility="Collapsed" IsEnabled="False">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding NO}" Header="NO" Width="50"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Grade}" Header="학년" Width="50"></GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="150"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="100"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="과목명" Width="100"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="50"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="200"></GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="불" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Tag="{Binding NO}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
+            
+            
+        </ListView>        
+        <ListView x:Name="DataListView_All" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="8" ItemsSource="{Binding aList}" MouseDoubleClick="DataListView_All_MouseDoubleClick" MouseEnter="DataListView_All_MouseEnter" MouseLeave="DataListView_All_MouseLeave">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Grade}" Header="학년" Width="50"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="100"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="과목명" Width="100"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="50"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="200"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="불" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Tag="{Binding NO}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>            
         </ListView>
-
-
-
     </Grid>
 </Window>

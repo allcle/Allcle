@@ -23,6 +23,7 @@ using Client.Models;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Client
 {
@@ -32,7 +33,6 @@ namespace Client
     public partial class MainScreen : Window
     {
         static HttpClient client = new HttpClient();
-        DataTable _timeTable = new DataTable();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
         List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
         public struct TableSubjects //시간표 한칸의 Data
@@ -44,6 +44,7 @@ namespace Client
         TableSubjects[,] TimeTableDB = new TableSubjects[13, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
         string url = null;  //json으로 쓰일 url
+        public static ObservableCollection<string> data = new ObservableCollection<string>(); //User의 myGroup 목록        
         public MainScreen()
         {
             InitializeComponent();
@@ -86,23 +87,26 @@ namespace Client
                 else
                     DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOn(Search_Box.Text);
             }
-            //ShowList();
         }
         private void All_btn_Click(object sender, RoutedEventArgs e)//전체 버튼 클릭시
         {
-            //Search_Box.IsEnabled = true;
-            //Search_btn.IsEnabled = true;
-            //MyGroup_cob.IsEnabled = false;
+            Search_Box.Visibility = Visibility.Visible;
+            Search_Box.IsEnabled = true;
+            Search_btn.Visibility = Visibility.Visible;
+            Search_btn.IsEnabled = true;
+            MyGroup_cob.Visibility = Visibility.Collapsed;
+            MyGroup_cob.IsEnabled = false;
+            DataListView_All.Visibility = Visibility.Visible;
+            DataListView_All.IsEnabled = true;
+
             if (FilterOption.timeOption == true)
             {
                 if (FilterOption.subjectOption == true)
-                {
-                    
+                {                    
                     DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("true, false");
                     DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
                 }
             }
@@ -113,7 +117,6 @@ namespace Client
                 else
                     DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
             }
-            // ShowAllList();
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(string _time, string _subject)  //남은시간에서만, 담은과목 제외
@@ -181,27 +184,7 @@ namespace Client
             SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
             return SubjectList;
         }
-
-        private void ShowList() //검색하는 함수
-        {
-
-            url = urlBase + "/timefilteroff/subjectfilteroff";
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            DataListView_All.ItemsSource = SubjectList;
-        }
-        private void ShowAllList() //전체 다 보여주는 함수
-        {            
-            string url = null;
-            if (TimeInList(UsersSubjectsList) == null)
-                url = urlBase;
-            else url = urlBase + "/" + TimeInList(UsersSubjectsList);
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            DataListView_All.ItemsSource = SubjectList;
-        }
+                
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
             bool totalAbleToPut = false;
@@ -9029,16 +9012,20 @@ namespace Client
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
         }
-        private void OnOff_btn_Click(object sender, RoutedEventArgs e) //onoff버튼 클릭하면
+        private void Option_btn_Click(object sender, RoutedEventArgs e) //onoff버튼 클릭하면
         {
             FilterOption FO = new FilterOption();
             FO.Show();
         }
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)//MyGroup을 누르면 검색창 없어지고, combobox만 뜸 
         {
+            Search_Box.Visibility = Visibility.Collapsed;
             Search_Box.IsEnabled = false;
+            Search_btn.Visibility = Visibility.Collapsed;
             Search_btn.IsEnabled = false;
+            MyGroup_cob.Visibility = Visibility.Visible;
             MyGroup_cob.IsEnabled = true;
+            MyGroup_cob.ItemsSource = data;
         }
 
         //이 이하로는 mon1만 대표로 주석을 달겠음
@@ -11569,13 +11556,34 @@ namespace Client
         private void DataListView_All_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             //System.Windows.MessageBox.Show(sender.ToString());
-            //System.Windows.MessageBox.Show(DataListView_All.SelectedValue.ToString());
+
+            //DataListView_All.SelectedItem = (sender as Border).DataContext;
+            //if (!DataListView_All.IsFocused)
+            //    DataListView_All.Focus();
            // mon1.Background = Brushes.Red;
         }
 
         private void DataListView_All_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
            // mon1.Background = Brushes.White;
+        }
+
+        private void MenuItem2_Click(object sender, RoutedEventArgs e)
+        {
+            MyGroup MG = new MyGroup();
+            MG.Show();
+        }
+
+        private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.MessageBox.Show("Value : " + data[MyGroup_cob.SelectedIndex]);
+        }
+
+        private void MyGroup_cob_Initialized(object sender, EventArgs e)
+        {
+            data.Add("A");
+            data.Add("B");
+            //MyGroup_cob.ItemsSource = data;
         }
     }
 

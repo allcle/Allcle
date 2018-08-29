@@ -100,10 +100,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MyGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\UsersSubject.cs" />
+    <Compile Include="MyGroup.xaml.cs">
+      <DependentUpon>MyGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

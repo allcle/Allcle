@@ -44,3 +44,5 @@ C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\Client.exe
 C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\Client.pdb
 C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\MyGroup.g.cs
 C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\MyGroup.baml
+C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\SignUp.g.cs
+C:\Users\user\Desktop\gitAllCle\AllCle\Client\obj\Debug\SignUp.baml

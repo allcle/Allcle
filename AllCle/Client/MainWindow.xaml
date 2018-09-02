@@ -11,12 +11,13 @@
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="screen" Text="홍익대학교 시간표 도우미 올클" Grid.Row="1" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="36" BorderThickness="0"></TextBox>
         <Grid Grid.Row="3" Width="450" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -28,7 +29,7 @@
             <TextBox x:Name="ID_Box" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="ID" AcceptsTab="True" Margin="0,3,5,3"/>
             <PasswordBox x:Name="PW_Box" Grid.Row="1" Grid.Column="0" UseLayoutRounding="False" Margin="0,3,5,3"/>
             <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Margin="3" Click="Login_btn_Click"/>
-            <Grid Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -36,8 +37,15 @@
                 <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Row="0" Grid.Column="0" Click="Geust_Login_Button_Click" Background="White" BorderThickness="0" Margin="50,3"/>
                 <Button x:Name="Forget_btn" Content="Forget btn" Grid.Row="0" Grid.Column="1" Click="Forget_btn_Button_Click" Background="White" BorderThickness="0" Margin="50,3"/>
             </Grid>
+            <Grid Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="1" Background="White" BorderBrush="White" Click="SingUP_btn_Click"/>
+            </Grid>
         </Grid>
-        
     </Grid>
 
 </Window>

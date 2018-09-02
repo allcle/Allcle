@@ -104,7 +104,7 @@ namespace Client {
             this.Save_btn = ((System.Windows.Controls.Button)(target));
             
             #line 32 "..\..\SignUp.xaml"
-            this.Save_btn.Click += new System.Windows.RoutedEventHandler(this.Save_btn_ClickAsync);
+            this.Save_btn.Click += new System.Windows.RoutedEventHandler(this.Save_btn_Click);
             
             #line default
             #line hidden

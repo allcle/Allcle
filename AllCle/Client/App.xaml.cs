@@ -13,5 +13,18 @@ namespace Client
     /// </summary>
     public partial class App : Application
     {
+        MainWindow MW = new MainWindow();
+        public static MainScreen MS = new MainScreen();
+        public static FilterOption FO = new FilterOption();
+        public static MyGroup MG = new MyGroup();
+        public static SignUp SU = new SignUp();
+
+        private void App_Startup(object sender, StartupEventArgs e)
+        {
+
+            MW.Show();
+                
+
+        }
     }
 }

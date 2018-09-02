@@ -19,25 +19,27 @@ namespace Client
     /// </summary>
     public partial class FilterOption : Window
     {
-        public static bool subjectOption;
-        public static bool timeOption;
+        public static bool subjectOption;   //시간표에 있는 과목 선택할지말지
+        public static bool timeOption;      //시간표에 있는 시간 뺄지말지
         public FilterOption()
         {            
             InitializeComponent();
         }
-
+      
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            if (TimeO.IsChecked == true)
+            if (TimeO.IsChecked == true)        //시간 라디오버튼
                 timeOption = true;
             else if (TimeX.IsChecked == true)
                 timeOption = false;
 
-            if (SubjectO.IsChecked == true)
+            if (SubjectO.IsChecked == true)     //과목 라디오버튼
                 subjectOption = true;
             else if (SubjectX.IsChecked == true)
                 subjectOption = false;
+
             this.Hide();
+            App.MS.RefreshByOption(timeOption, subjectOption);
         }
     }
 }

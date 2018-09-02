@@ -7,7 +7,7 @@ namespace Server.Models
 {
     public class User
     {
-        public int NO { get; set; }
+        public int NO { get; set; }     
         public string Id { get; set; }
         public string Password { get; set; }
         //public int StudentId { get; set; } //~13: 1 14,15: 2 16~: 3

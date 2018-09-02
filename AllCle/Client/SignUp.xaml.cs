@@ -31,9 +31,9 @@ namespace Client
             InitializeComponent();
         }
 
-        private async Task Save_btn_ClickAsync(object sender, RoutedEventArgs e)
+        private void Save_btn_Click(object sender, RoutedEventArgs e)
         {
 
-        }        
+        }
     }
 }

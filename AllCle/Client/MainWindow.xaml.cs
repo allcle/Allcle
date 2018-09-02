@@ -47,6 +47,10 @@ namespace Client
 
         }
 
-       
+        private void SingUP_btn_Click(object sender, RoutedEventArgs e)
+        {
+            SignUp SU = new SignUp();
+            SU.Show();
+        }
     }
 }

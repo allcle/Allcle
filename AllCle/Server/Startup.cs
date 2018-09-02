@@ -48,6 +48,7 @@ namespace Server
             //[Tech] 기술 목록
             services.AddTransient<ISubjectRepository1, SubjectRepository1>();
             services.AddTransient<ISubjectRepository2, SubjectRepository2>();
+            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

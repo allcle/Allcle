@@ -46,9 +46,9 @@ namespace Server
             services.AddSingleton<IConfiguration>(Configuration);
 
             //[Tech] 기술 목록
-            services.AddTransient<ISubjectRepository1, SubjectRepository1>();
-            services.AddTransient<ISubjectRepository2, SubjectRepository2>();
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISubjectRepository1, SubjectRepository1>();   //1학기 과목들 검색
+            services.AddTransient<ISubjectRepository2, SubjectRepository2>();   //2학기 과목들 검색
+            services.AddTransient<IUserRepository, UserRepository>();           //유저의 로그인, 회원가입
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +62,6 @@ namespace Server
             }
 
             app.UseMvc();
-        }
+        }   
     }
 }

@@ -32,8 +32,7 @@ namespace Client
         private void Login_btn_Click(object sender, RoutedEventArgs e)      // login 버튼을 클릭하면, MainWindow.xaml을 close하고, MainScreen.xaml show하는 메소드
         {
             this.Hide();
-            MainScreen MS = new MainScreen();
-            MS.Show();
+            App.MS.Show();
 
         }
         
@@ -49,8 +48,7 @@ namespace Client
 
         private void SingUP_btn_Click(object sender, RoutedEventArgs e)
         {
-            SignUp SU = new SignUp();
-            SU.Show();
+            App.SU.Show();
         }
     }
 }

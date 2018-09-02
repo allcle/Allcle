@@ -98,21 +98,20 @@ namespace Client
             MyGroup_cob.IsEnabled = false;
             DataListView_All.Visibility = Visibility.Visible;
             DataListView_All.IsEnabled = true;
-
-            if (FilterOption.timeOption == true)
+            RefreshByOption(FilterOption.timeOption, FilterOption.subjectOption);            
+        }
+        public void RefreshByOption(bool _timeOption, bool _subjectOption)
+        {
+            if (_timeOption == true)
             {
-                if (FilterOption.subjectOption == true)
-                {                    
+                if (_subjectOption == true)
                     DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
-                }
                 else
-                {
                     DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
-                }
             }
             else
             {
-                if (FilterOption.subjectOption == true)
+                if (_subjectOption == true)
                     DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
                 else
                     DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
@@ -11570,8 +11569,7 @@ namespace Client
 
         private void MenuItem2_Click(object sender, RoutedEventArgs e)
         {
-            MyGroup MG = new MyGroup();
-            MG.Show();
+            App.MG.Show();
         }
 
         private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)

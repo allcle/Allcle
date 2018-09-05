@@ -50,6 +50,8 @@ namespace Client
             InitializeComponent();
             DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
             InitDB();
+
+            //SubjectList.Where(s => !s.Times.Contains("수1"));
         }
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
         {

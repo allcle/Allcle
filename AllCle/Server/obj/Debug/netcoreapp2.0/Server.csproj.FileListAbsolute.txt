@@ -20,3 +20,14 @@ C:\Users\user\Desktop\gitAllCle\AllCle\Server\obj\Debug\netcoreapp2.0\Server.Ass
 C:\Users\user\Desktop\gitAllCle\AllCle\Server\obj\Debug\netcoreapp2.0\Server.AssemblyInfo.cs
 C:\Users\user\Desktop\gitAllCle\AllCle\Server\obj\Debug\netcoreapp2.0\Server.dll
 C:\Users\user\Desktop\gitAllCle\AllCle\Server\obj\Debug\netcoreapp2.0\Server.pdb
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\bin\Debug\netcoreapp2.0\Server.deps.json
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\bin\Debug\netcoreapp2.0\Server.runtimeconfig.json
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\bin\Debug\netcoreapp2.0\Server.runtimeconfig.dev.json
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\bin\Debug\netcoreapp2.0\Server.dll
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\bin\Debug\netcoreapp2.0\Server.pdb
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.csprojAssemblyReference.cache
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.csproj.CoreCompileInputs.cache
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.AssemblyInfoInputs.cache
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.AssemblyInfo.cs
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.dll
+C:\Users\kjp10\OneDrive\Documents\GitHub\Allcle-1\AllCle\Server\obj\Debug\netcoreapp2.0\Server.pdb

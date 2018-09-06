@@ -49,5 +49,41 @@ namespace Client
         {
             App.SU.Show();
         }
+
+        private void ID_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (ID_Box.Text == "ID를 입력해주세요")
+            {
+                ID_Box.Foreground = Brushes.Black;
+                ID_Box.TextAlignment = TextAlignment.Left;
+                ID_Box.Text = "";
+            }
+        }
+
+        private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(ID_Box.Text == "")
+            {
+                ID_Box.Foreground = Brushes.LightGray;
+                ID_Box.TextAlignment = TextAlignment.Center;
+                ID_Box.Text = "ID를 입력해주세요";
+            }
+        }
+
+        private void PW_TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PW_TextBox.Visibility = Visibility.Collapsed;
+            PW_Box.Focus();
+        }
+
+        private void PW_Box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(PW_Box.Password.Length == 0)
+            {
+                PW_TextBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        
     }
 }

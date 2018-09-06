@@ -34,7 +34,8 @@ namespace Client
     {
         static HttpClient client = new HttpClient();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
-        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
+        List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
+        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트        
         public struct TableSubjects //시간표 한칸의 Data
         {
             public string className;
@@ -48,46 +49,113 @@ namespace Client
         public MainScreen()
         {
             InitializeComponent();
-            DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+            DataListView_All.ItemsSource = GetSubjects();
             InitDB();
-
-            //SubjectList.Where(s => !s.Times.Contains("수1"));
         }
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
         {
-            
             if (FilterOption.timeOption == true)
             {
                 if (FilterOption.subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOn(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList),Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassName(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnProfessor(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassNumber(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList),SubjectInList(UsersSubjectsList));
+                }
                 else
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOn(TimeInList(UsersSubjectsList), Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassName(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnProfessor(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassNumber(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
+                }
             }
             else
             {
                 if (FilterOption.subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOn(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassName(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnProfessor(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassNumber(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
+                }
                 else
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOn(Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassName(Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnProfessor(Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassNumber(Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+                }
             }
-            //ShowList();
         }
         private void Search_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)//엔터키 눌렀을 때
         {
-
             if (FilterOption.timeOption == true)
             {
                 if (FilterOption.subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOn(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassName(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnProfessor(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassNumber(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
+                }
                 else
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOn(TimeInList(UsersSubjectsList), Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassName(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnProfessor(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassNumber(TimeInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
+                }
             }
             else
             {
                 if (FilterOption.subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOn(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassName(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnProfessor(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassNumber(SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
+                }
                 else
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOn(Search_Box.Text);
+                {
+                    if (FilterOption.searchOption == 1)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassName(Search_Box.Text);
+                    else if (FilterOption.searchOption == 2)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnProfessor(Search_Box.Text);
+                    else if (FilterOption.searchOption == 3)
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassNumber(Search_Box.Text);
+                    else
+                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+                }
             }
         }
         private void All_btn_Click(object sender, RoutedEventArgs e)//전체 버튼 클릭시
@@ -120,72 +188,176 @@ namespace Client
             }
         }
 
-        private List<Subject> ShowTimeOnSubjectOnSearchOff(string _time, string _subject)  //남은시간에서만, 담은과목 제외
+        private List<Subject> GetSubjects()
         {
-            url = urlBase + "/" + _time + "/" + _subject;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;            
-        }
-        private List<Subject> ShowTimeOnSubjectOffSearchOff(string _time)                 //남은 시간만에서만
-        {
-            url = urlBase + "/" + _time + "/subjectfilteroff";
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
-        }
-        private List<Subject> ShowTimeOffSubjectOnSearchOff(string _subject)                //담은 과목만 제외
-        {
-            url = urlBase + "/timefilteroff/" + _subject;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
-        }        
-        private List<Subject> ShowTimeOffSubjectOffSearchOff()                             //전체 모든 과목 보기
-        {
-            url = urlBase + "/timefilteroff/subjectfilteroff";
+            url = urlBase;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
             return SubjectList;
         }
 
-        private List<Subject> ShowTimeOnSubjectOnSearchOn(string _time, string _subject, string _search) //남은시간에서만, 담은과목제외, 검색
+        private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
         {
-            url = urlBase + "/" + _time + "/" + _subject + "/" + _search;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            return ResultSubtject;
         }
-        private List<Subject> ShowTimeOnSubjectOffSearchOn(string _time, string _search)                 //남은 시간에서만 검색
+        private List<Subject> ShowTimeOnSubjectOffSearchOff(List<string> _time)                 //남은 시간만에서만
         {
-            url = urlBase + "/" + _time + "/subjectfilteroff/" + _search;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            return ResultSubtject;
         }
-        private List<Subject> ShowTimeOffSubjectOnSearchOn(string _subject, string _search)              //담은 과목 제외하고 검색
+        private List<Subject> ShowTimeOffSubjectOnSearchOff(List<string> _subject)                //담은 과목만 제외
         {
-            url = urlBase + "/timefilteroff/" + _subject + "/" + _search;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
-        }    
-        private List<Subject> ShowTimeOffSubjectOffSearchOn(string _search)                              //그냥 과목검색
-        {
-            url = urlBase + "/timefilteroff/subjectfilteroff/" + _search;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            return ResultSubtject;
         }
-                
+        private List<Subject> ShowTimeOffSubjectOffSearchOff()                             //전체 모든 과목 보기
+        {
+            ResultSubtject = SubjectList;
+            return ResultSubtject;
+        }
+
+        private List<Subject> ShowTimeOnSubjectOnSearchOnClassName(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOnSubjectOnSearchOnProfessor(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOnSubjectOnSearchOnClassNumber(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+
+        private List<Subject> ShowTimeOnSubjectOffSearchOnClassName(List<string> _time, string _search)                 //남은 시간에서만 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOnSubjectOffSearchOnProfessor(List<string> _time, string _search)                 //남은 시간에서만 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOnSubjectOffSearchOnClassNumber(List<string> _time, string _search)                 //남은 시간에서만 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _time.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+
+        private List<Subject> ShowTimeOffSubjectOnSearchOnClassName(List<string> _subject, string _search)              //담은 과목 제외하고 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOffSubjectOnSearchOnProfessor(List<string> _subject, string _search)              //담은 과목 제외하고 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOffSubjectOnSearchOnClassNumber(List<string> _subject, string _search)              //담은 과목 제외하고 검색
+        {
+            ResultSubtject = SubjectList;
+            for (int i = 0; i < _subject.Count; i++)
+            {
+                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
+            }
+            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+
+        private List<Subject> ShowTimeOffSubjectOffSearchOnClassName(string _search)                              //그냥 과목검색
+        {
+            ResultSubtject = SubjectList;
+            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOffSubjectOffSearchOnProfessor(string _search)                              //그냥 과목검색
+        {
+            ResultSubtject = SubjectList;
+            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+        private List<Subject> ShowTimeOffSubjectOffSearchOnClassNumber(string _search)                              //그냥 과목검색
+        {
+            ResultSubtject = SubjectList;
+            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
+            return ResultSubtject;
+        }
+
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
             bool totalAbleToPut = false;
@@ -507,68 +679,25 @@ namespace Client
                 RefreshTimeTable();
             }
         }
-        private string TimeInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 시간을 string으로
+        private List<string> TimeInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 시간을 string으로
         {
-            string result = null;
+            List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
             {
-                if (_UsersSubjectList[i].Time1 != "")
+                for (int j = 0; j < 8; j++)
                 {
-                    result += _UsersSubjectList[i].Time1;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time2 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time2;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time3 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time3;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time4 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time4;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time5 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time5;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time6 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time6;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time7 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time7;
-                    result += "&";
-                }
-                if (_UsersSubjectList[i].Time8 != "")
-                {
-
-                    result += _UsersSubjectList[i].Time8;
-                    result += "&";
+                    if (_UsersSubjectList[i].Times[j] != "")
+                        result.Add(_UsersSubjectList[i].Times[j]);
                 }
             }
             return result;
         }
-        private string SubjectInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 과목을 string으로
+        private List<string> SubjectInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 과목을 string으로
         {
-            string result = null;
+            List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
             {
-                result += _UsersSubjectList[i].ClassName;
-                result += "&";
+                    result.Add(_UsersSubjectList[i].ClassName);
             }
             return result;
         }

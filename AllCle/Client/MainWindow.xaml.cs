@@ -33,7 +33,6 @@ namespace Client
         {
             this.Hide();
             App.MS.Show();
-
         }
         
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)

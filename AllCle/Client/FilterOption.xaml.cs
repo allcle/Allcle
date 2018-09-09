@@ -21,9 +21,13 @@ namespace Client
     {
         public static bool subjectOption;   //시간표에 있는 과목 선택할지말지
         public static bool timeOption;      //시간표에 있는 시간 뺄지말지
+        public static int searchOption;     //검색 옵션
         public FilterOption()
         {            
             InitializeComponent();
+            subjectOption = false;
+            timeOption = false;
+            searchOption = 1;
         }
       
         private void save_Click(object sender, RoutedEventArgs e)
@@ -37,6 +41,15 @@ namespace Client
                 subjectOption = true;
             else if (SubjectX.IsChecked == true)
                 subjectOption = false;
+
+            if (Search1.IsChecked == true)
+                searchOption = 1;
+            else if (Search2.IsChecked == true)
+                searchOption = 2;
+            else if (Search3.IsChecked == true)
+                searchOption = 3;
+            else
+                searchOption = 0;
 
             this.Hide();
             App.MS.RefreshByOption(timeOption, subjectOption);

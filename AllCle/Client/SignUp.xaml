@@ -21,15 +21,12 @@
         <Border Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="회원가입" FontSize="40"/>
         </Border>
-        <Border Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
-            <TextBlock Text="User ID" FontSize="20"/>
-        </Border>
-        <TextBox x:Name="ID_box" Text="ID를 입력해주세요" Grid.Row="2" Margin="20" BorderBrush="LightGray"/>
-        <Border Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
-            <TextBlock Text="Password" FontSize="20"/>
-        </Border>
-        <TextBox x:Name="Pw_box" Text="비밀번호를 입력해주세요" Grid.Row="4" Margin="20" BorderBrush="LightGray"/>
-        <Button x:Name="Save_btn" Content="저장" Grid.Row="5" Click="Save_btn_Click"/>
+        <TextBox x:Name="ID_box" Text="ID를 입력해주세요" FontSize="20" Grid.Row="1" Margin="20" Foreground="LightGray" BorderBrush="gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus"/>
+        <PasswordBox x:Name="PW_Box"  Grid.Row="2" Margin="20" LostFocus="PW_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="PW_TextBox" Text="비밀번호를 입력해주세요" FontSize="20" Grid.Row="2" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus"/>
+        <PasswordBox x:Name="PWCon_Box"  Grid.Row="3" Margin="20" LostFocus="PWCon_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="PWCon_TextBox" Text="확인비밀번호를 입력해주세요" FontSize="20" Grid.Row="3" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus"/>
+        <Button x:Name="Save_btn" Content="저장" Grid.Row="5" FontSize="20" Click="Save_btn_Click"/>
 
 
     </Grid>

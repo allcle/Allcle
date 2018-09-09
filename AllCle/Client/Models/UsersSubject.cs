@@ -23,8 +23,28 @@ namespace Client.Models
         public string Time6 { get; set; }
         public string Time7 { get; set; }
         public string Time8 { get; set; }
+
         public string LectureRoom { get; set; }
         public string UserName { get; set; }
         public int NumOfTimeTable { get; set; }
+        private List<string> times = new List<string>();
+        public List<string> Times
+        {
+            get
+            {
+                if (times.Count == 0)
+                {
+                    times.Add(Time1);
+                    times.Add(Time2);
+                    times.Add(Time3);
+                    times.Add(Time4);
+                    times.Add(Time5);
+                    times.Add(Time6);
+                    times.Add(Time7);
+                    times.Add(Time8);
+                }
+                return times;
+            }
+        }
     }
 }

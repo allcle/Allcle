@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="FilterOption" Height="208.185" Width="390.036" WindowStartupLocation="CenterScreen">
+        Title="FilterOption" Height="308.185" Width="390.036" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>        
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
@@ -26,6 +30,10 @@
         <TextBlock x:Name="SubjectAsk" Text="과목 적용" Grid.Row="3" Grid.Column="0" FontSize="20" Padding="20,0"></TextBlock>
         <RadioButton x:Name="SubjectO" GroupName="Subject" Content="담은 과목 제외하고 보기" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="40,0,0,0"></RadioButton>
         <RadioButton x:Name="SubjectX" GroupName="Subject" Content="모든 과목 보기" Grid.Row="5" Grid.Column="0" FontSize="20" Margin="40,0,0,0"></RadioButton>
-        <Button x:Name="save" Content="저장" Grid.Row="7" Grid.Column="1" Click="save_Click"/>
+        <TextBlock x:Name="SearchAsk" Text="검색 옵션" Grid.Row="6" Grid.Column="0" FontSize="20" Padding="20,0"></TextBlock>
+        <RadioButton x:Name="Search1" GroupName="Search" Content="교과명 검색" Grid.Row="7" Grid.Column="0" FontSize="20" Margin="40,0,0,0"></RadioButton>
+        <RadioButton x:Name="Search2" GroupName="Search" Content="교수명 검색" Grid.Row="8" Grid.Column="0" FontSize="20" Margin="40,0,0,0"></RadioButton>
+        <RadioButton x:Name="Search3" GroupName="Search" Content="학수번호 검색" Grid.Row="9" Grid.Column="0" FontSize="20" Margin="40,0,0,0"></RadioButton>
+        <Button x:Name="save" Content="저장" Grid.Row="10" Grid.Column="1" Click="save_Click"/>
     </Grid>
 </Window>

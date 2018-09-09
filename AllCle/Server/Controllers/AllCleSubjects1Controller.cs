@@ -26,55 +26,12 @@ namespace Server.Controllers
         {
             _repo = repo;
         }
-        [Route("{time}/{subject}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOnSubjectOnSearchOff(string time, string subject)  //남은시간에서만, 담은과목 제외
-        {
-            return _repo.GetTimeOnSubjectOnSearchOff(time, subject);
-        }
-        [Route("{time}/subjectfilteroff")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOnSubjectOffSearchOff(string time)               //담은 과목만 제외
-        {
-            return _repo.GetTimeOnSubjectOffSearchOff(time);
-        }
-        [Route("timefilteroff/{subject}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOffSubjectOnSearchOff(string subject)                  //남은 시간만에서만
-        {
-            return _repo.GetTimeOffSubjectOnSearchOff(subject);
-        }
-        [Route("timefilteroff/subjectfilteroff")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOffSubjectOffSearchOff()                             //전체 모든 과목 보기
-        {
-            return _repo.GetTimeOffSubjectOffSearchOff();
-        }
-        [Route("{time}/{subject}/{search}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOnSubjectOnSearchOn(string time, string subject, string search) //남은시간에서만, 담은과목제외, 검색
-        {
-            return _repo.GetTimeOnSubjectOnSearchOn(time, subject, search);
-        }
-        [Route("timefilteroff/{subject}/{search}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOffSubjectOnSearchOn(string subject, string search)              //담은 과목 제외하고 검색
-        {
-            return _repo.GetTimeOffSubjectOnSearchOn(subject, search);
-        }
-        [Route("{time}/subjectfilteroff/{search}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOnSubjectOffSearchOn(string time, string search)                 //남은 시간에서만 검색
-        {
-            return _repo.GetTimeOnSubjectOffSearchOn(time, search);
-        }
-        [Route("timefilteroff/subjectfilteroff/{search}")]
-        [HttpGet]
-        public IEnumerable<Subject> GetTimeOffSubjectOffSearchOn(string search)                              //그냥 과목검색
-        {
-            return _repo.GetTimeOffSubjectOffSearchOn(search);
-        }
 
+        [HttpGet]
+        public IEnumerable<Subject> GetSubjects()  //남은시간에서만, 담은과목 제외
+        {
+            return _repo.GetSubjects();
+        }
 
         /*[HttpPost]
         public Subject PostSubject([FromBody] Subject Subject)              // ID와 PW를 server에 전송하는 메소드

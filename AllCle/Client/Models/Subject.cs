@@ -24,7 +24,6 @@ namespace Client.Models
         public string Time7 { get; set; }
         public string Time8 { get; set; }
         public string LectureRoom { get; set; }
-
         private List<string> times = new List<string>();
         public List<string> Times
         {

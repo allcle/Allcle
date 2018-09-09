@@ -36,7 +36,7 @@ namespace Server.Controllers
         [HttpPost]
         public void Post([FromBody]User _user)
         {
-            string password =  _user.Password;
+            //string password =  _user.Password;
             // 1234qwer
 
             // encyption
@@ -44,7 +44,7 @@ namespace Server.Controllers
 
             // decyption
             // jifle8f3jufl3j8flj3js3 -> 1234qwer
-            //_repo.PostUsers(_user);
+            _repo.PostUsers(_user);
         }
 
         // PUT api/<controller>/5

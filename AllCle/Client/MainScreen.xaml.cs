@@ -363,294 +363,57 @@ namespace Client
         {
             bool totalAbleToPut = false;
             int index = DataListView_All.SelectedIndex;
-            int period1 = 0;
-            string day1 = null;
-            int period2 = 0; ;
-            string day2 = null;
-            int period3 = 0; ;
-            string day3 = null;
-            int period4 = 0; ;
-            string day4 = null;
-            int period5 = 0; ;
-            string day5 = null;
-            int period6 = 0; ;
-            string day6 = null;
-            int period7 = 0; ;
-            string day7 = null;
-            int period8 = 0; ;
-            string day8 = null;
+            int period1 = 0; string day1 = null;
+            int period2 = 0; string day2 = null;
+            int period3 = 0; string day3 = null;
+            int period4 = 0; string day4 = null;
+            int period5 = 0; string day5 = null;
+            int period6 = 0; string day6 = null;
+            int period7 = 0; string day7 = null;
+            int period8 = 0; string day8 = null;
+
+            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
+
+            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
+
             if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
             {
-                if (SubjectList[index].Time1 != "") //시간1이 존재하면
+                string[] time = new string[] { SubjectList[index].Time1, SubjectList[index].Time2, SubjectList[index].Time3, SubjectList[index].Time4, SubjectList[index].Time5, SubjectList[index].Time6, SubjectList[index].Time7, SubjectList[index].Time8 };
+
+                if (time[0] != "")
                 {
-                    period1 = Int32.Parse(SubjectList[index].Time1.Substring(1, SubjectList[index].Time1.Length - 1)); //교시
-                    day1 = SubjectList[index].Time1.Substring(0, 1);  //요일
-                    if (day1 == "월" && TimeTableDB[period1, 1].ableToPut == true) //요일에 해당 교시에 과목을 넣을 수있으면
-                    {
-                        totalAbleToPut = true; //넣을 수 있다
-                    }
-                    else if (day1 == "화" && TimeTableDB[period1, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day1 == "수" && TimeTableDB[period1, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day1 == "목" && TimeTableDB[period1, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day1 == "금" && TimeTableDB[period1, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day1 == "토" && TimeTableDB[period1, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
+                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
+                    daylist[0] = time[0].Substring(0, 1);
+                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
                     else
                     {
                         System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
                         totalAbleToPut = false;
                     }
                 }
-                if (SubjectList[index].Time2 != "" && totalAbleToPut == true)
+
+                for (int i=1; i<8; i++)
                 {
-                    period2 = Int32.Parse(SubjectList[index].Time2.Substring(1, SubjectList[index].Time2.Length - 1));
-                    day2 = SubjectList[index].Time2.Substring(0, 1);
-                    if (day2 == "월" && TimeTableDB[period2, 1].ableToPut == true)
+                    if(time[i] != "" && totalAbleToPut == true)
                     {
-                        totalAbleToPut = true;
-                    }
-                    else if (day2 == "화" && TimeTableDB[period2, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day2 == "수" && TimeTableDB[period2, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day2 == "목" && TimeTableDB[period2, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day2 == "금" && TimeTableDB[period2, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day2 == "토" && TimeTableDB[period2, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time3 != "" && totalAbleToPut == true)
-                {
-                    period3 = Int32.Parse(SubjectList[index].Time3.Substring(1, SubjectList[index].Time3.Length - 1));
-                    day3 = SubjectList[index].Time3.Substring(0, 1);
-                    if (day3 == "월" && TimeTableDB[period3, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day3 == "화" && TimeTableDB[period3, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day3 == "수" && TimeTableDB[period3, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day3 == "목" && TimeTableDB[period3, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day3 == "금" && TimeTableDB[period3, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day3 == "토" && TimeTableDB[period3, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time4 != "" && totalAbleToPut == true)
-                {
-                    period4 = Int32.Parse(SubjectList[index].Time4.Substring(1, SubjectList[index].Time4.Length - 1));
-                    day4 = SubjectList[index].Time4.Substring(0, 1);
-                    if (day4 == "월" && TimeTableDB[period4, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day4 == "화" && TimeTableDB[period4, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day4 == "수" && TimeTableDB[period4, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day4 == "목" && TimeTableDB[period4, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day4 == "금" && TimeTableDB[period4, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day4 == "토" && TimeTableDB[period4, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time5 != "" && totalAbleToPut == true)
-                {
-                    period5 = Int32.Parse(SubjectList[index].Time5.Substring(1, SubjectList[index].Time5.Length - 1));
-                    day5 = SubjectList[index].Time5.Substring(0, 1);
-                    if (day5 == "월" && TimeTableDB[period5, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day5 == "화" && TimeTableDB[period5, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day5 == "수" && TimeTableDB[period5, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day5 == "목" && TimeTableDB[period5, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day5 == "금" && TimeTableDB[period5, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day5 == "토" && TimeTableDB[period5, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time6 != "" && totalAbleToPut == true)
-                {
-                    period6 = Int32.Parse(SubjectList[index].Time6.Substring(1, SubjectList[index].Time6.Length - 1));
-                    day6 = SubjectList[index].Time6.Substring(0, 1);
-                    if (day6 == "월" && TimeTableDB[period6, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day6 == "화" && TimeTableDB[period6, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day6 == "수" && TimeTableDB[period6, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day6 == "목" && TimeTableDB[period6, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day6 == "금" && TimeTableDB[period6, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day6 == "토" && TimeTableDB[period6, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time7 != "" && totalAbleToPut == true)
-                {
-                    period7 = Int32.Parse(SubjectList[index].Time7.Substring(1, SubjectList[index].Time7.Length - 1));
-                    day7 = SubjectList[index].Time7.Substring(0, 1);
-                    if (day7 == "월" && TimeTableDB[period7, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day7 == "화" && TimeTableDB[period7, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day7 == "수" && TimeTableDB[period7, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day7 == "목" && TimeTableDB[period7, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day7 == "금" && TimeTableDB[period7, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day7 == "토" && TimeTableDB[period7, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-                if (SubjectList[index].Time8 != "" && totalAbleToPut == true)
-                {
-                    period8 = Int32.Parse(SubjectList[index].Time8.Substring(1, SubjectList[index].Time8.Length - 1));
-                    day8 = SubjectList[index].Time8.Substring(0, 1);
-                    if (day8 == "월" && TimeTableDB[period8, 1].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day8 == "화" && TimeTableDB[period8, 2].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day8 == "수" && TimeTableDB[period8, 3].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day8 == "목" && TimeTableDB[period8, 4].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day8 == "금" && TimeTableDB[period8, 5].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else if (day8 == "토" && TimeTableDB[period8, 6].ableToPut == true)
-                    {
-                        totalAbleToPut = true;
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
+                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
+                        daylist[i] = time[i].Substring(0, 1);
+                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
+                        else
+                        {
+                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                            totalAbleToPut = false;
+                        }
                     }
                 }
             }
@@ -933,6 +696,37 @@ namespace Client
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
 
         }
+        private void Btn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
+            {
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+            };
+            var panel = sender as System.Windows.Controls.Button;
+
+            int week = 0;
+            int period = 0;
+
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    if (schedule[i, j].Name == panel.Name)
+                    {
+                        week = i + 1;
+                        period = j + 1;
+                    }
+                }
+            }
+
+            schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
+
+        }
         private void btn_Click(object sender, RoutedEventArgs e) //x버튼 한번 클릭
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
@@ -981,43 +775,6 @@ namespace Client
             }
             schedule[week-1, period-1].Visibility = Visibility.Collapsed;
         }
-        /*
-         * 혹시 몰라서 원본 코드 한 셋트 남겨둠
-        private void mon2_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (TimeTableDB[2, 1].ableToPut == false)
-                mon2_btn.Visibility = Visibility.Visible;
-        }
-        private void mon2_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            mon2_btn.Visibility = Visibility.Collapsed;
-        }
-        private void mon2_btn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (TimeTableDB[2, 1].ableToPut == false)
-                mon2_btn.Visibility = Visibility.Visible;
-        }
-        private void mon2_btn_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(TimeTableDB[2, 1].className + "를 삭제하시겠습니까?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                DeleteSubjectInTimeTable("월1");
-                RefreshTimeTable();
-            }
-            mon2_btn.Visibility = Visibility.Collapsed;
-        }
-        private void mon2_btn_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(TimeTableDB[2, 1].className + "를 삭제하시겠습니까?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                DeleteSubjectInTimeTable("월2");
-                RefreshTimeTable();
-            }
-            mon2_btn.Visibility = Visibility.Collapsed;
-        }
-        */
 
         private void DataListView_All_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {

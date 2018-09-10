@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 
 namespace Client
 {
@@ -31,16 +32,34 @@ namespace Client
             InitializeComponent();
         }
 
+        public string Encrypt(string strToEncrypt, string strKey)
+        {
+            TripleDESCryptoServiceProvider objDESCrypto = new TripleDESCryptoServiceProvider();
+            MD5CryptoServiceProvider objHashMD5 = new MD5CryptoServiceProvider();
+            byte[] byteHash, byteBuff;
+            string strTempKey = strKey;
+            byteHash = objHashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strTempKey));
+            objHashMD5 = null;
+            objDESCrypto.Key = byteHash;
+            objDESCrypto.Mode = CipherMode.ECB; //CBC, CFB
+            byteBuff = ASCIIEncoding.ASCII.GetBytes(strToEncrypt);
+            return Convert.ToBase64String(objDESCrypto.CreateEncryptor().
+                TransformFinalBlock(byteBuff, 0, byteBuff.Length)); ;
+
+        }
+
         private void Save_btn_Click(object sender, RoutedEventArgs e)
         {
             String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
+            string setkey = "allcle";
             String[] data = new String[10];
             data[0] = ID_box.Text;              // id
             data[1] = PW_Box.Password;          // pw
             data[2] = PWCon_Box.Password;       //confirm pw
             if (data[1] == data[2])
             {
-                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + data[1] + "\"}";
+                string encrypted = Encrypt(data[1], setkey);
+                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\"}";
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
                 httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -54,6 +73,7 @@ namespace Client
                 streamReader.ReadToEnd();
                 streamReader.Close();
                 httpWebResponse.Close();
+                this.Close();
             }
             else
                 System.Windows.MessageBox.Show("비밀번호가 일치하지 않습니다");

@@ -12716,11 +12716,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\git\\Allcle\\AllCle\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\git2\\Allcle\\AllCle\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\user\\Desktop\\git\\Allcle\\AllCle\\Server\\Server.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\git2\\Allcle\\AllCle\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\git\\Allcle\\AllCle\\Server\\obj\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\git2\\Allcle\\AllCle\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

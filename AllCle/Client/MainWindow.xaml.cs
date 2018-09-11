@@ -47,6 +47,8 @@ namespace Client
                 Text.Text = "Password";
                 PW_Box.Focus();
             }
+            else if(ID_Box.Text == "")
+                System.Windows.MessageBox.Show("아이디를 입력해주세요");
             else
                 System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
         }

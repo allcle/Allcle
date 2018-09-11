@@ -9,5 +9,6 @@ namespace Server.Models
     {
         List<User> GetUsers();
         void PostUsers(User _user);
+        bool GetUserId(string _id);
     }
 }

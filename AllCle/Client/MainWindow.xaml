@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350">
-    
+        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350" MouseDown="Window_MouseDown">    
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -15,12 +14,13 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
+        <TextBox x:Name="temp" VerticalAlignment="Top" HorizontalAlignment="Left" Height="1" Width="1"/>
         <Border Grid.Row="1">
             <TextBlock x:Name="screen" Text="홍익대학교 시간표 도우미 올클" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="36"  MinWidth="500"/>
         </Border>
         <Grid Grid.Row="3" Width="450" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.5*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -29,10 +29,44 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="ID_Box" Grid.Row="0" Grid.Column="0" Foreground="LightGray" TextWrapping="Wrap" Text="ID를 입력해주세요" FontSize="20" FontWeight="Light" AcceptsTab="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" Margin="0,3,5,3" GotFocus="ID_Box_GotFocus" LostFocus="ID_Box_LostFocus"/>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="1" Grid.Column="0" FontSize="20" UseLayoutRounding="False" MinHeight="40" MinWidth="280" Margin="0,3,5,3" MaxLength="20" LostFocus="PW_Box_LostFocus"/>
-            <TextBox x:Name="PW_TextBox" Grid.Row="1" Grid.Column="0" Text="비밀번호를 입력해주세요" Foreground="LightGray" FontSize="20" FontWeight="Light" AcceptsTab="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" Margin="0,3,5,3" GotFocus="PW_TextBox_GotFocus"/>
-            <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Margin="3" Click="Login_btn_Click"/>
+            <Border BorderThickness="0">
+                <TextBlock x:Name="Text" Text="ID" Grid.Row="0" FontSize="20" Foreground="Blue" Margin="30,0,0,0" Opacity="0"/>
+            </Border>
+            <TextBox x:Name="Back" Grid.Row="1" Grid.Column="0" BorderThickness="0,0,0,5"/>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="1" Grid.Column="0" FontSize="20" UseLayoutRounding="False" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus"/>
+            <TextBox x:Name="ID_Box" Grid.Row="1" Grid.Column="0" Foreground="Black" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" BorderThickness="0" Margin="0,3,5,5" GotFocus="ID_Box_GotFocus" LostFocus="ID_Box_LostFocus"/>
+            <Grid x:Name="PW" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="PW_" GotFocus="PW__GotFocus">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="PW_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\password.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="PW_img_MouseDown"/>
+                    <TextBox x:Name="PW_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="Password" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
+                </Grid>
+                <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Login_btn_Click"/>
+            </Grid>
+            <Grid x:Name="ID" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="ID_" GotFocus="ID__GotFocus">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="ID_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\account.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="ID_img_MouseDown"/>
+                    <TextBox x:Name="ID_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
+                </Grid>
+                <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Next_btn_Click"/>
+            </Grid>            
+            
+            
             <Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -49,7 +83,7 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="1" Background="White" BorderBrush="White" Click="SingUP_btn_Click" MinWidth="200"/>
             </Grid>
-        </Grid>
+        </Grid>        
     </Grid>
 
 </Window>

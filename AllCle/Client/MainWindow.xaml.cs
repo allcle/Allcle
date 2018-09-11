@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
+using System.Windows.Forms.VisualStyles;
+using System.Net;
 
 namespace Client
 {
@@ -29,10 +32,23 @@ namespace Client
             InitializeComponent();
         }
 
-        private void Login_btn_Click(object sender, RoutedEventArgs e)      // login 버튼을 클릭하면, MainWindow.xaml을 close하고, MainScreen.xaml show하는 메소드
+        private void Next_btn_Click(object sender, RoutedEventArgs e)      // login 버튼을 클릭하면, MainWindow.xaml을 close하고, MainScreen.xaml show하는 메소드
         {
-            this.Hide();
-            App.MS.Show();
+            string urlBase = @"https://allcleapp.azurewebsites.net/api/Users"; //기본 url
+            string url = null;  //json으로 쓰일 url
+            url = urlBase + "/" + ID_Box.Text;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            if (Unicode == "true")
+            {
+                ID.Visibility = Visibility.Collapsed;
+                ID_Box.Visibility = Visibility.Collapsed;
+                PW.Visibility = Visibility.Visible;
+                Text.Text = "Password";
+                PW_Box.Focus();
+            }
+            else
+                System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
         }
         
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
@@ -52,38 +68,104 @@ namespace Client
 
         private void ID_Box_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (ID_Box.Text == "ID를 입력해주세요")
-            {
-                ID_Box.Foreground = Brushes.Black;
-                ID_Box.TextAlignment = TextAlignment.Left;
-                ID_Box.Text = "";
-            }
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 0;
+            doubleAnimation.To = 1;
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.3);
+            Back.BorderThickness = new Thickness(0, 0, 0, 5);
+            Back.BorderBrush = Brushes.Blue;
+            Back.BeginAnimation(OpacityProperty, doubleAnimation);
+            ID_.Visibility = Visibility.Collapsed;
+            Text.Foreground = Brushes.Blue;
+            Text.BeginAnimation(OpacityProperty, doubleAnimation);
         }
 
         private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if(ID_Box.Text == "")
+        {           
+            Back.BorderBrush = Brushes.Gray;
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 1;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);
+            if (ID_Box.Text == "")
             {
-                ID_Box.Foreground = Brushes.LightGray;
-                ID_Box.TextAlignment = TextAlignment.Center;
-                ID_Box.Text = "ID를 입력해주세요";
+                ID_.Visibility = Visibility.Visible;
+                Text.BeginAnimation(OpacityProperty, doubleAnimation);
+            }
+            else
+            {
+                Text.Foreground = Brushes.Gray;
             }
         }
 
         private void PW_TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            PW_TextBox.Visibility = Visibility.Collapsed;
+            //PW_TextBox.Visibility = Visibility.Collapsed;            
             PW_Box.Focus();
         }
 
         private void PW_Box_LostFocus(object sender, RoutedEventArgs e)
         {
-            if(PW_Box.Password.Length == 0)
+            Back.BorderBrush = Brushes.Gray;
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 1;
+            doubleAnimation.To = 0;
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);            
+            if (PW_Box.Password.Length == 0)
             {
-                PW_TextBox.Visibility = Visibility.Visible;
+                PW_.Visibility = Visibility.Visible;
+                Text.BeginAnimation(OpacityProperty, doubleAnimation);
             }
+            else
+                Text.Foreground = Brushes.Gray;           
+        }
+        
+        private void Login_btn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
-        
+        private void ID__GotFocus(object sender, RoutedEventArgs e)
+        {
+            ID_Box.Focus();
+        }
+
+        private void ID_img_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ID_Box.Focus();
+        }
+
+        private void PW_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PW_.Visibility = Visibility.Collapsed;
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 0;
+            doubleAnimation.To = 1;
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.3);
+            Back.BorderThickness = new Thickness(0, 0, 0, 5);
+            Back.BorderBrush = Brushes.Blue;
+            Back.BeginAnimation(OpacityProperty, doubleAnimation);
+            Text.Foreground = Brushes.Blue;
+            Text.BeginAnimation(OpacityProperty, doubleAnimation);
+        }
+
+        private void PW__GotFocus(object sender, RoutedEventArgs e)
+        {
+            PW_Box.Focus();
+        }
+
+        private void PW_img_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            PW_Box.Focus();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //if (ID_img.IsMouseOver == true)
+            //    ID_Box.Focus();
+            //  //  System.Windows.MessageBox.Show("a");
+            if (ID_Box.IsFocused == true || PW_Box.IsFocused == true)
+                temp.Focus();
+        }
     }
 }

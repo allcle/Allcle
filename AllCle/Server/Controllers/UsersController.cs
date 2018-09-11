@@ -27,23 +27,21 @@ namespace Server.Controllers
         
         // GET api/<controller>
         [HttpGet]
-        public IEnumerable<User> GeUserst()
+        public IEnumerable<User> GeUsers()
         {
             return _repo.GetUsers();
+        }
+
+        [HttpGet("{id}")]
+        public bool GetUserId(string id)
+        {
+            return _repo.GetUserId(id);   
         }
 
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]User _user)
         {
-            //string password =  _user.Password;
-            // 1234qwer
-
-            // encyption
-            // 1234qwer -> jifle8f3jufl3j8flj3js3
-
-            // decyption
-            // jifle8f3jufl3j8flj3js3 -> 1234qwer
             _repo.PostUsers(_user);
         }
 
@@ -51,6 +49,7 @@ namespace Server.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+
         }
 
         // DELETE api/<controller>/5

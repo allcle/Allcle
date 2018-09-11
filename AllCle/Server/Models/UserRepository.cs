@@ -57,6 +57,17 @@ namespace Server.Models
         }
 
 
+        public bool GetUserId(string _id)
+        {
+            string sql = "Select * From Users Where Id ='" + _id + "'";
+            int num = this.db.Query<User>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
+        }
+
+
 
     }
 }

@@ -38,12 +38,25 @@ namespace Server.Controllers
             return _repo.GetUserId(id);   
         }
 
+
+
+
+
+
         // POST api/<controller>
         [HttpPost]
         public void Post([FromBody]User _user)
         {
             _repo.PostUsers(_user);
         }
+
+        [HttpPost("{id}")]
+        public bool LoginUser([FromBody]User _user)
+        {
+            return _repo.LoginUser(_user);
+        }
+
+
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]

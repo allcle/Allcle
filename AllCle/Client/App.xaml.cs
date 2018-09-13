@@ -17,14 +17,11 @@ namespace Client
         public static MainScreen MS = new MainScreen();
         public static FilterOption FO = new FilterOption();
         public static MyGroup MG = new MyGroup();
-        public static SignUp SU = new SignUp();
+        public static string ID;
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-
-            MW.Show();
-                
-
+            MW.Show();     
         }
     }
 }

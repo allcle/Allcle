@@ -35,7 +35,8 @@ namespace Client
         static HttpClient client = new HttpClient();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
         List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
-        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트        
+        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
+        List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -43,14 +44,16 @@ namespace Client
             public string professor;
             public bool ableToPut;
         }
-        TableSubjects[,] TimeTableDB = new TableSubjects[13, 7]; //12교시*일주일 2차원 배열
+        TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
+        string urlTimeTalbe = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //combobox를 위한 기본 url
         string url = null;  //json으로 쓰일 url
-        public static ObservableCollection<string> data = new ObservableCollection<string>(); //User의 myGroup 목록        
+        
         public MainScreen()
         {
             InitializeComponent();
-            DataListView_All.ItemsSource = GetSubjects();
+            GetSubjects();
+            DataListView_All.ItemsSource = SubjectList;
             InitDB();
         }
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
@@ -189,13 +192,20 @@ namespace Client
             }
         }
 
-        private List<Subject> GetSubjects()
+        private void GetSubjects()
         {
             url = urlBase;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
+            ResultSubtject = SubjectList;
+        }
+        private void GetTimeTable()
+        {
+            url = urlTimeTalbe + "/" + App.ID;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);            
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
@@ -358,6 +368,8 @@ namespace Client
             ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
             return ResultSubtject;
         }
+         
+        
 
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
@@ -378,7 +390,7 @@ namespace Client
 
             if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
             {
-                string[] time = new string[] { SubjectList[index].Time1, SubjectList[index].Time2, SubjectList[index].Time3, SubjectList[index].Time4, SubjectList[index].Time5, SubjectList[index].Time6, SubjectList[index].Time7, SubjectList[index].Time8 };
+                string[] time = new string[] { ResultSubtject[index].Time1, ResultSubtject[index].Time2, ResultSubtject[index].Time3, ResultSubtject[index].Time4, ResultSubtject[index].Time5, ResultSubtject[index].Time6, ResultSubtject[index].Time7, ResultSubtject[index].Time8 };
 
                 if (time[0] != "")
                 {
@@ -422,21 +434,21 @@ namespace Client
             {
                 UsersSubjectsList.Add(new UsersSubject()
                 {
-                    NO = SubjectList[index].NO,
-                    Grade = SubjectList[index].Grade,
-                    ClassNumber = SubjectList[index].ClassNumber,
-                    ClassName = SubjectList[index].ClassName,
-                    CreditCourse = SubjectList[index].CreditCourse,
-                    Professor = SubjectList[index].Professor,
-                    강의시간 = SubjectList[index].강의시간,
-                    Time1 = SubjectList[index].Time1,
-                    Time2 = SubjectList[index].Time2,
-                    Time3 = SubjectList[index].Time3,
-                    Time4 = SubjectList[index].Time4,
-                    Time5 = SubjectList[index].Time5,
-                    Time6 = SubjectList[index].Time6,
-                    Time7 = SubjectList[index].Time7,
-                    Time8 = SubjectList[index].Time8,
+                    NO = ResultSubtject[index].NO,
+                    Grade = ResultSubtject[index].Grade,
+                    ClassNumber = ResultSubtject[index].ClassNumber,
+                    ClassName = ResultSubtject[index].ClassName,
+                    CreditCourse = ResultSubtject[index].CreditCourse,
+                    Professor = ResultSubtject[index].Professor,
+                    강의시간 = ResultSubtject[index].강의시간,
+                    Time1 = ResultSubtject[index].Time1,
+                    Time2 = ResultSubtject[index].Time2,
+                    Time3 = ResultSubtject[index].Time3,
+                    Time4 = ResultSubtject[index].Time4,
+                    Time5 = ResultSubtject[index].Time5,
+                    Time6 = ResultSubtject[index].Time6,
+                    Time7 = ResultSubtject[index].Time7,
+                    Time8 = ResultSubtject[index].Time8,
                     UserName = "User",
                     NumOfTimeTable = 1,
                 }); //과목추가
@@ -467,7 +479,7 @@ namespace Client
         }
         private void InitDB() //TimeTable 초기화
         {
-            for (int _row = 0; _row < 13; _row++)
+            for (int _row = 0; _row < 14; _row++)
                 for (int _col = 0; _col < 7; _col++)
                 {
                     TimeTableDB[_row, _col].className = null;
@@ -495,12 +507,12 @@ namespace Client
 
             TextBlock[,] schedule = new TextBlock[,]
             {
-                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12},
-                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12},
-                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12},
-                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12},
-                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12},
-                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12},
+                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
+                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
+                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
+                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
+                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
+                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
             };
 
             InitDB();  //초기화
@@ -508,7 +520,7 @@ namespace Client
 
             for(int i=0; i<6; i++)
             {
-                for(int j=0; j<12; j++)
+                for(int j=0; j<13; j++)
                 {
                     schedule[i, j].Text = string.Empty;
                     schedule[i, j].Background = Brushes.White;
@@ -576,7 +588,8 @@ namespace Client
             Search_btn.IsEnabled = false;
             MyGroup_cob.Visibility = Visibility.Visible;
             MyGroup_cob.IsEnabled = true;
-            MyGroup_cob.ItemsSource = data;
+            GetTimeTable();
+            MyGroup_cob.ItemsSource = userTimeTable;
         }
 
         private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -584,22 +597,22 @@ namespace Client
 
             TextBlock[,] _schedule = new TextBlock[,]
             {
-                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12},
-                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12},
-                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12},
-                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12},
-                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12},
-                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12},
+                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
+                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
+                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
+                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
+                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
+                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
             };
 
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
             {
-                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
-                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
-                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
-                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
-                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
-                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn, mon13_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn, tue13_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn, wed13_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn, thu13_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn, fri13_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn, sat13_btn},
             };
             var panel = sender as TextBlock;
 
@@ -608,7 +621,7 @@ namespace Client
 
             for (int i=0; i<6; i++)
             {
-                for(int j=0; j<12; j++)
+                for(int j=0; j<13; j++)
                 {
                     if(_schedule[i,j].Name == panel.Name)
                     {
@@ -626,12 +639,12 @@ namespace Client
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
             {
-                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
-                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
-                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
-                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
-                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
-                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn, mon13_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn, tue13_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn, wed13_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn, thu13_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn, fri13_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn, sat13_btn},
             };
             var panel = sender as System.Windows.Controls.Button;
 
@@ -640,7 +653,7 @@ namespace Client
 
             for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < 13; j++)
                 {
                     if (schedule[i, j].Name == panel.Name)
                     {
@@ -659,22 +672,22 @@ namespace Client
 
             TextBlock[,] _schedule = new TextBlock[,]
             {
-                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12},
-                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12},
-                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12},
-                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12},
-                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12},
-                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12},
+                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
+                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
+                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
+                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
+                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
+                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
             };
 
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
             {
-                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
-                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
-                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
-                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
-                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
-                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn, mon13_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn, tue13_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn, wed13_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn, thu13_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn, fri13_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn, sat13_btn},
             };
             var panel = sender as TextBlock;
 
@@ -683,7 +696,7 @@ namespace Client
 
             for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < 13; j++)
                 {
                     if (_schedule[i, j].Name == panel.Name)
                     {
@@ -700,12 +713,12 @@ namespace Client
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
             {
-                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
-                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
-                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
-                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
-                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
-                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn, mon13_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn, tue13_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn, wed13_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn, thu13_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn, fri13_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn, sat13_btn},
             };
             var panel = sender as System.Windows.Controls.Button;
 
@@ -714,7 +727,7 @@ namespace Client
 
             for (int i = 0; i < 6; i++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int j = 0; j < 13; j++)
                 {
                     if (schedule[i, j].Name == panel.Name)
                     {
@@ -731,22 +744,22 @@ namespace Client
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
             {
-                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn},
-                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn},
-                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn},
-                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn},
-                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn},
-                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn},
+                {mon1_btn, mon2_btn, mon3_btn, mon4_btn, mon5_btn, mon6_btn, mon7_btn, mon8_btn, mon9_btn, mon10_btn, mon11_btn, mon12_btn, mon13_btn},
+                {tue1_btn, tue2_btn, tue3_btn, tue4_btn, tue5_btn, tue6_btn, tue7_btn, tue8_btn, tue9_btn, tue10_btn, tue11_btn, tue12_btn, tue13_btn},
+                {wed1_btn, wed2_btn, wed3_btn, wed4_btn, wed5_btn, wed6_btn, wed7_btn, wed8_btn, wed9_btn, wed10_btn, wed11_btn, wed12_btn, wed13_btn},
+                {thu1_btn, thu2_btn, thu3_btn, thu4_btn, thu5_btn, thu6_btn, thu7_btn, thu8_btn, thu9_btn, thu10_btn, thu11_btn, thu12_btn, thu13_btn},
+                {fri1_btn, fri2_btn, fri3_btn, fri4_btn, fri5_btn, fri6_btn, fri7_btn, fri8_btn, fri9_btn, fri10_btn, fri11_btn, fri12_btn, fri13_btn},
+                {sat1_btn, sat2_btn, sat3_btn, sat4_btn, sat5_btn, sat6_btn, sat7_btn, sat8_btn, sat9_btn, sat10_btn, sat11_btn, sat12_btn, sat13_btn},
             };
 
             string[,] day_time = new string[,]
             {
-                {"월1", "월2", "월3", "월4", "월5", "월6", "월7", "월8", "월9", "월10", "월11", "월12"},
-                {"화1", "화2", "화3", "화4", "화5", "화6", "화7", "화8", "화9", "화10", "화11", "화12"},
-                {"수1", "수2", "수3", "수4", "수5", "수6", "수7", "수8", "수9", "수10", "수11", "수12"},
-                {"목1", "목2", "목3", "목4", "목5", "목6", "목7", "목8", "목9", "목10", "목11", "목12"},
-                {"금1", "금2", "금3", "금4", "금5", "금6", "금7", "금8", "금9", "금10", "금11", "금12"},
-                {"토1", "토2", "토3", "토4", "토5", "토6", "토7", "토8", "토9", "토10", "토11", "토12"}
+                {"월1", "월2", "월3", "월4", "월5", "월6", "월7", "월8", "월9", "월10", "월11", "월12", "월13"},
+                {"화1", "화2", "화3", "화4", "화5", "화6", "화7", "화8", "화9", "화10", "화11", "화12", "화13"},
+                {"수1", "수2", "수3", "수4", "수5", "수6", "수7", "수8", "수9", "수10", "수11", "수12", "수13"},
+                {"목1", "목2", "목3", "목4", "목5", "목6", "목7", "목8", "목9", "목10", "목11", "목12", "목13"},
+                {"금1", "금2", "금3", "금4", "금5", "금6", "금7", "금8", "금9", "금10", "금11", "금12", "금13"},
+                {"토1", "토2", "토3", "토4", "토5", "토6", "토7", "토8", "토9", "토10", "토11", "토12", "토13"}
             };
 
             var panel = sender as System.Windows.Controls.Button;
@@ -756,7 +769,7 @@ namespace Client
 
             for(int i=0; i<6; i++)
             {
-                for(int j=0; j<12; j++)
+                for(int j=0; j<13; j++)
                 {
                     if(panel.Name == schedule[i, j].Name)
                     {
@@ -798,14 +811,27 @@ namespace Client
 
         private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Value : " + data[MyGroup_cob.SelectedIndex]);
+            System.Windows.MessageBox.Show("Value : " + userTimeTable[MyGroup_cob.SelectedIndex]);
         }
 
         private void MyGroup_cob_Initialized(object sender, EventArgs e)
         {
-            data.Add("A");
-            data.Add("B");
+            //userTimeTable.Add("A");
+            //userTimeTable.Add("B");
             //MyGroup_cob.ItemsSource = data;
+        }
+        
+               
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            GetTimeTable();
+            TableList.ItemsSource = userTimeTable;
+        }
+
+        private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = TableList.SelectedIndex;
         }
     }
 }

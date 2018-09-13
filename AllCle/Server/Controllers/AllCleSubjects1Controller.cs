@@ -32,15 +32,5 @@ namespace Server.Controllers
         {
             return _repo.GetSubjects();
         }
-
-        /*[HttpPost]
-        public Subject PostSubject([FromBody] Subject Subject)              // ID와 PW를 server에 전송하는 메소드
-        {
-            _repo.AddSubject(Subject);                                      // 로그인할 때 사용하는 메소드
-            return Subject;
-        }*/
-
-
-
     }
 }

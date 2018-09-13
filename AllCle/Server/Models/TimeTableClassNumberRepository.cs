@@ -23,7 +23,14 @@ namespace Server.Models
                     "DefaultConnection").Value);
         }
 
-        public void PostTimeTalbe(TimeTableClassNumber _timeTableClassNumber)
+        public List<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
+        {
+            string sql = "Select * from TimeTableClassNumber Where UserTimeTable = N'" + _timeTableName + "'";
+            return db.Query<TimeTableClassNumber>(sql).ToList();
+        }
+
+
+        public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
             string sql = "Insert Into UserTimeTable (UserTimeTable, TimeTableClassNumber) Values (@UserTimeTable, @TimeTableClassNumber)";
             db.Execute(sql, _timeTableClassNumber);

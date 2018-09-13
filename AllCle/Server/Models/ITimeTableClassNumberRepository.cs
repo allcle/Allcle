@@ -7,6 +7,7 @@ namespace Server.Models
 {
     public interface ITimeTableClassNumberRepository
     {
-        void PostTimeTalbe(TimeTableClassNumber _timeTableClassNumber);
+        List<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName);
+        void PostTimeTable(TimeTableClassNumber _timeTableClassNumber);
     }
 }

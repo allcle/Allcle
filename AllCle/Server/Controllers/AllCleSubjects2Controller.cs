@@ -30,22 +30,6 @@ namespace Server.Controllers
         public IEnumerable<Subject> GetSubjects()  //남은시간에서만, 담은과목 제외
         {
             return _repo.GetSubjects();
-        }
-        
-        
-
-       /* 
-
-
-        [HttpPost]
-        public Subject PostSubject([FromBody] Subject Subject)              // ID와 PW를 server에 전송하는 메소드
-        {
-            _repo.AddSubject(Subject);                                      // 로그인할 때 사용하는 메소드
-            return Subject;
-        }
-        */
-
-        
-
+        }        
     }
 }

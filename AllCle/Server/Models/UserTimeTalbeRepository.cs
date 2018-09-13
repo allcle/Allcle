@@ -25,6 +25,12 @@ namespace Server.Models
                     "DefaultConnection").Value);
         }        
 
+        public List<UserTimeTable> GetUserTimeTables(string _userId)
+        {
+            string sql = "select * from UserTimeTable Where ID = N'" + _userId + "'";
+            return this.db.Query<UserTimeTable>(sql).ToList();
+        }
+
         public void PostTimeTalbe(UserTimeTable _userTimeTable)
         {
             string sql = "Insert Into UserTimeTable (ID, TimeTableName) Values (@ID, @TimeTalbeName)";

@@ -33,8 +33,8 @@
                 <TextBlock x:Name="Text" Text="ID" Grid.Row="0" FontSize="20" Foreground="Blue" Margin="30,0,0,0" Opacity="0"/>
             </Border>
             <TextBox x:Name="Back" Grid.Row="1" Grid.Column="0" BorderThickness="0,0,0,5"/>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="1" Grid.Column="0" FontSize="20" UseLayoutRounding="False" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus"/>
-            <TextBox x:Name="ID_Box" Grid.Row="1" Grid.Column="0" Foreground="Black" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" BorderThickness="0" Margin="0,3,5,5" GotFocus="ID_Box_GotFocus" LostFocus="ID_Box_LostFocus"/>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="1" Grid.Column="0" FontSize="20" UseLayoutRounding="False" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus" KeyDown="PW_Box_KeyDown"/>
+            <TextBox x:Name="ID_Box" Grid.Row="1" Grid.Column="0" Foreground="Black" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" BorderThickness="0" Margin="0,3,5,5" GotFocus="ID_Box_GotFocus" LostFocus="ID_Box_LostFocus" KeyDown="ID_Box_KeyDown"/>
             <Grid x:Name="PW" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"/>

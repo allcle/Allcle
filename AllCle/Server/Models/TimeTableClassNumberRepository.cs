@@ -25,14 +25,14 @@ namespace Server.Models
 
         public List<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
         {
-            string sql = "Select * from TimeTableClassNumber Where UserTimeTable = N'" + _timeTableName + "'";
+            string sql = "Select * From TimeTableClassNumber Where TimeTableName = N'" + _timeTableName + "'";
             return db.Query<TimeTableClassNumber>(sql).ToList();
         }
 
 
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (UserTimeTable, TimeTableClassNumber) Values (@UserTimeTable, @TimeTableClassNumber)";
+            string sql = "Insert Into UserTimeTable (TimeTableName, TimeTableClassNumber) Values (@TimeTableName, @TimeTableClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
     }

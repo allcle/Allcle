@@ -35,8 +35,9 @@ namespace Client
         static HttpClient client = new HttpClient();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
         List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
-        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
+        List<Subject> UsersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
+        List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -46,7 +47,8 @@ namespace Client
         }
         TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
-        string urlTimeTalbe = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //combobox를 위한 기본 url
+        string urlTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //유저의 시간표 리스트를 위한 기본 url
+        string urlTimeTableClassNumber = @"https://allcleapp.azurewebsites.net/api/TimeTableClassNumber";       //저장된 시간표의 과목들
         string url = null;  //json으로 쓰일 url
         
         public MainScreen()
@@ -202,10 +204,17 @@ namespace Client
         }
         private void GetTimeTable()
         {
-            url = urlTimeTalbe + "/" + App.ID;
+            url = urlTimeTable + "/" + App.ID;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);            
+        }
+        private void GetTimeTableClassNumber(string _timeTableName)
+        {
+            url = urlTimeTableClassNumber + "/" + _timeTableName;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
@@ -432,7 +441,7 @@ namespace Client
 
             if (totalAbleToPut == true) //과목을 넣을 수 있다면
             {
-                UsersSubjectsList.Add(new UsersSubject()
+                UsersSubjectsList.Add(new Subject()
                 {
                     NO = ResultSubtject[index].NO,
                     Grade = ResultSubtject[index].Grade,
@@ -449,13 +458,11 @@ namespace Client
                     Time6 = ResultSubtject[index].Time6,
                     Time7 = ResultSubtject[index].Time7,
                     Time8 = ResultSubtject[index].Time8,
-                    UserName = "User",
-                    NumOfTimeTable = 1,
                 }); //과목추가
                 RefreshTimeTable();
             }
         }
-        private List<string> TimeInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 시간을 string으로
+        private List<string> TimeInList(List<Subject> _UsersSubjectList) //유저가 듣는 시간을 string으로
         {
             List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
@@ -468,7 +475,7 @@ namespace Client
             }
             return result;
         }
-        private List<string> SubjectInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 과목을 string으로
+        private List<string> SubjectInList(List<Subject> _UsersSubjectList) //유저가 듣는 과목을 string으로
         {
             List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
@@ -832,6 +839,14 @@ namespace Client
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = TableList.SelectedIndex;
+            string tableName = userTimeTable[index].TimeTableName;
+            GetTimeTableClassNumber(tableName);
+            UsersSubjectsList.Clear();
+            for(int i=0;i<timeTableClassNumber.Count;i++)
+            {
+                UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i].ClassNumber)).ToList().ElementAt(0));                
+            }
+            RefreshTimeTable();
         }
     }
 }

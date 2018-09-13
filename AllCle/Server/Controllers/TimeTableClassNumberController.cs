@@ -30,7 +30,7 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
+        [HttpGet("{_timeTableName}")]
         public IEnumerable<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
         {
             return _repo.GetTimeTableClassNumbers(_timeTableName);

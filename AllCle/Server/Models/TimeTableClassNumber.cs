@@ -9,6 +9,6 @@ namespace Server.Models
     {
         public int NO { get; set; }
         public string TimeTableName { get; set; }
-        public string ClassNuumber { get; set; }
+        public string ClassNumber { get; set; }
     }
 }

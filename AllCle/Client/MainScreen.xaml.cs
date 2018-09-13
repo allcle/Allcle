@@ -35,7 +35,8 @@ namespace Client
         static HttpClient client = new HttpClient();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
         List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
-        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트        
+        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
+        List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -45,12 +46,14 @@ namespace Client
         }
         TableSubjects[,] TimeTableDB = new TableSubjects[13, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
+        string urlTimeTalbe = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //combobox를 위한 기본 url
         string url = null;  //json으로 쓰일 url
-        public static ObservableCollection<string> data = new ObservableCollection<string>(); //User의 myGroup 목록        
+        
         public MainScreen()
         {
             InitializeComponent();
-            DataListView_All.ItemsSource = GetSubjects();
+            GetSubjects();
+            DataListView_All.ItemsSource = SubjectList;
             InitDB();
         }
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
@@ -189,13 +192,20 @@ namespace Client
             }
         }
 
-        private List<Subject> GetSubjects()
+        private void GetSubjects()
         {
             url = urlBase;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            return SubjectList;
+            ResultSubtject = SubjectList;
+        }
+        private void GetTimeTable()
+        {
+            url = urlTimeTalbe + "/" + App.ID;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);            
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
@@ -358,6 +368,8 @@ namespace Client
             ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
             return ResultSubtject;
         }
+         
+        
 
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
@@ -378,7 +390,7 @@ namespace Client
 
             if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
             {
-                string[] time = new string[] { SubjectList[index].Time1, SubjectList[index].Time2, SubjectList[index].Time3, SubjectList[index].Time4, SubjectList[index].Time5, SubjectList[index].Time6, SubjectList[index].Time7, SubjectList[index].Time8 };
+                string[] time = new string[] { ResultSubtject[index].Time1, ResultSubtject[index].Time2, ResultSubtject[index].Time3, ResultSubtject[index].Time4, ResultSubtject[index].Time5, ResultSubtject[index].Time6, ResultSubtject[index].Time7, ResultSubtject[index].Time8 };
 
                 if (time[0] != "")
                 {
@@ -422,21 +434,21 @@ namespace Client
             {
                 UsersSubjectsList.Add(new UsersSubject()
                 {
-                    NO = SubjectList[index].NO,
-                    Grade = SubjectList[index].Grade,
-                    ClassNumber = SubjectList[index].ClassNumber,
-                    ClassName = SubjectList[index].ClassName,
-                    CreditCourse = SubjectList[index].CreditCourse,
-                    Professor = SubjectList[index].Professor,
-                    강의시간 = SubjectList[index].강의시간,
-                    Time1 = SubjectList[index].Time1,
-                    Time2 = SubjectList[index].Time2,
-                    Time3 = SubjectList[index].Time3,
-                    Time4 = SubjectList[index].Time4,
-                    Time5 = SubjectList[index].Time5,
-                    Time6 = SubjectList[index].Time6,
-                    Time7 = SubjectList[index].Time7,
-                    Time8 = SubjectList[index].Time8,
+                    NO = ResultSubtject[index].NO,
+                    Grade = ResultSubtject[index].Grade,
+                    ClassNumber = ResultSubtject[index].ClassNumber,
+                    ClassName = ResultSubtject[index].ClassName,
+                    CreditCourse = ResultSubtject[index].CreditCourse,
+                    Professor = ResultSubtject[index].Professor,
+                    강의시간 = ResultSubtject[index].강의시간,
+                    Time1 = ResultSubtject[index].Time1,
+                    Time2 = ResultSubtject[index].Time2,
+                    Time3 = ResultSubtject[index].Time3,
+                    Time4 = ResultSubtject[index].Time4,
+                    Time5 = ResultSubtject[index].Time5,
+                    Time6 = ResultSubtject[index].Time6,
+                    Time7 = ResultSubtject[index].Time7,
+                    Time8 = ResultSubtject[index].Time8,
                     UserName = "User",
                     NumOfTimeTable = 1,
                 }); //과목추가
@@ -576,7 +588,8 @@ namespace Client
             Search_btn.IsEnabled = false;
             MyGroup_cob.Visibility = Visibility.Visible;
             MyGroup_cob.IsEnabled = true;
-            MyGroup_cob.ItemsSource = data;
+            GetTimeTable();
+            MyGroup_cob.ItemsSource = userTimeTable;
         }
 
         private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -798,14 +811,27 @@ namespace Client
 
         private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            System.Windows.MessageBox.Show("Value : " + data[MyGroup_cob.SelectedIndex]);
+            System.Windows.MessageBox.Show("Value : " + userTimeTable[MyGroup_cob.SelectedIndex]);
         }
 
         private void MyGroup_cob_Initialized(object sender, EventArgs e)
         {
-            data.Add("A");
-            data.Add("B");
+            //userTimeTable.Add("A");
+            //userTimeTable.Add("B");
             //MyGroup_cob.ItemsSource = data;
+        }
+        
+               
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            GetTimeTable();
+            TableList.ItemsSource = userTimeTable;
+        }
+
+        private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            int index = TableList.SelectedIndex;
         }
     }
 }

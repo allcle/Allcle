@@ -32,9 +32,9 @@ namespace Server.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IEnumerable<UserTimeTable> Get(string _id)
         {
-            return "value";
+            return _repo.GetUserTimeTables(_id);
         }
 
         // POST api/<controller>

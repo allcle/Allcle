@@ -7,6 +7,7 @@ namespace Server.Models
 {
     public interface IUserTimeTableRepository
     {
+        List<UserTimeTable> GetUserTimeTables(string _userId);
         void PostTimeTalbe(UserTimeTable _userTimeTable);
     }
 }

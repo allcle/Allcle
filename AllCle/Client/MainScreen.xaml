@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="AllCle" Height="635.1" Width="951.2" WindowStartupLocation="CenterScreen">
+        Title="AllCle" Height="635.1" Width="951.2" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Grid Name="BigGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -48,10 +48,10 @@
                     <TextBlock x:Name="UserMajor" Text="과 : 컴퓨터공학과" FontSize="20"/>
                 </Border>                
             </Grid>
-            <ListView x:Name="TableList" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding List}" Margin="5">
+            <ListView x:Name="TableList" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding List}" Margin="5" MouseDoubleClick="TableList_MouseDoubleClick">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding table}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding TimeTableName}" Width="200"/>
                     </GridView>
                 </ListView.View>
             </ListView>

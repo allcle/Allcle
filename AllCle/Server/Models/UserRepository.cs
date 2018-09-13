@@ -12,6 +12,7 @@ namespace Server.Models
 {
     public class UserRepository : IUserRepository
     {
+        string setkey = "allcle";
         private IConfiguration _config;
         private SqlConnection db;
         public UserRepository(IConfiguration config)                                             // db 설정하는 메소드
@@ -50,13 +51,32 @@ namespace Server.Models
 
         public void PostUsers(User _user)
         {
-            string setkey = "allcle";
             _user.Password = Decrypt(_user.Password, setkey);
             string sql = "Insert Into Users (Id, Password) Values (@Id, @Password)";
             db.Execute(sql, _user);
         }
 
 
+        public bool GetUserId(string _id)
+        {
+            string sql = "Select * From Users Where Id ='" + _id + "'";
+            int num = this.db.Query<User>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
+        }
+
+        public bool LoginUser(User _user)
+        {
+            _user.Password = Decrypt(_user.Password, setkey);
+            string sql = "Select * From Users Where Id = '" + _user.Id + "' And Password = '" + _user.Password + "'";
+            int num = this.db.Query<User>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
+        }
 
     }
 }

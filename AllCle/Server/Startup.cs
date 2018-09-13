@@ -49,7 +49,7 @@ namespace Server
             services.AddTransient<ISubjectRepository1, SubjectRepository1>();   //1학기 과목들 검색
             services.AddTransient<ISubjectRepository2, SubjectRepository2>();   //2학기 과목들 검색
             services.AddTransient<IUserRepository, UserRepository>();           //유저의 로그인, 회원가입
-            services.AddTransient<IUserTimeTableRepository, UserTimeTalbeRepository>();   //유저 - 타임테이블 
+            services.AddTransient<IUserTimeTableRepository, UserTimeTableRepository>();   //유저 - 타임테이블 
             services.AddTransient<ITimeTableClassNumberRepository, TimeTableClassNumberRepository>();   //타임테이블 - 과목
         }
 

@@ -10,8 +10,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Server.Models;   // Models라는 디렉토리 using
-                        // Models는 Server를 통해서 DataBase에서 어떤식으로 데이터를 가지고 올지에 대한 코드가 저장되어 있는 디렉토리.
-                        // DataBase에서 Data를 수신하는 방법을 크게 4가지로 구분(18.08.15 기준, 변동 예정)하였다.
+                       // Models는 Server를 통해서 DataBase에서 어떤식으로 데이터를 가지고 올지에 대한 코드가 저장되어 있는 디렉토리.
+                       // DataBase에서 Data를 수신하는 방법을 크게 4가지로 구분(18.08.15 기준, 변동 예정)하였다.
+using Server.IRepository;
+using Server.Repository;
 
 // Subject.cs는 DataBase가 구분되어 있는 쿼리를 public 변수로 저장하고 있는 class를 갖고 있다. 쿼리 별로 데이터를 가져올 때 사용할 class 객체이다.
 // SubjectRepository.cs는 데이터를 수신하는 4가지 방법에 대한 구현 코드가 있는 class이다.
@@ -51,6 +53,8 @@ namespace Server
             services.AddTransient<IUserRepository, UserRepository>();           //유저의 로그인, 회원가입
             services.AddTransient<IUserTimeTableRepository, UserTimeTableRepository>();   //유저 - 타임테이블 
             services.AddTransient<ITimeTableClassNumberRepository, TimeTableClassNumberRepository>();   //타임테이블 - 과목
+            services.AddTransient<IUserMyGroupRepository, UserMyGroupRepository>();         //유저 - MyGroup
+            services.AddTransient<IMyGroupClassNumberRepository, MyGroupClassNumberRepository>();       //MyGroup - 과목
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

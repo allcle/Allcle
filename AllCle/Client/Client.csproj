@@ -76,7 +76,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\TimeTableClassNumber.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserTimeTable.cs" />
     <Compile Include="SignUp.xaml.cs">

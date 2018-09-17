@@ -48,7 +48,7 @@ namespace Client
 
         }
 
-        private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
+        private void Save_btn_Click(object sender, RoutedEventArgs e)
         {
             String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
             string setkey = "allcle";
@@ -56,16 +56,7 @@ namespace Client
             data[0] = ID_box.Text;              // id
             data[1] = PW_Box.Password;          // pw
             data[2] = PWCon_Box.Password;       //confirm pw
-            string url = callUrl + "/" + ID_box.Text;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            if (Unicode == "true")                                          //있다
-            {
-                System.Windows.MessageBox.Show("이미 존재하는 아이디입니다.");
-                ID_box.Text = "";
-                ID_box.Focus();
-            }
-            else if (data[1] == data[2])
+            if (data[1] == data[2])
             {
                 string encrypted = Encrypt(data[1], setkey);
                 String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\"}";
@@ -82,12 +73,12 @@ namespace Client
                 streamReader.ReadToEnd();
                 streamReader.Close();
                 httpWebResponse.Close();
-                System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
                 this.Close();
             }
             else
                 System.Windows.MessageBox.Show("비밀번호가 일치하지 않습니다");
         }
+
         private void ID_box_GotFocus(object sender, RoutedEventArgs e)
         {
             if (ID_box.Text == "ID를 입력해주세요")

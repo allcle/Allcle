@@ -36,7 +36,7 @@
             <Button x:Name="Save_btn" Content="저장" Grid.Column="5" Margin="4" Click="Save_btn_Click"/>
         </Grid>
         <ListView x:Name="MyGroup_list" Grid.Row="2" Margin="10">
-            
+
         </ListView>
     </Grid>
 </Window>

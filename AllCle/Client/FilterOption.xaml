@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="FilterOption" Height="308.185" Width="390.036" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.RowDefinitions>        
+        <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>

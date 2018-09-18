@@ -53,10 +53,10 @@ namespace Client
         {
             Login_id();
         }
-        
+
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
@@ -85,7 +85,7 @@ namespace Client
         }
 
         private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
-        {           
+        {
             Back.BorderBrush = Brushes.Gray;
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 1;
@@ -103,7 +103,7 @@ namespace Client
         }
 
         private void PW_TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {                     
+        {
             PW_Box.Focus();
         }
 
@@ -113,23 +113,23 @@ namespace Client
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 1;
             doubleAnimation.To = 0;
-            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);            
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);
             if (PW_Box.Password.Length == 0)
             {
                 PW_.Visibility = Visibility.Visible;
                 Text.BeginAnimation(OpacityProperty, doubleAnimation);
             }
             else
-                Text.Foreground = Brushes.Gray;           
+                Text.Foreground = Brushes.Gray;
         }
-        
+
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             Login_PW();
         }
 
         private void ID__GotFocus(object sender, RoutedEventArgs e)     //ID 칸 클릭시
-        {   
+        {
             ID_Box.Focus();                                             //ID입력칸으로 focus
         }
 
@@ -153,7 +153,7 @@ namespace Client
         }
 
         private void PW__GotFocus(object sender, RoutedEventArgs e)         //패스워드 누르는 칸 클릭시
-        {      
+        {
             PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
         }
 
@@ -196,7 +196,7 @@ namespace Client
                 System.Windows.MessageBox.Show("아이디를 입력해주세요");
             else                                                            //없다
                 System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
-        } 
+        }
 
         private void Login_PW()
         {
@@ -229,7 +229,7 @@ namespace Client
 
         private void PW_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == System.Windows.Input.Key.Enter)
             {
                 Login_PW();
             }

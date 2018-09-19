@@ -23,13 +23,13 @@ namespace Client
         public static bool timeOption;      //시간표에 있는 시간 뺄지말지
         public static int searchOption;     //검색 옵션
         public FilterOption()
-        {            
+        {
             InitializeComponent();
             subjectOption = false;
             timeOption = false;
             searchOption = 1;
         }
-      
+
         private void save_Click(object sender, RoutedEventArgs e)
         {
             if (TimeO.IsChecked == true)        //시간 라디오버튼

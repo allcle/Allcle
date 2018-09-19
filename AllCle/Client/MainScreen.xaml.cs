@@ -35,8 +35,9 @@ namespace Client
         static HttpClient client = new HttpClient();
         List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
         List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
-        List<UsersSubject> UsersSubjectsList = new List<UsersSubject>(); //유저가 듣는 과목 리스트
+        List<Subject> UsersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
+        List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -46,9 +47,10 @@ namespace Client
         }
         TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
-        string urlTimeTalbe = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //combobox를 위한 기본 url
+        string urlTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //유저의 시간표 리스트를 위한 기본 url
+        string urlTimeTableClassNumber = @"https://allcleapp.azurewebsites.net/api/TimeTableClassNumber";       //저장된 시간표의 과목들
         string url = null;  //json으로 쓰일 url
-        
+
         public MainScreen()
         {
             InitializeComponent();
@@ -69,7 +71,7 @@ namespace Client
                     else if (FilterOption.searchOption == 3)
                         DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassNumber(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
                     else
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList),SubjectInList(UsersSubjectsList));
+                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
                 }
                 else
                 {
@@ -172,7 +174,7 @@ namespace Client
             MyGroup_cob.IsEnabled = false;
             DataListView_All.Visibility = Visibility.Visible;
             DataListView_All.IsEnabled = true;
-            RefreshByOption(FilterOption.timeOption, FilterOption.subjectOption);            
+            RefreshByOption(FilterOption.timeOption, FilterOption.subjectOption);
         }
         public void RefreshByOption(bool _timeOption, bool _subjectOption)
         {
@@ -202,10 +204,17 @@ namespace Client
         }
         private void GetTimeTable()
         {
-            url = urlTimeTalbe + "/" + App.ID;
+            url = urlTimeTable + "/" + App.ID;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
-            userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);            
+            userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
+        }
+        private void GetTimeTableClassNumber(string _timeTableName)
+        {
+            url = urlTimeTableClassNumber + "/" + _timeTableName;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
@@ -368,8 +377,8 @@ namespace Client
             ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
             return ResultSubtject;
         }
-         
-        
+
+
 
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
@@ -409,9 +418,9 @@ namespace Client
                     }
                 }
 
-                for (int i=1; i<8; i++)
+                for (int i = 1; i < 8; i++)
                 {
-                    if(time[i] != "" && totalAbleToPut == true)
+                    if (time[i] != "" && totalAbleToPut == true)
                     {
                         _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
                         daylist[i] = time[i].Substring(0, 1);
@@ -432,7 +441,7 @@ namespace Client
 
             if (totalAbleToPut == true) //과목을 넣을 수 있다면
             {
-                UsersSubjectsList.Add(new UsersSubject()
+                UsersSubjectsList.Add(new Subject()
                 {
                     NO = ResultSubtject[index].NO,
                     Grade = ResultSubtject[index].Grade,
@@ -449,13 +458,11 @@ namespace Client
                     Time6 = ResultSubtject[index].Time6,
                     Time7 = ResultSubtject[index].Time7,
                     Time8 = ResultSubtject[index].Time8,
-                    UserName = "User",
-                    NumOfTimeTable = 1,
                 }); //과목추가
                 RefreshTimeTable();
             }
         }
-        private List<string> TimeInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 시간을 string으로
+        private List<string> TimeInList(List<Subject> _UsersSubjectList) //유저가 듣는 시간을 string으로
         {
             List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
@@ -468,12 +475,12 @@ namespace Client
             }
             return result;
         }
-        private List<string> SubjectInList(List<UsersSubject> _UsersSubjectList) //유저가 듣는 과목을 string으로
+        private List<string> SubjectInList(List<Subject> _UsersSubjectList) //유저가 듣는 과목을 string으로
         {
             List<string> result = new List<string>();
             for (int i = 0; i < _UsersSubjectList.Count; i++)
             {
-                    result.Add(_UsersSubjectList[i].ClassName);
+                result.Add(_UsersSubjectList[i].ClassName);
             }
             return result;
         }
@@ -492,7 +499,7 @@ namespace Client
         {
             Type brushesType = typeof(Brushes);
             PropertyInfo[] properties = brushesType.GetProperties();
-            int period1 = 0;   string day1 = null;
+            int period1 = 0; string day1 = null;
             int period2 = 0; ; string day2 = null;
             int period3 = 0; ; string day3 = null;
             int period4 = 0; ; string day4 = null;
@@ -501,9 +508,9 @@ namespace Client
             int period7 = 0; ; string day7 = null;
             int period8 = 0; ; string day8 = null;
 
-            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8};
+            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
 
-            int[] period = new int[] {period1, period2, period3, period4, period5, period6, period7, period8};
+            int[] period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
 
             TextBlock[,] schedule = new TextBlock[,]
             {
@@ -518,22 +525,22 @@ namespace Client
             InitDB();  //초기화
             //이 이하로는 다 하얗게 만들기
 
-            for(int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
-                for(int j=0; j<13; j++)
+                for (int j = 0; j < 13; j++)
                 {
                     schedule[i, j].Text = string.Empty;
                     schedule[i, j].Background = Brushes.White;
                 }
             }
-            
+
             //여기부터는 User의 과목들을 색칠, 2차원 배열에 넣기
             for (int i = 0; i < UsersSubjectsList.Count(); i++)
             {
-                string[] time = new string[] { UsersSubjectsList[i].Time1, UsersSubjectsList[i].Time2, UsersSubjectsList[i].Time3, UsersSubjectsList[i].Time4, UsersSubjectsList[i].Time5, UsersSubjectsList[i].Time6, UsersSubjectsList[i].Time7, UsersSubjectsList[i].Time8};
-                for(int j=0; j<8; j++)
+                string[] time = new string[] { UsersSubjectsList[i].Time1, UsersSubjectsList[i].Time2, UsersSubjectsList[i].Time3, UsersSubjectsList[i].Time4, UsersSubjectsList[i].Time5, UsersSubjectsList[i].Time6, UsersSubjectsList[i].Time7, UsersSubjectsList[i].Time8 };
+                for (int j = 0; j < 8; j++)
                 {
-                    if(time[j] != "")
+                    if (time[j] != "")
                     {
                         int _day = 0;
                         int _period = Int32.Parse(time[j].Substring(1, time[j].Length - 1)); //time의 교시 뽑기
@@ -619,18 +626,18 @@ namespace Client
             int week = 0;
             int period = 0;
 
-            for (int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
-                for(int j=0; j<13; j++)
+                for (int j = 0; j < 13; j++)
                 {
-                    if(_schedule[i,j].Name == panel.Name)
+                    if (_schedule[i, j].Name == panel.Name)
                     {
                         week = i + 1;
                         period = j + 1;
                     }
                 }
             }
-            
+
             if (TimeTableDB[period, week].ableToPut == false)
                 schedule[week - 1, period - 1].Visibility = Visibility.Visible;
 
@@ -667,7 +674,7 @@ namespace Client
                 schedule[week - 1, period - 1].Visibility = Visibility.Visible;
 
         }
-        private void MouseLeave (object sender, System.Windows.Input.MouseEventArgs e)
+        private void MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
 
             TextBlock[,] _schedule = new TextBlock[,]
@@ -767,11 +774,11 @@ namespace Client
             int week = 0;
             int period = 0;
 
-            for(int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
-                for(int j=0; j<13; j++)
+                for (int j = 0; j < 13; j++)
                 {
-                    if(panel.Name == schedule[i, j].Name)
+                    if (panel.Name == schedule[i, j].Name)
                     {
                         week = i + 1;
                         period = j + 1;
@@ -783,10 +790,10 @@ namespace Client
             //메세지창 띄우기
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                DeleteSubjectInTimeTable(day_time[week-1, period-1]);
+                DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
                 RefreshTimeTable(); //새로고침
             }
-            schedule[week-1, period-1].Visibility = Visibility.Collapsed;
+            schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
         }
 
         private void DataListView_All_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -796,12 +803,12 @@ namespace Client
             //DataListView_All.SelectedItem = (sender as Border).DataContext;
             //if (!DataListView_All.IsFocused)
             //    DataListView_All.Focus();
-           // mon1.Background = Brushes.Red;
+            // mon1.Background = Brushes.Red;
         }
 
         private void DataListView_All_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-           // mon1.Background = Brushes.White;
+            // mon1.Background = Brushes.White;
         }
 
         private void MenuItem2_Click(object sender, RoutedEventArgs e)
@@ -820,8 +827,8 @@ namespace Client
             //userTimeTable.Add("B");
             //MyGroup_cob.ItemsSource = data;
         }
-        
-               
+
+
 
         private void Window_Activated(object sender, EventArgs e)
         {
@@ -832,6 +839,14 @@ namespace Client
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = TableList.SelectedIndex;
+            string tableName = userTimeTable[index].TimeTableName;
+            GetTimeTableClassNumber(tableName);
+            UsersSubjectsList.Clear();
+            for (int i = 0; i < timeTableClassNumber.Count; i++)
+            {
+                UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i].ClassNumber)).ToList().ElementAt(0));
+            }
+            RefreshTimeTable();
         }
     }
 }

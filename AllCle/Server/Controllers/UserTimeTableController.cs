@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
+using Server.IRepository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,9 +33,9 @@ namespace Server.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public IEnumerable<UserTimeTable> Get(string _id)
+        public IEnumerable<UserTimeTable> Get(string id)
         {
-            return _repo.GetUserTimeTables(_id);
+            return _repo.GetUserTimeTables(id);
         }
 
         // POST api/<controller>

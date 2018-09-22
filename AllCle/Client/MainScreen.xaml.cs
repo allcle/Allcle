@@ -38,6 +38,7 @@ namespace Client
         List<Subject> UsersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
         List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
+        List<UserMyGroup> userMyGroup = new List<UserMyGroup>();
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -47,8 +48,9 @@ namespace Client
         }
         TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
         string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
-        string urlTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //유저의 시간표 리스트를 위한 기본 url
+        string urlUserTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //유저의 시간표 리스트를 위한 기본 url
         string urlTimeTableClassNumber = @"https://allcleapp.azurewebsites.net/api/TimeTableClassNumber";       //저장된 시간표의 과목들
+        string urlUserMyGroup = @"https://allcleapp.azurewebsites.net/api/UserMyGroup";
         string url = null;  //json으로 쓰일 url
 
         public MainScreen()
@@ -202,9 +204,9 @@ namespace Client
             SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
             ResultSubtject = SubjectList;
         }
-        private void GetTimeTable()
+        private void GetUserTimeTable()
         {
-            url = urlTimeTable + "/" + App.ID;
+            url = urlUserTimeTable + "/" + App.ID;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
@@ -215,6 +217,13 @@ namespace Client
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
+        }
+        private void GetUserMyGroup()
+        {
+            url = urlUserMyGroup + "/" + App.ID;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            userMyGroup = JsonConvert.DeserializeObject<List<UserMyGroup>>(Unicode);
         }
 
         private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
@@ -595,7 +604,7 @@ namespace Client
             Search_btn.IsEnabled = false;
             MyGroup_cob.Visibility = Visibility.Visible;
             MyGroup_cob.IsEnabled = true;
-            GetTimeTable();
+            GetUserTimeTable();
             MyGroup_cob.ItemsSource = userTimeTable;
         }
 
@@ -832,8 +841,9 @@ namespace Client
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            GetTimeTable();
+            GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
+            UserId.Text = App.ID;
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)

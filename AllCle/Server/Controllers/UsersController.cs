@@ -51,9 +51,9 @@ namespace Server.Controllers
         }
 
         [HttpPost("{id}")]
-        public bool LoginUser([FromBody]User _user)
+        public User LoginUser(string id)
         {
-            return _repo.LoginUser(_user);
+            return _repo.LoginUser(id);
         }
 
 

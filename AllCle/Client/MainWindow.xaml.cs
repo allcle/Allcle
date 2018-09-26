@@ -21,6 +21,8 @@ using System.Windows.Forms.VisualStyles;
 using System.Net;
 using System.Security.Cryptography;
 using System.IO;
+using Client.Models;
+using Newtonsoft.Json;
 
 namespace Client
 {
@@ -29,7 +31,6 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        string setkey = "allcle";
         public MainWindow()
         {
             InitializeComponent();
@@ -204,8 +205,7 @@ namespace Client
             string urlBase = @"https://allcleapp.azurewebsites.net/api/Users"; //기본 url
             string url = null;  //json으로 쓰일 url
             url = urlBase + "/" + App.ID;
-            string encrypted = Encrypt(PW_Box.Password, setkey);
-            String postData = "{ \"Id\" : \"" + App.ID + "\", \"Password\" : \"" + encrypted + "\"}";
+            String postData = "";
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
             httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -216,13 +216,16 @@ namespace Client
             requestStream.Close();
             HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-            string result = streamReader.ReadToEnd().ToString();            //return 값이 true인지 false인지
+            string Unicode = streamReader.ReadToEnd().ToString();
+            User result = JsonConvert.DeserializeObject<User>(Unicode); //유저 정보 post로 가져온거
             streamReader.Close();
             httpWebResponse.Close();
-            if (result == "true")                                           //아이디 비번 맞음
+            string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
+            if(encryptedPW == result.Password)      //기존꺼랑 비교
             {
-                App.MS.Show();                                              //메인 화면 띄우기
-                this.Hide();                                                //로그인창 hide
+                App.MS.Show();
+                this.Hide();
+                //여기서 부터 암호화 키 다시해서 put으로 설정하는거 하면 됨
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");

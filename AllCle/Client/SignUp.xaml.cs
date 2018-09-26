@@ -68,7 +68,9 @@ namespace Client
             else if (data[1] == data[2])
             {
                 string encrypted = Encrypt(data[1], setkey);
-                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\"}";
+                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\"}";
+//                String postData = String.Format("Id={0}&Password={1}&EncryptKey={2}", data[0], encrypted, setkey);
+
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
                 httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -77,6 +79,7 @@ namespace Client
                 Stream requestStream = httpWebRequest.GetRequestStream();
                 requestStream.Write(sendData, 0, sendData.Length);
                 requestStream.Close();
+                // 여기서 500 error 발생
                 HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
                 streamReader.ReadToEnd();

@@ -61,7 +61,8 @@ namespace Client
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            App.MS.Show();                                              //메인 화면 띄우기
+            this.Hide();                                                //로그인창 hide
         }
 
         private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입

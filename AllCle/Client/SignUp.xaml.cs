@@ -79,7 +79,6 @@ namespace Client
                 Stream requestStream = httpWebRequest.GetRequestStream();
                 requestStream.Write(sendData, 0, sendData.Length);
                 requestStream.Close();
-                // 여기서 500 error 발생
                 HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
                 streamReader.ReadToEnd();

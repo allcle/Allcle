@@ -14,7 +14,6 @@ namespace Server.Repository
 {
     public class UserRepository : IUserRepository
     {
-        string setkey = "allcle";
         private IConfiguration _config;
         private SqlConnection db;
         public UserRepository(IConfiguration config)                                             // db 설정하는 메소드
@@ -51,14 +50,10 @@ namespace Server.Repository
                 return false;
         }
 
-        public bool LoginUser(User _user)
+        public User LoginUser(string _id)
         {
-            string sql = "Select * From Users Where Id = '" + _user.Id + "' And Password = '" + _user.Password + "' And EncryptKey = '" + _user.EncryptKey + "'";
-            int num = this.db.Query<User>(sql).Count();
-            if (num == 1)
-                return true;
-            else
-                return false;
+            string sql = "Select * From Users Where Id = '" +_id + "'";
+            return this.db.Query<User>(sql).ToList()[0];       
         }
 
     }

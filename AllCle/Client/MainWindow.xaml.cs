@@ -223,6 +223,8 @@ namespace Client
             string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
             if(encryptedPW == result.Password)      //기존꺼랑 비교
             {
+
+
                 App.MS.Show();
                 this.Hide();
                 //여기서 부터 암호화 키 다시해서 put으로 설정하는거 하면 됨

@@ -78,7 +78,6 @@ namespace Client
             {
                 string encrypted = Encrypt(data[1], setkey);
                 String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\"}";
-//                String postData = String.Format("Id={0}&Password={1}&EncryptKey={2}", data[0], encrypted, setkey);
 
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);

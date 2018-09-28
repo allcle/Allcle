@@ -39,7 +39,12 @@ namespace Server.Controllers
         }
 
 
-
+        // Update api/<controller>
+        [HttpPut]
+        public void Update([FromBody]User _user)
+        {
+            _repo.UpdateUsers(_user);
+        }
 
 
 

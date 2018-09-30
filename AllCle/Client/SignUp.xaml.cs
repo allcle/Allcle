@@ -51,7 +51,16 @@ namespace Client
         private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
         {
             String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
-            string setkey = "allcle";
+
+            // 첫 회원가입 시, Encrypt key 랜덤 생성. 로그인 마다 바뀔 예정
+            string setkey = null;
+            Random rand = new Random();
+            int len = rand.Next(6, 10);
+            for (int i = 0; i < len; i++)
+            {
+                setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
+            }
+
             String[] data = new String[10];
             data[0] = ID_box.Text;              // id
             data[1] = PW_Box.Password;          // pw
@@ -69,7 +78,6 @@ namespace Client
             {
                 string encrypted = Encrypt(data[1], setkey);
                 String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\"}";
-//                String postData = String.Format("Id={0}&Password={1}&EncryptKey={2}", data[0], encrypted, setkey);
 
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);

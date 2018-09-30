@@ -203,6 +203,7 @@ namespace Client
         private void Login_PW()
         {
             string urlBase = @"https://allcleapp.azurewebsites.net/api/Users"; //기본 url
+
             string url = null;  //json으로 쓰일 url
             url = urlBase + "/" + App.ID;
             String postData = "";
@@ -221,11 +222,47 @@ namespace Client
             streamReader.Close();
             httpWebResponse.Close();
             string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
+            string id = result.Id;
+
             if(encryptedPW == result.Password)      //기존꺼랑 비교
             {
+                String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
+                string setkey = null;
+                Random rand = new Random();
+                int len = rand.Next(6, 10);
+                for (int i = 0; i < len; i++)
+                {
+                    setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
+                }
+                string NewEncryptedPW = Encrypt(PW_Box.Password, setkey);
+
+                System.Windows.MessageBox.Show(id);
+                System.Windows.MessageBox.Show(NewEncryptedPW);
+                System.Windows.MessageBox.Show(setkey);
+
+
+                // NewEncryptedPW, setkey업데이트
+                // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
+                String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\"}";
+
+                HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
+                byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+                httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+                httpWebRequest2.Method = "PUT";
+
+                httpWebRequest2.ContentLength = sendData2.Length;
+                Stream requestStream2 = httpWebRequest2.GetRequestStream();
+                requestStream2.Write(sendData2, 0, sendData2.Length);
+                requestStream2.Close();
+                HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+                StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                streamReader2.ReadToEnd();
+                streamReader2.Close();
+                httpWebResponse2.Close();
+
                 App.MS.Show();
                 this.Hide();
-                //여기서 부터 암호화 키 다시해서 put으로 설정하는거 하면 됨
+                
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");

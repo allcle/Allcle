@@ -10,6 +10,7 @@ namespace Server.IRepository
     {
         List<User> GetUsers();
         void PostUsers(User _user);
+        void UpdateUsers(User _user);
         bool GetUserId(string _id);
         User LoginUser(string _id);
     }

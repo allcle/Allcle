@@ -45,7 +45,6 @@ namespace Server.Repository
             db.Execute(sql, _user);
         }
 
-
         public bool GetUserId(string _id)
         {
             string sql = "Select * From Users Where Id ='" + _id + "'";

@@ -38,14 +38,12 @@ namespace Server.Controllers
             return _repo.GetUserId(id);
         }
 
-
         // Update api/<controller>
         [HttpPut]
         public void Update([FromBody]User _user)
         {
             _repo.UpdateUsers(_user);
         }
-
 
 
         // POST api/<controller>
@@ -60,8 +58,6 @@ namespace Server.Controllers
         {
             return _repo.LoginUser(id);
         }
-
-
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]

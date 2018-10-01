@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350" MouseDown="Window_MouseDown">    
+        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350" MouseDown="Window_MouseDown">
     <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -64,9 +64,9 @@
                     <TextBox x:Name="ID_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
                 </Grid>
                 <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Next_btn_Click"/>
-            </Grid>            
-            
-            
+            </Grid>
+
+
             <Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -83,7 +83,7 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="1" Background="White" BorderBrush="White" Click="SingUP_btn_Click" MinWidth="200"/>
             </Grid>
-        </Grid>        
+        </Grid>
     </Grid>
 
 </Window>

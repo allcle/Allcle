@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using Server.IRepository;
 using Server.Models;                       // models에 있는 ISubjectRepository.cs, Subject.cs, SubjectRepository.cs 즉, 입출력 관련 코드 구현한 파일 import
 using Newtonsoft.Json;                      // C#의 JSON document를 다루기 위한 가장 기본적인 라이브러리
 using System.IO;                            // C#의 파일 입출력을 다루는 라이브러리
@@ -24,7 +24,7 @@ namespace Server.Controllers
         {
             _repo = repo;
         }
-        
+
         // GET api/<controller>
         [HttpGet]
         public IEnumerable<User> GeUsers()
@@ -35,12 +35,15 @@ namespace Server.Controllers
         [HttpGet("{id}")]
         public bool GetUserId(string id)
         {
-            return _repo.GetUserId(id);   
+            return _repo.GetUserId(id);
         }
 
-
-
-
+        // Update api/<controller>
+        [HttpPut]
+        public void Update([FromBody]User _user)
+        {
+            _repo.UpdateUsers(_user);
+        }
 
 
         // POST api/<controller>
@@ -51,12 +54,10 @@ namespace Server.Controllers
         }
 
         [HttpPost("{id}")]
-        public bool LoginUser([FromBody]User _user)
+        public User LoginUser(string id)
         {
-            return _repo.LoginUser(_user);
+            return _repo.LoginUser(id);
         }
-
-
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]

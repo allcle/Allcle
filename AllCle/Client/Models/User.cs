@@ -11,5 +11,6 @@ namespace Client.Models
         public int NO { get; set; }
         public string Id { get; set; }
         public string Password { get; set; }
+        public string EncryptKey { get; set; }
     }
 }

@@ -21,6 +21,8 @@ using System.Windows.Forms.VisualStyles;
 using System.Net;
 using System.Security.Cryptography;
 using System.IO;
+using Client.Models;
+using Newtonsoft.Json;
 
 namespace Client
 {
@@ -29,7 +31,6 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        string setkey = "allcle";
         public MainWindow()
         {
             InitializeComponent();
@@ -53,18 +54,21 @@ namespace Client
         {
             Login_id();
         }
-        
+
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
         {
-            
+            // 비밀번호 찾기 기능
+            // 추후에 아이디 찾기 기능 부가
         }
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            App.ID = "Guest";
+            App.MS.Show();                                              //메인 화면 띄우기
+            this.Hide();                                                //로그인창 hide
         }
 
-        private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입
+        private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입 화면 열기
         {
             SignUp SU = new SignUp();
             SU.Show();
@@ -85,7 +89,7 @@ namespace Client
         }
 
         private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
-        {           
+        {
             Back.BorderBrush = Brushes.Gray;
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 1;
@@ -103,7 +107,7 @@ namespace Client
         }
 
         private void PW_TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {                     
+        {
             PW_Box.Focus();
         }
 
@@ -113,23 +117,23 @@ namespace Client
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 1;
             doubleAnimation.To = 0;
-            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);            
+            doubleAnimation.Duration = TimeSpan.FromSeconds(0.01);
             if (PW_Box.Password.Length == 0)
             {
                 PW_.Visibility = Visibility.Visible;
                 Text.BeginAnimation(OpacityProperty, doubleAnimation);
             }
             else
-                Text.Foreground = Brushes.Gray;           
+                Text.Foreground = Brushes.Gray;
         }
-        
+
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             Login_PW();
         }
 
         private void ID__GotFocus(object sender, RoutedEventArgs e)     //ID 칸 클릭시
-        {   
+        {
             ID_Box.Focus();                                             //ID입력칸으로 focus
         }
 
@@ -153,7 +157,7 @@ namespace Client
         }
 
         private void PW__GotFocus(object sender, RoutedEventArgs e)         //패스워드 누르는 칸 클릭시
-        {      
+        {
             PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
         }
 
@@ -196,15 +200,15 @@ namespace Client
                 System.Windows.MessageBox.Show("아이디를 입력해주세요");
             else                                                            //없다
                 System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
-        } 
+        }
 
         private void Login_PW()
         {
             string urlBase = @"https://allcleapp.azurewebsites.net/api/Users"; //기본 url
+
             string url = null;  //json으로 쓰일 url
             url = urlBase + "/" + App.ID;
-            string encrypted = Encrypt(PW_Box.Password, setkey);
-            String postData = "{ \"Id\" : \"" + App.ID + "\", \"Password\" : \"" + encrypted + "\"}";
+            String postData = "";
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
             httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -215,13 +219,53 @@ namespace Client
             requestStream.Close();
             HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-            string result = streamReader.ReadToEnd().ToString();            //return 값이 true인지 false인지
+            string Unicode = streamReader.ReadToEnd().ToString();
+            User result = JsonConvert.DeserializeObject<User>(Unicode); //유저 정보 post로 가져온거
             streamReader.Close();
             httpWebResponse.Close();
-            if (result == "true")                                           //아이디 비번 맞음
+            string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
+            string id = result.Id;
+
+            if(encryptedPW == result.Password)      //기존꺼랑 비교
             {
-                App.MS.Show();                                              //메인 화면 띄우기
-                this.Hide();                                                //로그인창 hide
+                String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
+                string setkey = null;
+                Random rand = new Random();
+                int len = rand.Next(6, 10);
+                for (int i = 0; i < len; i++)
+                {
+                    setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
+                }
+                string NewEncryptedPW = Encrypt(PW_Box.Password, setkey);
+
+                // NewEncryptedPW, setkey업데이트
+                // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
+                String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\"}";
+
+                HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
+                byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+                httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+                httpWebRequest2.Method = "PUT";
+
+                httpWebRequest2.ContentLength = sendData2.Length;
+                Stream requestStream2 = httpWebRequest2.GetRequestStream();
+                requestStream2.Write(sendData2, 0, sendData2.Length);
+                requestStream2.Close();
+                HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+                StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                streamReader2.ReadToEnd();
+                streamReader2.Close();
+                httpWebResponse2.Close();
+
+                App.ID = ID_Box.Text;
+                ID.Visibility = Visibility.Visible;
+                PW.Visibility = Visibility.Collapsed;
+                PW_Box.Visibility = Visibility.Collapsed;
+                Text.Text = "ID";
+
+                App.MS.Show();
+                this.Hide();
+                
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");
@@ -229,7 +273,7 @@ namespace Client
 
         private void PW_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == System.Windows.Input.Key.Enter)
             {
                 Login_PW();
             }

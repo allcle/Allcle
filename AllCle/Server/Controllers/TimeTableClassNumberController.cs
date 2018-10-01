@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
+using Server.IRepository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,7 +31,7 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
+        [HttpGet("{_timeTableName}")]
         public IEnumerable<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
         {
             return _repo.GetTimeTableClassNumbers(_timeTableName);

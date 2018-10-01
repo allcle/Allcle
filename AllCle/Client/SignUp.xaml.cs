@@ -48,18 +48,37 @@ namespace Client
 
         }
 
-        private void Save_btn_Click(object sender, RoutedEventArgs e)
+        private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
         {
             String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
-            string setkey = "allcle";
+
+            // 첫 회원가입 시, Encrypt key 랜덤 생성. 로그인 마다 바뀔 예정
+            string setkey = null;
+            Random rand = new Random();
+            int len = rand.Next(6, 10);
+            for (int i = 0; i < len; i++)
+            {
+                setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
+            }
+
             String[] data = new String[10];
             data[0] = ID_box.Text;              // id
             data[1] = PW_Box.Password;          // pw
             data[2] = PWCon_Box.Password;       //confirm pw
-            if (data[1] == data[2])
+            string url = callUrl + "/" + ID_box.Text;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            if (Unicode == "true")                                          //있다
+            {
+                System.Windows.MessageBox.Show("이미 존재하는 아이디입니다.");
+                ID_box.Text = "";
+                ID_box.Focus();
+            }
+            else if (data[1] == data[2])
             {
                 string encrypted = Encrypt(data[1], setkey);
-                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\"}";
+                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\"}";
+
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
                 httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -73,12 +92,12 @@ namespace Client
                 streamReader.ReadToEnd();
                 streamReader.Close();
                 httpWebResponse.Close();
+                System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
                 this.Close();
             }
             else
                 System.Windows.MessageBox.Show("비밀번호가 일치하지 않습니다");
         }
-
         private void ID_box_GotFocus(object sender, RoutedEventArgs e)
         {
             if (ID_box.Text == "ID를 입력해주세요")
@@ -113,9 +132,9 @@ namespace Client
         }
 
         private void PWCon_TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {            
-                PWCon_TextBox.Visibility = Visibility.Collapsed;
-                PWCon_Box.Focus();            
+        {
+            PWCon_TextBox.Visibility = Visibility.Collapsed;
+            PWCon_Box.Focus();
         }
 
         private void PWCon_Box_LostFocus(object sender, RoutedEventArgs e)
@@ -126,6 +145,6 @@ namespace Client
             }
         }
 
-        
+
     }
 }

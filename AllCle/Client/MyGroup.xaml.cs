@@ -37,17 +37,17 @@ namespace Client
 
         public MyGroup()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         private void MyGroup_Cob_Initialized(object sender, EventArgs e)
         {
-            
+
         }
 
         private void MyGroup_Cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-               MessageBox.Show("Value : " + userTimeTable[MyGroup_Cob.SelectedIndex]); //선택하면 선택한거 보여줌
+            MessageBox.Show("Value : " + userTimeTable[MyGroup_Cob.SelectedIndex]); //선택하면 선택한거 보여줌
         }
 
         private void NewGroup_btn_Click(object sender, RoutedEventArgs e)

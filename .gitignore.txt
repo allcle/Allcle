@@ -1,5 +1,0 @@
-Allcle/.vs/
-Allcle/Client/bin/
-Allcle/Client/obj/
-Allcle/Server/bin/
-Allcle/Server/obj/

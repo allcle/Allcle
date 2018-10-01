@@ -13,7 +13,7 @@ namespace Client
     /// </summary>
     public partial class App : Application
     {
-        MainWindow MW = new MainWindow();
+        public static MainWindow MW = new MainWindow();
         public static MainScreen MS = new MainScreen();
         public static FilterOption FO = new FilterOption();
         public static MyGroup MG = new MyGroup();

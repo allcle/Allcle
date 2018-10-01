@@ -607,6 +607,11 @@ namespace Client
             GetUserTimeTable();
             MyGroup_cob.ItemsSource = userTimeTable;
         }
+        private void Logout_btn_Click(object sender, RoutedEventArgs e)
+        {
+            App.MW.Show();
+            this.Hide();
+        }
 
         private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {

@@ -208,7 +208,6 @@ namespace Client
 
             string url = null;  //json으로 쓰일 url
             url = urlBase + "/" + App.ID;
-            System.Windows.MessageBox.Show(App.ID);
             String postData = "";
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
@@ -225,9 +224,6 @@ namespace Client
             streamReader.Close();
             httpWebResponse.Close();
             string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
-            System.Windows.MessageBox.Show(PW_Box.Password);
-            System.Windows.MessageBox.Show(encryptedPW);
-            System.Windows.MessageBox.Show(result.EncryptKey);
             string id = result.Id;
 
             if(encryptedPW == result.Password)      //기존꺼랑 비교

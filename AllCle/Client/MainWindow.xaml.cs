@@ -259,13 +259,16 @@ namespace Client
 
                 App.ID = ID_Box.Text;
                 ID.Visibility = Visibility.Visible;
+                ID_Box.Visibility = Visibility.Visible;
                 PW.Visibility = Visibility.Collapsed;
-                PW_Box.Visibility = Visibility.Collapsed;
+//                PW_Box.Visibility = Visibility.Collapsed;
                 Text.Text = "ID";
-
+                
                 App.MS.Show();
                 this.Hide();
-                
+                ID_Box.Text = "";
+                PW_Box.Password = "";
+
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");

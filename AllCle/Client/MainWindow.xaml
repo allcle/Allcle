@@ -57,11 +57,13 @@
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="ID_" GotFocus="ID__GotFocus">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="61*"/>
+                        <ColumnDefinition Width="83*"/>
+                        <ColumnDefinition Width="174*"/>
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="ID_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\account.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="ID_img_MouseDown"/>
-                    <TextBox x:Name="ID_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
+                    <Image x:Name="ID_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\account.png" Grid.Column="1" Margin="7,10,0,10" MouseDown="ID_img_MouseDown"/>
+                    <TextBox x:Name="ID_btn" Grid.Column="2" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" Grid.ColumnSpan="2"/>
                 </Grid>
                 <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Next_btn_Click"/>
             </Grid>

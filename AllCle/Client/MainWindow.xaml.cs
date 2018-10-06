@@ -208,6 +208,7 @@ namespace Client
 
             string url = null;  //json으로 쓰일 url
             url = urlBase + "/" + App.ID;
+            System.Windows.MessageBox.Show(App.ID);
             String postData = "";
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
@@ -224,6 +225,9 @@ namespace Client
             streamReader.Close();
             httpWebResponse.Close();
             string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
+            System.Windows.MessageBox.Show(PW_Box.Password);
+            System.Windows.MessageBox.Show(encryptedPW);
+            System.Windows.MessageBox.Show(result.EncryptKey);
             string id = result.Id;
 
             if(encryptedPW == result.Password)      //기존꺼랑 비교
@@ -259,13 +263,16 @@ namespace Client
 
                 App.ID = ID_Box.Text;
                 ID.Visibility = Visibility.Visible;
+                ID_Box.Visibility = Visibility.Visible;
                 PW.Visibility = Visibility.Collapsed;
-                PW_Box.Visibility = Visibility.Collapsed;
+//                PW_Box.Visibility = Visibility.Collapsed;
                 Text.Text = "ID";
-
+                
                 App.MS.Show();
                 this.Hide();
-                
+                ID_Box.Text = "";
+                PW_Box.Password = "";
+
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");

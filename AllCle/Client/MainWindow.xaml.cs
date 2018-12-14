@@ -57,16 +57,18 @@ namespace Client
 
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            // 비밀번호 찾기 기능
+            // 추후에 아이디 찾기 기능 부가
         }
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
+            App.ID = "Guest";
             App.MS.Show();                                              //메인 화면 띄우기
             this.Hide();                                                //로그인창 hide
         }
 
-        private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입
+        private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입 화면 열기
         {
             SignUp SU = new SignUp();
             SU.Show();
@@ -236,11 +238,6 @@ namespace Client
                 }
                 string NewEncryptedPW = Encrypt(PW_Box.Password, setkey);
 
-                System.Windows.MessageBox.Show(id);
-                System.Windows.MessageBox.Show(NewEncryptedPW);
-                System.Windows.MessageBox.Show(setkey);
-
-
                 // NewEncryptedPW, setkey업데이트
                 // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
                 String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\"}";
@@ -260,9 +257,18 @@ namespace Client
                 streamReader2.Close();
                 httpWebResponse2.Close();
 
+                App.ID = ID_Box.Text;
+                ID.Visibility = Visibility.Visible;
+                ID_Box.Visibility = Visibility.Visible;
+                PW.Visibility = Visibility.Collapsed;
+//                PW_Box.Visibility = Visibility.Collapsed;
+                Text.Text = "ID";
+                
                 App.MS.Show();
                 this.Hide();
-                
+                ID_Box.Text = "";
+                PW_Box.Password = "";
+
             }
             else
                 System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");

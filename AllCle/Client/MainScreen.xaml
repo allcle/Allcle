@@ -26,9 +26,10 @@
             </Grid.RowDefinitions>
             <Grid x:Name="UserInfo" Grid.Row="0" Grid.Column="0" MinWidth="190" Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1.4*"/>
+                    <RowDefinition Height="1.4*"/>
+                    <RowDefinition Height="1.4*"/>
+                    <RowDefinition Height="1.4*"/>
                 </Grid.RowDefinitions>
                 <Border  BorderBrush="Gray"   Grid.Row="0" Grid.Column="0" Background="White" BorderThickness="1,1,1,0">
                     <TextBlock x:Name="UserId" FontSize="20"/>
@@ -36,8 +37,11 @@
                 <Border  BorderBrush="Gray"   Grid.Row="1"  Grid.Column="0"  Background="White" BorderThickness="1,0,1,0">
                     <TextBlock x:Name="UserAdmissionYear" Text="학번 : 14" FontSize="20"/>
                 </Border>
-                <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="0" Background="White" BorderThickness="1,0,1,1">
+                <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="0" Background="White" BorderThickness="1,0,1,0">
                     <TextBlock x:Name="UserMajor" Text="과 : 컴퓨터공학과" FontSize="20"/>
+                </Border>
+                <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="0" Background="White" BorderThickness="1,0,1,1">
+                    <Button x:Name="Logout_Button" Content="로그아웃" Grid.Row="2" Grid.Column="0" Margin="120,3,5,3"  Click="Logout_btn_Click"/>
                 </Border>
             </Grid>
             <ListView x:Name="TableList" Grid.Row="1" Grid.Column="0" MinWidth="190" ItemsSource="{Binding List}" Margin="5" MouseDoubleClick="TableList_MouseDoubleClick">

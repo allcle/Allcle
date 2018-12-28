@@ -31,10 +31,10 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{_timeTableName}")]
-        public IEnumerable<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
+        [HttpGet("{_id}/timetalble/{_timeTableName}")]
+        public IEnumerable<TimeTableClassNumber> GetTimeTableClassNumbers(string _id, string _timeTableName)
         {
-            return _repo.GetTimeTableClassNumbers(_timeTableName);
+            return _repo.GetTimeTableClassNumbers(_id, _timeTableName);
         }
 
         // POST api/<controller>

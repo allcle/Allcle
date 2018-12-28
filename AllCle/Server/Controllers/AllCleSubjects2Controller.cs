@@ -27,7 +27,7 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Subject> GetSubjects()  //남은시간에서만, 담은과목 제외
+        public IEnumerable<Subject> GetSubjects()  //모든 과목
         {
             return _repo.GetSubjects();
         }

@@ -26,7 +26,7 @@ namespace Server.Repository
                 _config.GetSection("ConnectionStrings").GetSection(
                     "DefaultConnection").Value);
         }
-        public List<User> GetUsers()                             //전체 모든 과목 보기
+        public List<User> GetUsers()                             //전체 유저 보기
         {
             string sql = "Select * From Users Order by NO Asc";
             return this.db.Query<User>(sql).ToList();

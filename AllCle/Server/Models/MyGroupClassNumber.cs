@@ -9,6 +9,5 @@ namespace Server.Models
     {
         public int NO { get; set; }
         public string MyGroupName { get; set; }
-        public string ClassNumber { get; set; }
     }
 }

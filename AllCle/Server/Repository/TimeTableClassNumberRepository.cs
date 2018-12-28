@@ -25,16 +25,20 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<TimeTableClassNumber> GetTimeTableClassNumbers(string _timeTableName)
+        public List<TimeTableClassNumber> GetTimeTableClassNumbers(string _id, string _timeTableName)
         {
-            string sql = "Select * From TimeTableClassNumber Where TimeTableName = N'" + _timeTableName + "'";
+            string sql = "Select TTCN.ClassNumber " +
+                         "From TimeTableClassNumber TTCN, UserTimeTable UTT " +
+                         "Where UTT.TimeTableName = N'" + _timeTableName + "' " +
+                         "and UTT.ID = N'" + _id+ "' " +
+                         "and UTT.NO = TTCN.NO";
             return db.Query<TimeTableClassNumber>(sql).ToList();
         }
 
 
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (TimeTableName, TimeTableClassNumber) Values (@TimeTableName, @TimeTableClassNumber)";
+            string sql = "Insert Into UserTimeTable (NO, TimeTableClassNumber) Values (@NO, @TimeTableClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
     }

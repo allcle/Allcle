@@ -8,6 +8,6 @@ namespace Server.IRepository
 {
     public interface IMyGroupClassNumberRepository
     {
-        List<MyGroupClassNumber> GetMyGroupClassNumbers(string _myGroupName);
+        List<MyGroupClassNumber> GetMyGroupClassNumbers(string _id, string _myGroupName);
     }
 }

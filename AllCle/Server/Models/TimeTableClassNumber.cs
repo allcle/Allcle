@@ -8,7 +8,6 @@ namespace Server.Models
     public class TimeTableClassNumber
     {
         public int NO { get; set; }
-        public string TimeTableName { get; set; }
         public string ClassNumber { get; set; }
     }
 }

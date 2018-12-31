@@ -32,10 +32,10 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{_myGroupName}")]
-        public IEnumerable<MyGroupClassNumber> Get(string _myGroupName)
+        [HttpGet("{_id}/group/{_myGroupName}")]
+        public IEnumerable<MyGroupClassNumber> Get(string _id, string _myGroupName)
         {
-            return _repo.GetMyGroupClassNumbers(_myGroupName);
+            return _repo.GetMyGroupClassNumbers(_id,_myGroupName);
         }
 
         // POST api/<controller>

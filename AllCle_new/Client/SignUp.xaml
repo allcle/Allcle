@@ -1,0 +1,33 @@
+﻿<Window x:Class="Client.SignUp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="SignUp" Height="600" Width="400" WindowStartupLocation="CenterScreen" Background="LightBlue">
+    <Grid Margin="20" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="회원가입" FontSize="40"/>
+        </Border>
+        <TextBox x:Name="ID_box" Text="ID를 입력해주세요" FontSize="20" Grid.Row="1" Margin="20" Foreground="LightGray" BorderBrush="gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus"/>
+        <PasswordBox x:Name="PW_Box"  Grid.Row="2" Margin="20" LostFocus="PW_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="PW_TextBox" Text="비밀번호를 입력해주세요" FontSize="20" Grid.Row="2" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus"/>
+        <PasswordBox x:Name="PWCon_Box"  Grid.Row="3" Margin="20" LostFocus="PWCon_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="PWCon_TextBox" Text="확인비밀번호를 입력해주세요" FontSize="20" Grid.Row="3" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus"/>
+        <Button x:Name="Save_btn" Content="저장" Grid.Row="5" FontSize="20" Click="Save_btn_Click"/>
+
+
+    </Grid>
+</Window>

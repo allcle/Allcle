@@ -166,35 +166,7 @@ namespace Client
                 }
             }
         }
-        private void All_btn_Click(object sender, RoutedEventArgs e)//전체 버튼 클릭시
-        {
-            Search_Box.Visibility = Visibility.Visible;
-            Search_Box.IsEnabled = true;
-            Search_btn.Visibility = Visibility.Visible;
-            Search_btn.IsEnabled = true;
-            MyGroup_cob.Visibility = Visibility.Collapsed;
-            MyGroup_cob.IsEnabled = false;
-            DataListView_All.Visibility = Visibility.Visible;
-            DataListView_All.IsEnabled = true;
-            RefreshByOption(FilterOption.timeOption, FilterOption.subjectOption);
-        }
-        public void RefreshByOption(bool _timeOption, bool _subjectOption)
-        {
-            if (_timeOption == true)
-            {
-                if (_subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
-                else
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
-            }
-            else
-            {
-                if (_subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
-                else
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-            }
-        }
+        
 
         private void GetSubjects()
         {
@@ -213,7 +185,7 @@ namespace Client
         }
         private void GetTimeTableClassNumber(string _timeTableName)
         {
-            url = urlTimeTableClassNumber + "/" + _timeTableName;
+            url = urlTimeTableClassNumber + "/" + App.ID + "/timetable/" +_timeTableName;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
@@ -598,14 +570,7 @@ namespace Client
         }
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)//MyGroup을 누르면 검색창 없어지고, combobox만 뜸 
         {
-            Search_Box.Visibility = Visibility.Collapsed;
-            Search_Box.IsEnabled = false;
-            Search_btn.Visibility = Visibility.Collapsed;
-            Search_btn.IsEnabled = false;
-            MyGroup_cob.Visibility = Visibility.Visible;
-            MyGroup_cob.IsEnabled = true;
             GetUserTimeTable();
-            MyGroup_cob.ItemsSource = userTimeTable;
         }
         private void Logout_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -810,40 +775,6 @@ namespace Client
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
         }
 
-        private void DataListView_All_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            //System.Windows.MessageBox.Show(sender.ToString());
-
-            //DataListView_All.SelectedItem = (sender as Border).DataContext;
-            //if (!DataListView_All.IsFocused)
-            //    DataListView_All.Focus();
-            // mon1.Background = Brushes.Red;
-        }
-
-        private void DataListView_All_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            // mon1.Background = Brushes.White;
-        }
-
-        private void MenuItem2_Click(object sender, RoutedEventArgs e)
-        {
-            App.MG.Show();
-        }
-
-        private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            System.Windows.MessageBox.Show("Value : " + userTimeTable[MyGroup_cob.SelectedIndex]);
-        }
-
-        private void MyGroup_cob_Initialized(object sender, EventArgs e)
-        {
-            //userTimeTable.Add("A");
-            //userTimeTable.Add("B");
-            //MyGroup_cob.ItemsSource = data;
-        }
-
-
-
         private void Window_Activated(object sender, EventArgs e)
         {
             GetUserTimeTable();
@@ -863,5 +794,7 @@ namespace Client
             }
             RefreshTimeTable();
         }
+
+        
     }
 }

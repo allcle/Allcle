@@ -28,7 +28,7 @@ namespace Server.Repository
         }
         public List<User> GetUsers()                             //전체 유저 보기
         {
-            string sql = "Select * From Users Order by NO Asc";
+            string sql = "Select * From Users";
             return this.db.Query<User>(sql).ToList();
         }
 

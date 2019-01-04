@@ -18,9 +18,11 @@ namespace Client
         public static FilterOption FO = new FilterOption();
         public static MyGroup MG = new MyGroup();
         public static string ID;
+        public static bool first;
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
+            first = true;
             MW.Show();     
         }
     }

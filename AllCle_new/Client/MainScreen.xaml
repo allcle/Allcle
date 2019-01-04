@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="PickUp" Height="635.1" Width="951.2" MinHeight="500" MinWidth="700" MaxWidth="960" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Window.Resources>
-        <Style TargetType="Button" x:Key="roundedButton">
+        <Style TargetType="Button" x:Key="roundedButton">   <!--버튼 둥글게 하는 템플릿-->
             <Setter Property="Background" Value="White" />
             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -20,12 +20,18 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="Button" x:Key="unblue">      <!--when mouse over on buttno, remain own color(fail)-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid Name="BigGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" MinWidth="0" MaxWidth="204">
             <Grid.RowDefinitions>
@@ -85,10 +91,14 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Background="WhiteSmoke">
-                
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="9*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Background="WhiteSmoke">
+
             </Grid>
-            <ScrollViewer Name="TimTable_scr" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden">
+            <ScrollViewer Name="TimTable_scr" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Hidden">
                 <Grid Name="TimeTable" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="34"/>
@@ -468,16 +478,7 @@
                     <Button Name="sat13_btn" Content="X" Grid.Row="13" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
                 </Grid>
             </ScrollViewer>
-        </Grid>
-
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0"  Background="WhiteSmoke">
+            <Grid Grid.Row="0" Grid.Column="1"  Background="WhiteSmoke">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -486,96 +487,103 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button  Content="탭" Grid.Column="1"/>
-                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="2"/>
-                <Button  Content="시간모양" Grid.Column="3"/>
-                <Button  Content="MY GROUP" Grid.Column="4"/>
-
+                <Button x:Name="tab" Content="탭" Style="{StaticResource unblue}" Grid.Column="1" Background="White" BorderThickness="0 8 0 0" Click="tab_Click" MouseEnter="tab_MouseEnter" MouseLeave="tab_MouseLeave"/>
+                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="2" Background="White" BorderThickness="0 8 0 0"/>
+                <Button  Content="시간모양" Grid.Column="3" Background="White" BorderThickness="0 8 0 0"/>
+                <Button  Content="MY GROUP" Grid.Column="4" Background="White" BorderThickness="0 8 0 0"/>
             </Grid>
-            <Grid Grid.Row="1" Background="LightGray">
+            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Margin="10,15">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
-                        <ComboBoxItem>서울 캠퍼스</ComboBoxItem>
-                        <ComboBoxItem>세종캠퍼스</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Grid.Column="1" FontSize="10" Margin="2,0" SelectedIndex="0">
-                        <ComboBoxItem>교양</ComboBoxItem>
-                        <ComboBoxItem>전공</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0">
-                        <ComboBoxItem>교양 구분</ComboBoxItem>
-                        <ComboBoxItem>교양</ComboBoxItem>
-                    </ComboBox>
-                    <ComboBox Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0">
-                        <ComboBoxItem>교양 영역</ComboBoxItem>
-                        <ComboBoxItem>분류</ComboBoxItem>
-                    </ComboBox>
+                <Grid Grid.Row="0" Grid.Column="1" Background="LightGray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="10,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>서울 캠퍼스</ComboBoxItem>
+                            <ComboBoxItem>세종캠퍼스</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox Grid.Column="1" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>교양</ComboBoxItem>
+                            <ComboBoxItem>전공</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>교양 구분</ComboBoxItem>
+                            <ComboBoxItem>교양</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>교양 영역</ComboBoxItem>
+                            <ComboBoxItem>분류</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="10,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>공강시간만</ComboBoxItem>
+                            <ComboBoxItem>전체 시간</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Name="Search_Box" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" TextWrapping="Wrap" Grid.Column="1" KeyDown="Search_Box_KeyDown"/>
+                        <Button Name="Search_btn" Content="검색" Grid.Column="2" Click="Search_btn_Click"/>
+
+
+
+
+                    </Grid>
                 </Grid>
-                <Grid Grid.Row="1" Margin="10,15">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="20"/>
-                    </Grid.ColumnDefinitions>
-                    <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
-                        <ComboBoxItem>공강시간만</ComboBoxItem>
-                        <ComboBoxItem>전체 시간</ComboBoxItem>
-                    </ComboBox>
-                    <TextBox Name="Search_Box" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" TextWrapping="Wrap" Grid.Column="1" KeyDown="Search_Box_KeyDown"/>
-                    <Button Name="Search_btn" Content="검색" Grid.Column="2" Click="Search_btn_Click"/>
-
-
-
-
-                </Grid>
-            </Grid>
-            <ListView x:Name="DataListView_All" Grid.Row="2" MinHeight="0" BorderThickness="0" ItemsSource="{Binding aList}" MouseDoubleClick="DataListView_All_MouseDoubleClick">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightGray"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="교과명" Width="80"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="80"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="80"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="80"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="40"/>
-                        <!--<GridViewColumn Header="불" Width="50"
+                <ListView x:Name="DataListView_All" Grid.Row="1" Grid.Column="2" MinHeight="0" BorderThickness="0" ItemsSource="{Binding aList}" MouseDoubleClick="DataListView_All_MouseDoubleClick">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="교과명" Width="80"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="80"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="80"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="80"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="40"/>
+                            <!--<GridViewColumn Header="불" Width="50"
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox Tag="{Binding NO}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>-->
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <Grid Grid.Row="3" Background="LightGray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource roundedButton}" x:Name="MyGroup_btn" Content="MY GROUP에 담기" Grid.Column="1" Click="MyGroup_btn_Click"/>
-                <Button Style="{StaticResource roundedButton}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Grid Grid.Row="2" Grid.Column="1" Background="LightGray">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource roundedButton}" x:Name="MyGroup_btn" Content="MY GROUP에 담기" Grid.Column="1" Click="MyGroup_btn_Click"/>
+                    <Button Style="{StaticResource roundedButton}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
+                </Grid>
             </Grid>
+            
         </Grid>
     </Grid>
 </Window>

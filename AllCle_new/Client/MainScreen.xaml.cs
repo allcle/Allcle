@@ -39,7 +39,7 @@ namespace Client
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
         List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
         List<UserMyGroup> userMyGroup = new List<UserMyGroup>();
-
+        bool tabActive;             //tab bar active or not
         public struct TableSubjects //시간표 한칸의 Data
         {
             public string className;
@@ -59,6 +59,7 @@ namespace Client
             GetSubjects();
             DataListView_All.ItemsSource = SubjectList;
             InitDB();
+            tabActive = false;
         }
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
         {
@@ -795,7 +796,36 @@ namespace Client
             }
             RefreshTimeTable();
         }
-
         
+        private void tab_Click(object sender, RoutedEventArgs e)
+        {
+            if(tabActive)
+            {
+                TimTable_scr.SetValue(Grid.ColumnSpanProperty, 2);
+                list_grid.Visibility = Visibility.Collapsed;
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 112, 112, 112));
+                tabActive = false;
+            }
+            else
+            {
+                TimTable_scr.SetValue(Grid.ColumnSpanProperty, 1);
+                list_grid.Visibility = Visibility.Visible;
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
+                tabActive = true;
+            }
+        }
+
+        private void tab_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
+        }
+
+        private void tab_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if(tabActive)
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
+            else
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 112, 112, 112));
+        }
     }
 }

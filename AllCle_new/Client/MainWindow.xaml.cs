@@ -81,10 +81,10 @@ namespace Client
             doubleAnimation.To = 1;
             doubleAnimation.Duration = TimeSpan.FromSeconds(0.3);
             Back.BorderThickness = new Thickness(0, 0, 0, 5);
-            Back.BorderBrush = Brushes.Blue;                            //파란색 밑줄
+            Back.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));                           //파란색 밑줄
             Back.BeginAnimation(OpacityProperty, doubleAnimation);      //파란색 밑줄 애니메이션
             ID_.Visibility = Visibility.Collapsed;
-            Text.Foreground = Brushes.Blue;                             //글자 파랗게
+            Text.Foreground = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));                            //글자 파랗게
             Text.BeginAnimation(OpacityProperty, doubleAnimation);      //글자 파랗게 애니메이션
         }
 
@@ -150,9 +150,9 @@ namespace Client
             doubleAnimation.To = 1;
             doubleAnimation.Duration = TimeSpan.FromSeconds(0.3);
             Back.BorderThickness = new Thickness(0, 0, 0, 5);
-            Back.BorderBrush = Brushes.Blue;
+            Back.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
             Back.BeginAnimation(OpacityProperty, doubleAnimation);
-            Text.Foreground = Brushes.Blue;
+            Text.Foreground = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
             Text.BeginAnimation(OpacityProperty, doubleAnimation);
         }
 

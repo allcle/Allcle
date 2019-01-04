@@ -52,7 +52,6 @@ namespace Client
                 searchOption = 0;
 
             this.Hide();
-            App.MS.RefreshByOption(timeOption, subjectOption);
         }
     }
 }

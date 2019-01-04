@@ -263,8 +263,10 @@ namespace Client
                 PW.Visibility = Visibility.Collapsed;
 //                PW_Box.Visibility = Visibility.Collapsed;
                 Text.Text = "ID";
-                
-                App.MS.Show();
+                if (App.first)
+                    App.MS.Show();
+                else
+                    App.MS.Visibility = Visibility.Visible;
                 this.Hide();
                 ID_Box.Text = "";
                 PW_Box.Password = "";

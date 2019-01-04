@@ -575,7 +575,8 @@ namespace Client
         private void Logout_btn_Click(object sender, RoutedEventArgs e)
         {
             App.MW.Show();
-            this.Hide();
+            App.first = false;
+            this.Visibility = Visibility.Collapsed;
         }
 
         private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

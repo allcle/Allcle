@@ -34,6 +34,7 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         public string Encrypt(string strToEncrypt, string strKey)               //암호화
@@ -64,6 +65,7 @@ namespace Client
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
             App.ID = "Guest";
+            App.guest = true;
             App.MS.Show();                                              //메인 화면 띄우기
             this.Hide();                                                //로그인창 hide
         }
@@ -225,8 +227,11 @@ namespace Client
             httpWebResponse.Close();
             string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
             string id = result.Id;
+            string yearofentry = result.YearOfEntry;
+            string college = result.College;
+            string major = result.Major;
 
-            if(encryptedPW == result.Password)      //기존꺼랑 비교
+            if (encryptedPW == result.Password)      //기존꺼랑 비교
             {
                 String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
                 string setkey = null;
@@ -240,7 +245,8 @@ namespace Client
 
                 // NewEncryptedPW, setkey업데이트
                 // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
-                String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\"}";
+                String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
+
 
                 HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
@@ -258,6 +264,7 @@ namespace Client
                 httpWebResponse2.Close();
 
                 App.ID = ID_Box.Text;
+                App.guest = false;
                 ID.Visibility = Visibility.Visible;
                 ID_Box.Visibility = Visibility.Visible;
                 PW.Visibility = Visibility.Collapsed;

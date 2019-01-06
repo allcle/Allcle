@@ -5,29 +5,153 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
+        Icon="bin\Debug\images\squirrel.ico"
         Title="SignUp" Height="600" Width="400" WindowStartupLocation="CenterScreen" Background="LightBlue">
-    <Grid Margin="20" Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="회원가입" FontSize="40"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  Background="#FFEFC050" />
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFEFC050">
+            <TextBlock Text="회원가입"  FontSize="20" Foreground="White"/>
         </Border>
-        <TextBox x:Name="ID_box" Text="ID를 입력해주세요" FontSize="20" Grid.Row="1" Margin="20" Foreground="LightGray" BorderBrush="gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus"/>
-        <PasswordBox x:Name="PW_Box"  Grid.Row="2" Margin="20" LostFocus="PW_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="PW_TextBox" Text="비밀번호를 입력해주세요" FontSize="20" Grid.Row="2" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus"/>
-        <PasswordBox x:Name="PWCon_Box"  Grid.Row="3" Margin="20" LostFocus="PWCon_Box_LostFocus" BorderBrush="Gray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="PWCon_TextBox" Text="확인비밀번호를 입력해주세요" FontSize="20" Grid.Row="3" Margin="20" Foreground="LightGray" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus"/>
-        <Button x:Name="Save_btn" Content="저장" Grid.Row="5" FontSize="20" Click="Save_btn_Click"/>
+        <Grid Grid.Row="1" Background="White" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="아이디" FontSize="17" Grid.Row="0"  Foreground="#FF7D7676"/>
+            </Border>
+            <TextBox x:Name="ID_box" Text="아이디" FontSize="15" Grid.Row="1" Margin="5,0,0,0"  Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus" Background="#FFEDE3E3"/>
+            <Border x:Name="ID_concern" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+                <TextBlock Text="*이미 존재하는 아이디입니다" Foreground="Red" Background="White" FontSize="8"/>
+            </Border>
+            <Border Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="비밀번호" Foreground="#FF7D7676" Background="White" FontSize="17"/>
+            </Border>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="4" Margin="5,0,0,0" LostFocus="PW_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3"/>
+            <TextBox x:Name="PW_TextBox" Text="비밀번호" FontSize="15" Grid.Row="4" Margin="5,0,0,0" Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus" Background="#FFEDE3E3" Padding="0,0,0,3"/>
+            <Border x:Name="PW_corcenrn" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+                <TextBlock Text="*비밀번호는 영문자, 숫자를 섞어서 8글자 이상" Foreground="Red" Background="White" FontSize="8"/>
+            </Border>
+            <PasswordBox x:Name="PWCon_Box"  Grid.Row="6"  LostFocus="PWCon_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Margin="5,0,0,0" Background="#FFEDE3E3"/>
+            <TextBox x:Name="PWCon_TextBox" Text="비밀번호 확인" FontSize="15" Grid.Row="6" Margin="5,0,0,0" Foreground="#FF7D7676"  BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus" Background="#FFEDE3E3"/>
+            <Border x:Name="PW_corcenrn2" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+                <TextBlock Text="*비밀번호가 다릅니다" Foreground="Red" Background="White" FontSize="8"/>
+            </Border>
+            <Border Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="학번" Foreground="#FF7D7676" Background="White" FontSize="17"/>
+            </Border>
+            <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="9" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem>16</ComboBoxItem>
+                <ComboBoxItem>17</ComboBoxItem>
+                <ComboBoxItem>18</ComboBoxItem>
+            </ComboBox>
+            <Border Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="단과대학" Foreground="#FF7D7676" Background="White" FontSize="17"/>
+            </Border>
+            <ComboBox x:Name="College_cbx" Grid.Row="11" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" DropDownClosed="College_cbx_DropDownClosed">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem>공과대학</ComboBoxItem>
+                <ComboBoxItem>건축대학</ComboBoxItem>
+                <ComboBoxItem>일반대학</ComboBoxItem>
+            </ComboBox>
+            <Border Grid.Row="12" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Text="전공" Foreground="#FF7D7676" Background="White" FontSize="17"/>
+            </Border>
+            <ComboBox x:Name="Major_normal" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" ScrollViewer.CanContentScroll="False">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem>경영학부</ComboBoxItem>
+                <ComboBoxItem>영어영문학과</ComboBoxItem>
+                <ComboBoxItem>독어독문학과</ComboBoxItem>
+                <ComboBoxItem>불어불문학과</ComboBoxItem>
+                <ComboBoxItem>국어국문학과</ComboBoxItem>
+                <ComboBoxItem>수학교육과</ComboBoxItem>
+                <ComboBoxItem>국어교육과</ComboBoxItem>
+                <ComboBoxItem>영어교육과</ComboBoxItem>
+                <ComboBoxItem>역사교육과</ComboBoxItem>
+                <ComboBoxItem>교육학과</ComboBoxItem>
+                <ComboBoxItem>동양학과</ComboBoxItem>
+                <ComboBoxItem>회화과</ComboBoxItem>
+                <ComboBoxItem>판화과</ComboBoxItem>
+                <ComboBoxItem>조소과</ComboBoxItem>
+                <ComboBoxItem>목조형가구학과</ComboBoxItem>
+                <ComboBoxItem>예술학과</ComboBoxItem>
+                <ComboBoxItem>금속디자인학과</ComboBoxItem>
+                <ComboBoxItem>도유유리과</ComboBoxItem>
+                <ComboBoxItem>섬유미술패션디자인학과</ComboBoxItem>
+                <ComboBoxItem>디자인학부</ComboBoxItem>
+                <ComboBoxItem>법학부</ComboBoxItem>
+                <ComboBoxItem>경제학부</ComboBoxItem>
+            </ComboBox>
 
+            <ComboBox x:Name="Major_engineer" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem>건설도시공학부</ComboBoxItem>
+                <ComboBoxItem>전자전기공학부</ComboBoxItem>
+                <ComboBoxItem>정보컴퓨터공학부</ComboBoxItem>
+                <ComboBoxItem>신소재화공시스템공학부</ComboBoxItem>
+                <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
+            </ComboBox>
+
+            <ComboBox x:Name="Major_architecture" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
+                <ComboBoxItem>건축학부</ComboBoxItem>
+            </ComboBox>
+
+
+
+        </Grid>
+        <Button x:Name="Save_btn" Content="가입하기" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="20" BorderThickness="0" Click="Save_btn_Click" Background="#FFEFC050" Foreground="White"/>
 
     </Grid>
 </Window>

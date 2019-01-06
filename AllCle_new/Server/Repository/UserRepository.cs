@@ -34,8 +34,8 @@ namespace Server.Repository
 
         public void PostUsers(User _user)
         {
-            string sql = "Insert Into Users (Id, Password, EncryptKey) Values (@Id, @Password, @EncryptKey)";
-//            string sql = "Insert Into Users (Id, Password, EncryptKey) Values (?, ?, ?)";
+            string sql = "Insert Into Users (Id, Password, EncryptKey, YearOfEntry, College, Major) Values (@Id, @Password, @EncryptKey, @YearOfEntry, @College, @Major)";
+            //string sql = "Insert Into Users (Id, Password, EncryptKey, YearOfEntry,College, Major) Values (?, ?, ?, ?, ?, ?)";
             db.Execute(sql, _user);
         }
 
@@ -59,7 +59,7 @@ namespace Server.Repository
         public User LoginUser(string _id)
         {
             string sql = "Select * From Users Where Id = '" +_id + "'";
-            return this.db.Query<User>(sql).ToList()[0];       
+            return this. db.Query<User>(sql).ToList()[0];       
         }
 
     }

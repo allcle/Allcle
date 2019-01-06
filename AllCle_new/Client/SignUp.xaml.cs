@@ -27,9 +27,11 @@ namespace Client
     /// </summary>
     public partial class SignUp : Window
     {
+        bool first;
         public SignUp()
         {
             InitializeComponent();
+            first = true;
         }
 
         public string Encrypt(string strToEncrypt, string strKey)
@@ -68,17 +70,37 @@ namespace Client
             string url = callUrl + "/" + ID_box.Text;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
+            ID_concern.Visibility = Visibility.Hidden;   // 처음엔 일단 숨기기
+            PW_corcenrn2.Visibility = Visibility.Hidden; // 처음엔 일단 숨기기
+            if (data[1] != data[2])                     //비밀번호 strcmp
+                PW_corcenrn2.Visibility = Visibility.Visible;       //다르다고 경고
+
             if (Unicode == "true")                                          //있다
             {
-                System.Windows.MessageBox.Show("이미 존재하는 아이디입니다.");
+                ID_concern.Visibility = Visibility.Visible;
                 ID_box.Text = "";
                 ID_box.Focus();
             }
             else if (data[1] == data[2])
             {
                 string encrypted = Encrypt(data[1], setkey);
-                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\"}";
-
+                string yearofentry = YearOfEntry_cbx.Text;
+                string college = College_cbx.Text;
+                string major = "";
+                if (College_cbx.Text == "일반대학")
+                {
+                    major = Major_normal.Text;
+                }
+                else if (College_cbx.Text == "공과대학")
+                {
+                    major = Major_engineer.Text;
+                }
+                else if (College_cbx.Text == "건축대학")
+                {
+                    major = Major_architecture.Text;
+                }
+                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
+               
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
                 httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -96,11 +118,14 @@ namespace Client
                 this.Close();
             }
             else
-                System.Windows.MessageBox.Show("비밀번호가 일치하지 않습니다");
+            {
+                PWCon_Box.Focus();
+            }
         }
+
         private void ID_box_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (ID_box.Text == "ID를 입력해주세요")
+            if (ID_box.Text == "아이디")
             {
                 ID_box.Foreground = Brushes.Black;
                 ID_box.TextAlignment = TextAlignment.Left;
@@ -114,9 +139,10 @@ namespace Client
             {
                 ID_box.Foreground = Brushes.LightGray;
                 ID_box.TextAlignment = TextAlignment.Center;
-                ID_box.Text = "ID를 입력해주세요";
+                ID_box.Text = "아이디";
             }
         }
+
         private void PW_TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             PW_TextBox.Visibility = Visibility.Collapsed;
@@ -145,6 +171,26 @@ namespace Client
             }
         }
 
+        private void College_cbx_DropDownClosed(object sender, EventArgs e)
+        {
+            Major_normal.Visibility = Visibility.Collapsed;
+            Major_engineer.Visibility = Visibility.Collapsed;
+            Major_architecture.Visibility = Visibility.Collapsed;
 
+            if (College_cbx.Text == "일반대학")
+            {
+                Major_normal.Visibility = Visibility.Visible;
+            }
+            else if (College_cbx.Text == "공과대학")
+            {
+                Major_engineer.Visibility = Visibility.Visible;
+            }
+            else if (College_cbx.Text == "건축대학")
+            {
+                Major_architecture.Visibility = Visibility.Visible;
+            }
+            else
+                System.Windows.MessageBox.Show("3개대학 이외 다른게 존재. error");
+        }
     }
 }

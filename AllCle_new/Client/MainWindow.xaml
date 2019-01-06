@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
+        Icon="bin\Debug\images\squirrel.ico"
         Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350" MouseDown="Window_MouseDown">
     <Grid >
         <Grid.RowDefinitions>
@@ -45,10 +46,10 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="PW_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\password.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="PW_img_MouseDown"/>
+                    <Image x:Name="PW_img" Source="bin\Debug\images\password.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="PW_img_MouseDown"/>
                     <TextBox x:Name="PW_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="Password" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
                 </Grid>
-                <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Login_btn_Click"/>
+                <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.Column="1" Margin="25,3" BorderThickness="0" Click="Login_btn_Click" Background="#FFEFC050"/>
             </Grid>
             <Grid x:Name="ID" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                 <Grid.ColumnDefinitions>
@@ -62,10 +63,15 @@
                         <ColumnDefinition Width="83*"/>
                         <ColumnDefinition Width="174*"/>
                     </Grid.ColumnDefinitions>
-                    <Image x:Name="ID_img" Source="C:\Users\user\Desktop\git\Allcle\AllCle\Client\images\account.png" Grid.Column="1" Margin="7,10,0,10" MouseDown="ID_img_MouseDown"/>
+                    <Image x:Name="ID_img" Source="bin\Debug\images\account.png" Grid.Column="1" Margin="7,10,0,10" MouseDown="ID_img_MouseDown">
+                        <Image.BindingGroup>
+                            <BindingGroup/>
+                        </Image.BindingGroup>
+
+                    </Image>
                     <TextBox x:Name="ID_btn" Grid.Column="2" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" Grid.ColumnSpan="2"/>
                 </Grid>
-                <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" Click="Next_btn_Click"/>
+                <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" BorderThickness="0" Click="Next_btn_Click" Background="#FFEFC050"/>
             </Grid>
 
 

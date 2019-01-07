@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Icon="bin\Debug\images\squirrel.ico"
+        Icon="images\squirrel.ico"
         Title="PickUp" Height="635.1" Width="951.2" MinHeight="500" MinWidth="700" MaxWidth="960" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Window.Resources>
         <Style TargetType="Button" x:Key="roundedButton">
@@ -60,7 +60,11 @@
                     <TextBlock x:Name="UserMajor" Text="Guest"  Foreground="gray" FontSize="13" Margin="0,-4,0,4.4"/>
                 </Border>
                 <Border Grid.Row="3" Margin="10,0,10,5">
-                    <Button x:Name="Logout_Button" Content="로그아웃" Foreground="gray" Grid.Row="2" Grid.Column="0" BorderThickness="0" Click="Logout_btn_Click" Background="#FFFFC53D"/>
+                    <Button x:Name="Logout_Button" Content="로그아웃" Foreground="gray" Grid.Row="2" Grid.Column="0" BorderThickness="0" Click="Logout_btn_Click" Background="#FFFFC53D">
+                        <Button.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
+                        </Button.BitmapEffect>
+                    </Button>
                 </Border>
             </Grid>
             <Grid Grid.Row="1" Background="#FFEFC050">
@@ -69,12 +73,13 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Background="#FFEFC0" CornerRadius="3" Margin="1,0"/>
-                <Border  Grid.Row="1" Background="#FFEFC050">
+                <Border  Grid.Row="1" Background="#FFEFC050" BorderThickness="0" Margin="3">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.5" Direction="70" ShadowDepth="1" BlurRadius="3" />
+                    </Border.Effect>
                     <TextBlock x:Name="tabBarTimeTable" Text="시간표" Foreground="gray" FontSize="20" Margin="5,0,0,0" FontFamily="Malgun Gothic"/>
                 </Border>
-                <Border Grid.Row="2" Background="#FFEFC0" CornerRadius="3" Margin="1,0"/>
-            </Grid>
+             </Grid>
             <ListView x:Name="TableList" Grid.Row="2" MinWidth="0" BorderThickness="0" Background="#FFEFC050" ItemsSource="{Binding List}" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" MouseDoubleClick="TableList_MouseDoubleClick">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">

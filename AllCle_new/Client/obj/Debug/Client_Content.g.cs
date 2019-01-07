@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/client.exe")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/client.pdb")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/newtonsoft.json.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/account.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/password.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/squirrel.ico")]
 
 

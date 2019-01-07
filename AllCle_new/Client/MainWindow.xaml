@@ -5,93 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Icon="bin\Debug\images\squirrel.ico"
-        Title="AllCle" Height="450" Width="800" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="350" MouseDown="Window_MouseDown">
-    <Grid >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="0.5*"/>
-        </Grid.RowDefinitions>
-        <TextBox x:Name="temp" VerticalAlignment="Top" HorizontalAlignment="Left" Height="1" Width="1"/>
-        <Border Grid.Row="1">
-            <TextBlock x:Name="screen" Text="홍익대학교 시간표 도우미 올클" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="36"  MinWidth="500"/>
-        </Border>
-        <Grid Grid.Row="3" Width="450" HorizontalAlignment="Center">
+        Icon="images\squirrel.ico"
+        Title="AllCle" Height="600" Width="400" WindowStartupLocation="CenterScreen" MinHeight="350" MouseDown="Window_MouseDown">
+    <Grid Background="#FFEFC050">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="0.5*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Border BorderThickness="0">
-                <TextBlock x:Name="Text" Text="ID" Grid.Row="0" FontSize="20" Foreground="Blue" Margin="30,0,0,0" Opacity="0"/>
+            <Image Source="images\squirrel.ico" Height="200" Width="200"/>
+            <TextBox x:Name="temp" VerticalAlignment="Top" HorizontalAlignment="Left" Height="1" Width="1"/>
+            <Border Grid.Row="1">
+                <TextBlock x:Name="screen" Text="홍익대학교 시간표 도우미 올클" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="20" />
             </Border>
-            <TextBox x:Name="Back" Grid.Row="1" Grid.Column="0" BorderThickness="0,0,0,5"/>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="1" Grid.Column="0" FontSize="20" UseLayoutRounding="False" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus" KeyDown="PW_Box_KeyDown"/>
-            <TextBox x:Name="ID_Box" Grid.Row="1" Grid.Column="0" Foreground="Black" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="280" BorderThickness="0" Margin="0,3,5,5" GotFocus="ID_Box_GotFocus" LostFocus="ID_Box_LostFocus" KeyDown="ID_Box_KeyDown"/>
-            <Grid x:Name="PW" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Grid x:Name="PW_" GotFocus="PW__GotFocus">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="4*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image x:Name="PW_img" Source="bin\Debug\images\password.png" Grid.Column="0" Margin="10,10,0,10" MouseDown="PW_img_MouseDown"/>
-                    <TextBox x:Name="PW_btn" Grid.Column="1" Foreground="Gray" Background="White" Text="Password" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5"/>
-                </Grid>
-                <Button x:Name="Login_btn" Content="Log in" Grid.Row="0" Grid.Column="1" Margin="25,3" BorderThickness="0" Click="Login_btn_Click" Background="#FFEFC050"/>
-            </Grid>
-            <Grid x:Name="ID" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <Grid x:Name="ID_" GotFocus="ID__GotFocus">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="61*"/>
-                        <ColumnDefinition Width="83*"/>
-                        <ColumnDefinition Width="174*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image x:Name="ID_img" Source="bin\Debug\images\account.png" Grid.Column="1" Margin="7,10,0,10" MouseDown="ID_img_MouseDown">
-                        <Image.BindingGroup>
-                            <BindingGroup/>
-                        </Image.BindingGroup>
-
-                    </Image>
-                    <TextBox x:Name="ID_btn" Grid.Column="2" Foreground="Gray" Background="White" Text="User ID" FontSize="20" FontWeight="Light" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" MinHeight="40" MinWidth="150" BorderThickness="0" Margin="0,3,5,5" Grid.ColumnSpan="2"/>
-                </Grid>
-                <Button x:Name="Next_btn" Content="next" Grid.Row="0" Grid.Column="1" Margin="25,3" BorderThickness="0" Click="Next_btn_Click" Background="#FFEFC050"/>
-            </Grid>
-
-
-            <Grid Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="40">
+            <TextBox x:Name="ID_Box" Text="  아이디 입력" Grid.Row="2" Foreground="Gray" Background="White" FontSize="15" FontWeight="Light" Margin="0 0 0 10" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" BorderThickness="0"/>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" HorizontalContentAlignment="Left" Margin="0 10 0 0" VerticalContentAlignment="Center"  BorderThickness="0"  MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus" KeyDown="PW_Box_KeyDown"/>
+            <TextBox x:Name="PW_" Text="  비밀번호 입력" Grid.Row="3" FontSize="15" Foreground="Gray" Background="White" FontWeight="Light" Margin="0 10 0 0" VerticalContentAlignment="Center" GotFocus="PW_Box_GotFocus"/>
+            
+            <Button x:Name="Login_btn" Content="로그인" Grid.Row="4" Grid.Column="1" Margin="25,8" BorderThickness="0" Click="Login_btn_Click" Background="#FF5F5656"/>
+            <Grid Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="1*"/>  
+                    <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Row="0" Grid.Column="0" Click="Geust_Login_Button_Click" Background="White" BorderThickness="0" MinWidth="100" Margin="50,3"/>
-                <Button x:Name="Forget_btn" Content="Forget btn" Grid.Row="0" Grid.Column="1" Click="Forget_btn_Button_Click" Background="White" BorderThickness="0" MinWidth="100" Margin="50,3"/>
-            </Grid>
-            <Grid Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="40">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="1" Background="White" BorderBrush="White" Click="SingUP_btn_Click" MinWidth="200"/>
+                <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="0" Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="SingUP_btn_Click"/>
+                <Border Grid.Column="1" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10" Width="2"/>
+                <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Column="2"  Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="Geust_Login_Button_Click"/>
+                <Border Grid.Column="3" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10" Width="2"/>
+                <Button x:Name="Forget_btn" Content="비밀번호 찾기" Grid.Column="4"  Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="Forget_btn_Button_Click"/>
             </Grid>
         </Grid>
     </Grid>
-
 </Window>

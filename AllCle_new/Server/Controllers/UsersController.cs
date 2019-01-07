@@ -53,6 +53,7 @@ namespace Server.Controllers
             _repo.PostUsers(_user);
         }
 
+        //원래 post
         [HttpPost("{id}")]
         public User LoginUser(string id)
         {

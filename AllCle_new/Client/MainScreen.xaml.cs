@@ -24,6 +24,8 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows.Media.Animation;
 
 namespace Client
 {
@@ -39,7 +41,10 @@ namespace Client
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
         List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
         List<UserMyGroup> userMyGroup = new List<UserMyGroup>();
-
+        SolidColorBrush[] br = { Brushes.Red, Brushes.Orange, Brushes.Yellow, Brushes.Green,Brushes.LightBlue,Brushes.Pink, Brushes.LightYellow, Brushes.LightGreen, Brushes.Coral };
+        User user = new User();
+        bool tabActive;             //tab bar active or not
+        
         public struct TableSubjects //시간표 한칸의 Data
         {
             public string className;
@@ -59,10 +64,40 @@ namespace Client
             GetSubjects();
             DataListView_All.ItemsSource = SubjectList;
             InitDB();
+            tabActive = false;
         }
+
+        private void InitUserInfo()
+        {
+            url = @"https://allcleapp.azurewebsites.net/api/Users/" + App.ID;
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+            byte[] sendData = new byte[0];
+            httpWebRequest.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest.Method = "POST";
+            httpWebRequest.ContentLength = sendData.Length;
+            Stream requestStream = httpWebRequest.GetRequestStream();
+            requestStream.Write(sendData, 0, sendData.Length);
+            requestStream.Close();
+            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+            user = JsonConvert.DeserializeObject<User>(streamReader.ReadToEnd());
+            streamReader.Close();
+            httpWebResponse.Close();
+
+            UserAdmissionYear.Text = "학번 : " + user.YearOfEntry;
+            UserMajor.Text = user.Major;
+        }
+        private void GuestLogIn()
+        {
+            UserId.Text = "Guest";
+            UserAdmissionYear.Text = "Guest";
+            UserMajor.Text = "Guest";
+        }
+
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
         {
-            if (FilterOption.timeOption == true)
+            DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+            /*if (FilterOption.timeOption == true)
             {
                 if (FilterOption.subjectOption == true)
                 {
@@ -111,11 +146,12 @@ namespace Client
                     else
                         DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
                 }
-            }
+            }*/
         }
         private void Search_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)//엔터키 눌렀을 때
         {
-            if (FilterOption.timeOption == true)
+            DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+            /*if (FilterOption.timeOption == true)
             {
                 if (FilterOption.subjectOption == true)
                 {
@@ -164,37 +200,9 @@ namespace Client
                     else
                         DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
                 }
-            }
+            }*/
         }
-        private void All_btn_Click(object sender, RoutedEventArgs e)//전체 버튼 클릭시
-        {
-            Search_Box.Visibility = Visibility.Visible;
-            Search_Box.IsEnabled = true;
-            Search_btn.Visibility = Visibility.Visible;
-            Search_btn.IsEnabled = true;
-            MyGroup_cob.Visibility = Visibility.Collapsed;
-            MyGroup_cob.IsEnabled = false;
-            DataListView_All.Visibility = Visibility.Visible;
-            DataListView_All.IsEnabled = true;
-            RefreshByOption(FilterOption.timeOption, FilterOption.subjectOption);
-        }
-        public void RefreshByOption(bool _timeOption, bool _subjectOption)
-        {
-            if (_timeOption == true)
-            {
-                if (_subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
-                else
-                    DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
-            }
-            else
-            {
-                if (_subjectOption == true)
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
-                else
-                    DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-            }
-        }
+        
 
         private void GetSubjects()
         {
@@ -213,7 +221,7 @@ namespace Client
         }
         private void GetTimeTableClassNumber(string _timeTableName)
         {
-            url = urlTimeTableClassNumber + "/" + _timeTableName;
+            url = urlTimeTableClassNumber + "/" + App.ID + "/timetable/" +_timeTableName;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
@@ -574,7 +582,9 @@ namespace Client
                         Run professor = new Run(TimeTableDB[_period + 1, _day + 1].professor);
                         professor.FontSize = 10;
                         schedule[_day, _period].Inlines.Add(professor);
-                        schedule[_day, _period].Background = (Brush)properties[UsersSubjectsList[i].NO % 141].GetValue(null, null);
+                        
+                        //UsersSubjectsList[i].NO
+                        schedule[_day, _period].Background = br[i];
                     }
                 }
 
@@ -591,26 +601,15 @@ namespace Client
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
         }
-        private void Option_btn_Click(object sender, RoutedEventArgs e) //onoff버튼 클릭하면
-        {
-            FilterOption FO = new FilterOption();
-            FO.Show();
-        }
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)//MyGroup을 누르면 검색창 없어지고, combobox만 뜸 
         {
-            Search_Box.Visibility = Visibility.Collapsed;
-            Search_Box.IsEnabled = false;
-            Search_btn.Visibility = Visibility.Collapsed;
-            Search_btn.IsEnabled = false;
-            MyGroup_cob.Visibility = Visibility.Visible;
-            MyGroup_cob.IsEnabled = true;
             GetUserTimeTable();
-            MyGroup_cob.ItemsSource = userTimeTable;
         }
         private void Logout_btn_Click(object sender, RoutedEventArgs e)
         {
             App.MW.Show();
-            this.Hide();
+            App.first = false;
+            this.Visibility = Visibility.Collapsed;
         }
 
         private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -810,45 +809,15 @@ namespace Client
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
         }
 
-        private void DataListView_All_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            //System.Windows.MessageBox.Show(sender.ToString());
-
-            //DataListView_All.SelectedItem = (sender as Border).DataContext;
-            //if (!DataListView_All.IsFocused)
-            //    DataListView_All.Focus();
-            // mon1.Background = Brushes.Red;
-        }
-
-        private void DataListView_All_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            // mon1.Background = Brushes.White;
-        }
-
-        private void MenuItem2_Click(object sender, RoutedEventArgs e)
-        {
-            App.MG.Show();
-        }
-
-        private void MyGroup_cob_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            System.Windows.MessageBox.Show("Value : " + userTimeTable[MyGroup_cob.SelectedIndex]);
-        }
-
-        private void MyGroup_cob_Initialized(object sender, EventArgs e)
-        {
-            //userTimeTable.Add("A");
-            //userTimeTable.Add("B");
-            //MyGroup_cob.ItemsSource = data;
-        }
-
-
-
         private void Window_Activated(object sender, EventArgs e)
         {
             GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
             UserId.Text = App.ID;
+            if(!App.guest)
+                InitUserInfo();
+            else if(App.guest)            
+                GuestLogIn();            
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -862,6 +831,245 @@ namespace Client
                 UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i].ClassNumber)).ToList().ElementAt(0));
             }
             RefreshTimeTable();
+        }
+        
+        private void tab_Click(object sender, RoutedEventArgs e)
+        {
+            if(tabActive)
+            {
+
+                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 2);
+                list_grid.Visibility = Visibility.Collapsed;
+                tab.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                tabActive = false;
+            }
+            else
+            {
+                /*DoubleAnimation doubleAnimation = new DoubleAnimation();
+                doubleAnimation.From = 75;
+                doubleAnimation.To = 400;
+                doubleAnimation.Duration = TimeSpan.FromSeconds(5);*/
+
+
+                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 1);
+                /*TimeTable_scr.BeginAnimation(ScrollViewer.WidthProperty, doubleAnimation);
+                TimeTable_scr.Width = 600;
+
+                Canvas containerCanvas = new Canvas();
+                containerCanvas.Width = 610;
+                containerCanvas.Height = 300;
+                containerCanvas.Children.Add(TimeTable_scr);
+                
+                Canvas.SetLeft(TimeTable_scr, 300);
+                TranslateTransform animatedTranslateTransform = new TranslateTransform();
+
+                TimeTable_scr.RenderTransform = animatedTranslateTransform;
+
+                 */
+
+
+
+                list_grid.SetValue(Grid.ColumnProperty, 1);
+                list_grid.Visibility = Visibility.Visible;
+                tab.BorderBrush = new SolidColorBrush(Color.FromRgb(239, 192, 80));
+                tabActive = true;
+            }
+            
+        }
+
+        private void tab_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
+        }
+
+        private void tab_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if(tabActive)
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
+            else
+                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 112, 112, 112));
+        }
+
+        private void normal_DropDownClosed(object sender, EventArgs e)
+        {
+            if (user.College == "일반대학")
+            {
+                all_general.Visibility = Visibility.Collapsed;
+                normal_common.Visibility = Visibility.Collapsed;
+                normal_normal.Visibility = Visibility.Collapsed;
+                if (normal.Text == "모든 교양")
+                {
+                    all_general.Visibility = Visibility.Visible;
+                }
+                else if (normal.Text == "공통 교양")
+                {
+                    normal_common.Visibility = Visibility.Visible;
+                }
+                else if (normal.Text == "일반 교양")
+                {
+                    normal_normal.Visibility = Visibility.Visible;
+                }
+                else
+                    System.Windows.MessageBox.Show("normal combobox에 다른 4번째 값이 존재");
+            }
+            else
+                System.Windows.MessageBox.Show("일반대학이 아닌데, normal combobox에 접근");
+            
+            
+            /*
+            else if (user.College == "건축대학")
+            {
+                normal.Visibility = Visibility.Collapsed;
+                engineer.Visibility = Visibility.Collapsed;
+                architecture.Visibility = Visibility.Visible;
+            }
+            */
+
+
+        }
+
+        private void engineer_DropDownClosed(object sender, EventArgs e)
+        {
+            if (user.College == "공과대학")
+            {
+                all_general.Visibility = Visibility.Collapsed;
+                engineer_ABEEK.Visibility = Visibility.Collapsed;
+                engineer_normal.Visibility = Visibility.Collapsed;
+                if (engineer.Text == "모든 교양")
+                {
+                    all_general.Visibility = Visibility.Visible;
+                }
+                else if (engineer.Text == "ABEEK 교양")
+                {
+                    engineer_ABEEK.Visibility = Visibility.Visible;
+                }
+                else if (engineer.Text == "일반 교양")
+                {
+                    engineer_normal.Visibility = Visibility.Visible;
+                }
+                else
+                    System.Windows.MessageBox.Show("engineer combobox에 다른 4번째 값이 존재");
+            }
+            else
+                System.Windows.MessageBox.Show("공과대학이 아닌데, engineer combobox에 접근");
+        }
+
+        private void course_DropDownClosed(object sender, EventArgs e)
+        {
+            all.Visibility = Visibility.Collapsed;
+            normal.Visibility = Visibility.Collapsed;
+            engineer.Visibility = Visibility.Collapsed;
+            architecture.Visibility = Visibility.Collapsed;
+            all_all.Visibility = Visibility.Collapsed;
+            all_general.Visibility = Visibility.Collapsed;
+            normal_normal.Visibility = Visibility.Collapsed;
+            normal_common.Visibility = Visibility.Collapsed;
+            engineer_ABEEK.Visibility = Visibility.Collapsed;
+            engineer_normal.Visibility = Visibility.Collapsed;
+            major.Visibility = Visibility.Collapsed;
+            major_engineer.Visibility = Visibility.Collapsed;
+            major_business.Visibility = Visibility.Collapsed;
+            major_language.Visibility = Visibility.Collapsed;
+            major_teach.Visibility = Visibility.Collapsed;
+            major_art.Visibility = Visibility.Collapsed;
+            major_architecture.Visibility = Visibility.Collapsed;
+            major_law.Visibility = Visibility.Collapsed;
+            major_economics.Visibility = Visibility.Collapsed;
+
+            if (course.Text == "모든 과목")
+            {
+                all.Visibility = Visibility.Visible;
+                all_all.Visibility = Visibility.Visible;
+            }
+            else if(course.Text == "교양")
+            {
+                if (user.College == "일반대학")
+                {
+                    normal.Visibility = Visibility.Visible;
+                    all_general.Visibility = Visibility.Visible;
+                }
+                else if (user.College == "공과대학")
+                {
+                    engineer.Visibility = Visibility.Visible;
+                    all_general.Visibility = Visibility.Visible;
+                }
+                else if (user.College == "건축대학")
+                {
+                    architecture.Visibility = Visibility.Visible;
+                    all_general.Visibility = Visibility.Visible;
+                }
+            }
+            else if (course.Text == "전공")
+            {
+                major.Visibility = Visibility.Visible;
+                major_engineer.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("모든과목, 교양, 전공 이외에 다른 combobox가 존재");
+            }
+        }
+
+        private void major_DropDownClosed(object sender, EventArgs e)
+        {
+            major_engineer.Visibility = Visibility.Collapsed;
+            major_business.Visibility = Visibility.Collapsed;
+            major_language.Visibility = Visibility.Collapsed;
+            major_teach.Visibility = Visibility.Collapsed;
+            major_art.Visibility = Visibility.Collapsed;
+            major_architecture.Visibility = Visibility.Collapsed;
+            major_law.Visibility = Visibility.Collapsed;
+            major_economics.Visibility = Visibility.Collapsed;
+            if (major.Text == "공과대학")
+            {
+                major_engineer.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "경영대학")
+            {
+                major_business.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "문과대학")
+            {
+                major_language.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "사범대학")
+            {
+                major_teach.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "미술대학")
+            {
+                major_art.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "건축대학")
+            {
+                major_architecture.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "법과대학")
+            {
+                major_law.Visibility = Visibility.Visible;
+            }
+            else if (major.Text == "경제학부")
+            {
+                major_economics.Visibility = Visibility.Visible;
+            }
+            else
+                System.Windows.MessageBox.Show("전공에 다른 무언가가 존재. error");
+        }
+
+        private void Search_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Search_Box.Foreground = Brushes.Black;
+            if(Search_Box.Text == "교과명, 학수번호, 교수이름으로 검색하기")
+                Search_Box.Text = "";
+        }
+
+        private void Search_Box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (Search_Box.Text == "")
+            {
+                Search_Box.Foreground = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211));
+                Search_Box.Text = "교과명, 학수번호, 교수이름으로 검색하기";
+            }
         }
     }
 }

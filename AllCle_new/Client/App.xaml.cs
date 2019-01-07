@@ -15,12 +15,15 @@ namespace Client
     {
         public static MainWindow MW = new MainWindow();
         public static MainScreen MS = new MainScreen();
-        public static FilterOption FO = new FilterOption();
         public static MyGroup MG = new MyGroup();
         public static string ID;
+        public static bool first;
+        public static bool guest;
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
+            first = true;
+            guest = true;
             MW.Show();     
         }
     }

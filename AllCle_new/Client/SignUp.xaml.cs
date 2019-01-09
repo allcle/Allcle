@@ -27,7 +27,7 @@ namespace Client
     /// </summary>
     public partial class SignUp : Window
     {
-        bool first;
+        bool first = true;
         public SignUp()
         {
             InitializeComponent();

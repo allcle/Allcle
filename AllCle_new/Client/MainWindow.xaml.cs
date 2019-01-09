@@ -75,10 +75,10 @@ namespace Client
 
         private void PW_Box_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (PW_Box.Password.Length == 0)
+            /*if (PW_Box.Password.Length == 0)
             {
                 PW_.Visibility = Visibility.Visible;
-            }
+            }*/
         }
 
         private void Login_btn_Click(object sender, RoutedEventArgs e)
@@ -94,8 +94,8 @@ namespace Client
 
         private void PW__GotFocus(object sender, RoutedEventArgs e)         //패스워드 누르는 칸 클릭시
         {
-            PW_.Visibility = Visibility.Collapsed;
-            PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
+            /*PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
+            PW_.Visibility = Visibility.Collapsed;*/
         }
 
 
@@ -204,9 +204,24 @@ namespace Client
 
         private void PW__MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PW_.Visibility = Visibility.Collapsed;
-            PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
+            /*PW_Box.Focus();
+            PW_.Visibility = Visibility.Collapsed;  //패스워드 창으로 포커스 가도록*/
 
+        }
+
+        private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (ID_Box.Text == "")
+                ID_Box.Text = "  아이디 입력";
+        }
+
+        private void ID_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ID_Box.Text = "";
+        }
+
+        private void PW_Box_PasswordChanged(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

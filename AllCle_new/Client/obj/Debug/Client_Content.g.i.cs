@@ -9,7 +9,10 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/account.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/add.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/password.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/squirrel.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_on.png")]
 
 

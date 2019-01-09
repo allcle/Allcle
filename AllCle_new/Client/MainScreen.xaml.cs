@@ -835,10 +835,10 @@ namespace Client
         
         private void tab_Click(object sender, RoutedEventArgs e)
         {
-            if(tabActive)
+            if (tabActive)
             {
 
-                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 2);
+                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 2);
                 list_grid.Visibility = Visibility.Collapsed;
                 tab.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
                 tabActive = false;
@@ -851,7 +851,7 @@ namespace Client
                 doubleAnimation.Duration = TimeSpan.FromSeconds(5);*/
 
 
-                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 1);
+                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 1);
                 /*TimeTable_scr.BeginAnimation(ScrollViewer.WidthProperty, doubleAnimation);
                 TimeTable_scr.Width = 600;
 
@@ -1070,6 +1070,18 @@ namespace Client
                 Search_Box.Foreground = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211));
                 Search_Box.Text = "교과명, 학수번호, 교수이름으로 검색하기";
             }
+        }
+
+        private void tab_off_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            tab_off.Visibility = Visibility.Collapsed;
+            tab_on.Visibility = Visibility.Visible;
+        }
+
+        private void tab_on_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            tab_off.Visibility = Visibility.Visible;
+            tab_on.Visibility = Visibility.Collapsed;
         }
     }
 }

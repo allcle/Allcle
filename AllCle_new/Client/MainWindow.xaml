@@ -6,7 +6,246 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Icon="images\squirrel.ico"
-        Title="AllCle" Height="600" Width="400" WindowStartupLocation="CenterScreen" MinHeight="350" MouseDown="Window_MouseDown">
+        BorderThickness="0" Height="600" Width="400" WindowStartupLocation="CenterScreen" MinHeight="350" MouseDown="Window_MouseDown"
+        WindowStyle="None" Padding="0">
+    
+    <Window.Resources>
+
+        <Style 
+           TargetType="{x:Type Window}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Grid>
+                            <Border x:Name="MainBorder" 
+                                BorderBrush="{DynamicResource MainWindowBorderBrush}" 
+                                BorderThickness="0" 
+                                CornerRadius="2" 
+                                Background="#FFEFC050">
+                                <DockPanel LastChildFill="True">
+                                    <Rectangle x:Name="PART_LEFT_BORDER" 
+                                           Width="2" 
+                                           Cursor="SizeWE">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle x:Name="PART_RIGHT_BORDER" 
+                                           Cursor="SizeWE" 
+                                           Width="2" 
+                                           DockPanel.Dock="Right">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle x:Name="PART_TOP_BORDER" 
+                                           Cursor="SizeNS" 
+                                           DockPanel.Dock="Top" 
+                                           Height="2">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle x:Name="PART_BOTTOM_BORDER" 
+                                           Cursor="SizeNS" 
+                                           Height="2" 
+                                           DockPanel.Dock="Bottom">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Border x:Name="PART_TITLEBAR" 
+                                        Margin="2,0,2,2" 
+                                        Height="40" 
+                                        DockPanel.Dock="Top" 
+                                        CornerRadius="2" 
+                                        Background="Transparent">
+                                        <DockPanel LastChildFill="False">
+                                            <TextBlock Margin="8,0,0,4" 
+                                                   VerticalAlignment="Center" 
+                                                   FontStretch="UltraExpanded" 
+                                                   Foreground="Black" 
+                                                   TextTrimming="CharacterEllipsis" 
+                                                   TextWrapping="NoWrap" 
+                                                   Text="{TemplateBinding Title}" 
+                                                   FontSize="16" />
+                                            <Button x:Name="PART_CLOSE" 
+                                                DockPanel.Dock="Right" 
+                                                Style="{DynamicResource FlatButton}" 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,4,0">
+                                                <!--<Image Source="/MixModes.Synergy.Resources;
+                        component/Resources/Close.png" 
+                                                   Stretch="None" 
+                                                   Margin="4" />-->
+                                            </Button>
+                                            <Button x:Name="PART_MAXIMIZE_RESTORE" 
+                                                DockPanel.Dock="Right" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center" 
+                                                Style="{DynamicResource FlatButton}">
+                                                <!--<Image x:Name="MaximizeRestoreImage" 
+                                                   Source="/MixModes.Synergy.Resources;
+                        component/Resources/Restore.png" 
+                                                   Stretch="None" 
+                                                   Margin="4" />-->
+                                            </Button>
+                                            <Button x:Name="PART_MINIMIZE" 
+                                                HorizontalAlignment="Center" 
+                                                Style="{DynamicResource FlatButton}" 
+                                                VerticalAlignment="Center" 
+                                                DockPanel.Dock="Right">
+                                                <!--<Image Margin="4" 
+                                                   Source="/MixModes.Synergy.
+                        Resources;component/Resources/
+                        Minimize.png" 
+                                                   Stretch="None" />-->
+                                            </Button>
+                                        </DockPanel>
+                                    </Border>
+
+                                    <!-- Title bar separator-->
+                                    <Border Height="1" 
+                                        DockPanel.Dock="Top" 
+                                        Background="{DynamicResource 
+                    MainWindowTitleBarSeparator}" />
+
+                                    <!-- Actual Window Content -->
+                                    <AdornerDecorator DockPanel.Dock="Bottom">
+                                        <ContentPresenter />
+                                    </AdornerDecorator>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource=
+                {RelativeSource Self}, Path=Maximized}" 
+                                     Value="False">
+                                <!--<Setter TargetName="MaximizeRestoreImage" 
+                                    Property="Source" 
+                                    Value="/MixModes.Synergy.Resources;
+                component/Resources/Maximize.png" />-->
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" x:Key="roundedButton">
+            <!--버튼 둥글게 하는 템플릿-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Background" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="Button" x:Key="unblue">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Background" Value="#FFFFE67E"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="PasswordChar" Value="●"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+          
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Grid>
+                            <Border CornerRadius="5" x:Name="Bd" Background="White" OpacityMask="{x:Null}">
+                                <StackPanel>
+                                    <Grid>
+                                        <ScrollViewer SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" x:Name="PART_ContentHost" Template="{DynamicResource ScrollViewerControlTemplate1}"/>
+                                        <TextBlock x:Name="PW_Cover" Text="비밀번호 입력" Padding="10 0 0 0" Margin="0 5 0 0" Foreground="Gray" FontSize="15" FontWeight="Light"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter TargetName="PW_Cover" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="blue"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter TargetName="PW_Cover" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border"
+                                CornerRadius="5"
+                                BorderThickness="0"
+                                Background="#fff">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="blue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+    </Window.Resources>
+    
     <Grid Background="#FFEFC050">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
@@ -25,13 +264,34 @@
             <Image Source="images\squirrel.ico" Height="200" Width="200"/>
             <TextBox x:Name="temp" VerticalAlignment="Top" HorizontalAlignment="Left" Height="1" Width="1"/>
             <Border Grid.Row="1">
-                <TextBlock x:Name="screen" Text="홍익대학교 시간표 도우미 올클" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="20" />
+                <TextBlock x:Name="screen" Text="홍익대학교 시간표 도우미 올클" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="20"/>
             </Border>
-            <TextBox x:Name="ID_Box" Text="  아이디 입력" Grid.Row="2" Foreground="Gray" Background="White" FontSize="15" FontWeight="Light" Margin="0 0 0 10" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" BorderThickness="0"/>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" HorizontalContentAlignment="Left" Margin="0 10 0 0" VerticalContentAlignment="Center"  BorderThickness="0"  MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus" KeyDown="PW_Box_KeyDown"/>
-            <TextBox x:Name="PW_" Text="  비밀번호 입력" Grid.Row="3" FontSize="15" Foreground="Gray" Background="White" FontWeight="Light" Margin="0 10 0 0" VerticalContentAlignment="Center" GotFocus="PW_Box_GotFocus"/>
-            
-            <Button x:Name="Login_btn" Content="로그인" Grid.Row="4" Grid.Column="1" Margin="25,8" BorderThickness="0" Click="Login_btn_Click" Background="#FF5F5656"/>
+            <TextBox x:Name="ID_Box" Text="아이디 입력" Grid.Row="2" Foreground="Gray" Background="White" 
+                     FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 0 0 10" HorizontalContentAlignment="Left" 
+                     VerticalContentAlignment="Center" BorderThickness="0" LostFocus="ID_Box_LostFocus" 
+                     GotFocus="ID_Box_GotFocus"/>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" Background="White"
+                         HorizontalContentAlignment="Left" Margin="0 2 0 8" VerticalContentAlignment="Center"  
+                          MaxLength="20" LostFocus="PW_Box_LostFocus" GotFocus="PW_Box_GotFocus" 
+                         KeyDown="PW_Box_KeyDown"/>
+            <TextBox x:Name="PW_" Visibility="Collapsed" Text="  비밀번호 입력" Grid.Row="3" FontSize="15" Foreground="Gray" BorderThickness="0"
+                     Background="White" FontWeight="Light" Margin="0 2 0 8" VerticalContentAlignment="Center" 
+                     GotFocus="PW_Box_GotFocus"/>
+            <Button x:Name="Login_btn" Content="로그인" Grid.Row="4" Grid.Column="1" Margin="3" Foreground="White"
+                    BorderThickness="0" Click="Login_btn_Click" Background="#FF5F5656">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" CornerRadius="8" BorderThickness="0" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#FF5F5F5F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
             <Grid Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -40,11 +300,14 @@
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="0" Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="SingUP_btn_Click"/>
+                <Button x:Name="SingUP_btn" Content="회원가입" Grid.Column="0" Foreground="White" Background="#FFEFC050" BorderThickness="0"
+                        Style="{StaticResource unblue}" Click="SingUP_btn_Click"/>
                 <Border Grid.Column="1" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10" Width="2"/>
-                <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Column="2"  Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="Geust_Login_Button_Click"/>
+                <Button x:Name="Geust_Login" Content="Guest Log in" Grid.Column="2"  Foreground="White" Background="#FFEFC050" BorderThickness="0"
+                        Style="{StaticResource unblue}" Click="Geust_Login_Button_Click"/>
                 <Border Grid.Column="3" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10" Width="2"/>
-                <Button x:Name="Forget_btn" Content="비밀번호 찾기" Grid.Column="4"  Foreground="White" Background="#FFEFC050" BorderThickness="0" Click="Forget_btn_Button_Click"/>
+                <Button x:Name="Forget_btn" Content="비밀번호 찾기" Grid.Column="4"  Foreground="White" Background="#FFEFC050" BorderThickness="0"
+                        Style="{StaticResource unblue}" Click="Forget_btn_Button_Click"/>
             </Grid>
         </Grid>
     </Grid>

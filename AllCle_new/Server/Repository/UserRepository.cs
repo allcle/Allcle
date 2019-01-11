@@ -41,7 +41,6 @@ namespace Server.Repository
 
         public void UpdateUsers(User _user)
         {
-            //          string sql = "UPDATE Users SET Password = '@Password', EncryptKey = '@EncryptKey' WHERE Id = '@Id'";
             string sql = "UPDATE Users SET Password = '"+_user.Password+"', EncryptKey = '"+_user.EncryptKey+"' WHERE Id = '"+_user.Id+"'";
             db.Execute(sql, _user);
         }

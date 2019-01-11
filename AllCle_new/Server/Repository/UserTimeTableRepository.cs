@@ -33,9 +33,16 @@ namespace Server.Repository
             return this.db.Query<UserTimeTable>(sql).ToList();
         }
 
-        public void PostTimeTalbe(UserTimeTable _userTimeTable)
+        public void PostTimeTable(UserTimeTable _userTimeTable)
         {
-            string sql = "Insert Into UserTimeTable (ID, TimeTableName) Values (@ID, @TimeTalbeName)";
+            /*아니 정수형이 post가 안됨 ㅡ.ㅡ ㅠㅠ*/
+            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableName) Values (\"" + _userTimeTable.ID + "\", " + _userTimeTable.NO + ", \"" + _userTimeTable.TimeTableName + "\")";
+            db.Execute(sql, _userTimeTable);
+        }
+
+        public void UpdateUserTimeTable(UserTimeTable _userTimeTable)
+        {
+            string sql = "UPDATE UserTimeTable SET TimeTableName = '" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "' and NO = '" + _userTimeTable.NO + "'";
             db.Execute(sql, _userTimeTable);
         }
     }

@@ -8,21 +8,44 @@
         Icon="images\squirrel.ico"
         Height="635.1" Width="951.2" MinHeight="500" MinWidth="700" MaxWidth="960" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Window.Resources>
-        <Style TargetType="{x:Type Button}" x:Key="roundedButton">
+        <Style TargetType="{x:Type Button}" x:Key="roundedButton_yellow">
             <!--버튼 둥글게 하는 템플릿-->
             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
+                        <Border x:Name="button_border" CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
                             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="button_border" Property="Background" Value="red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
-               
             </Setter>
         </Style>
         
+        <Style TargetType="{x:Type Button}" x:Key="roundedButton_gray">
+            <!--버튼 둥글게 하는 템플릿-->
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="button_border" CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="button_border" Property="Background" Value="red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Setter Property="Template">
                 <Setter.Value>
@@ -63,7 +86,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ComboBox}">
                         <Grid>
-                            <ToggleButton
+                            <ToggleButton 
                             Cursor="Hand"
                             Name="ToggleButton"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -84,30 +107,37 @@
                             Margin="10 3 0 3"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left" />
-
-
-
                             <Popup
                                 Name="Popup"
                                 Placement="Bottom"
+                                Margin="0 0 0 0"
                                 IsOpen="{TemplateBinding IsDropDownOpen}"
                                 AllowsTransparency="True"
                                 Focusable="False"
-                                PopupAnimation="Slide">
+                                PopupAnimation="Slide"
+                                Grid.Column="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3"/>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
                                 <Grid
                                     Name="DropDown"
-                                    Margin="0 3 0 0"
+                                    Margin="0 0 0 0"
                                     SnapsToDevicePixels="True"               
                                     MinWidth="{TemplateBinding ActualWidth}"
-                                    MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border 
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Grid.Row="1"
+                                    Opacity="0.75">
+                                        <Border 
                                         CornerRadius="8"
                                         x:Name="DropDownBorder"
                                         Background="White"
                                         BorderThickness="0"/>
-                                    <ScrollViewer Padding="10 6 0 6" SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                    </ScrollViewer>
+                                        <ScrollViewer Padding="10 6 0 6" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Grid>
                                 </Grid>
                             </Popup>
                         </Grid>
@@ -133,6 +163,8 @@
             </Setter>
         </Style>
     </Window.Resources>
+    
+    
     <Grid Name="BigGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
@@ -161,7 +193,8 @@
                     <TextBlock x:Name="UserMajor" Text="Guest"  Foreground="gray" FontSize="13" Margin="0,-4,0,4.4"/>
                 </Border>
                 <Border Grid.Row="3" Margin="10,0,10,5">
-                    <Button x:Name="Logout_Button" Content="로그아웃" Foreground="gray" Grid.Row="2" Grid.Column="0" BorderThickness="0" Click="Logout_btn_Click" Background="#FFFFC53D" Style="{StaticResource roundedButton}">
+                    <Button x:Name="Logout_Button" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
+                            BorderThickness="0" Click="Logout_btn_Click" Style="{StaticResource roundedButton_yellow}">
                         <Button.BitmapEffect>
                             <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
                         </Button.BitmapEffect>
@@ -186,6 +219,9 @@
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" Value="Yellow"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="Red"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -213,51 +249,126 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Background="WhiteSmoke" BorderThickness="0">
-                    <TextBlock/>
-                </Border>
-                <Border Grid.Column="1" Background="WhiteSmoke" BorderThickness="0" VerticalAlignment="Center">
+                <TextBox Name="TableEdit_txtbox" Text="시간표1" FontSize="25" Grid.Column="0" Background="WhiteSmoke" 
+                         BorderThickness="0" Padding="10 0 0 0" VerticalContentAlignment="Center" Foreground="#FF808080" KeyDown="TableEdit_txtbox_KeyDown">
+                    
+                </TextBox>
+                <Border Name="year_txtbox" Grid.Column="1" Background="WhiteSmoke" BorderThickness="0" VerticalAlignment="Center">
                     <TextBlock>
                         2019년도 <LineBreak/>
                         1학기
                     </TextBlock>
                 </Border>
-                <StackPanel Grid.Column="2">
-                    <Button Background="White" BorderThickness="0" DockPanel.Dock="Right" 
-                                                HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="MaximizeRestoreImage" Source="images\add.png" Margin="12"/>
-                    </Button>
-                </StackPanel>
+                <Button Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" 
+                                                HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Add_img_stkpnl" Background="White">
+                                <Image x:Name="Add_img" Source="images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter Property="BorderBrush" Value="Red"/>
+                                                <Setter Property="BorderThickness" Value="2"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="1"  Background="WhiteSmoke">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.8*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.8*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="1">
-                    <Grid>
-                        <Button x:Name="tab" Visibility="Visible" Click="tab_Click" MouseEnter="tab_MouseEnter" MouseLeave="tab_MouseLeave"/>
-                        <Image x:Name="tab_on" Source="images\tab_on.png" Height="50" Visibility="Collapsed" MouseUp="tab_on_MouseUp"/>
-                        <Image x:Name="tab_off" Source="images\tab_off.png" Height="50" MouseUp="tab_off_MouseUp"/>
-                    </Grid>
-                </StackPanel>
-                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="2" Background="White" BorderThickness="0 8 0 0"/>
-                <Button  Content="시간모양" Grid.Column="3" Background="White" BorderThickness="0 8 0 0"/>
-                <Button  Content="MY GROUP" Grid.Column="4" Background="White" BorderThickness="0 8 0 0"/>
+                <Button x:Name="tab" Grid.Column="1" Click="tab_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="tab_off_img" Source="images\tab_off.png"/>
+                                    <Image x:Name="tab_on_img" Source="images\tab_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="tab_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="tab_on_img" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="2">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="Graduation_off_img" Source="images\Graduation_off.png"/>
+                                    <Image x:Name="Graduation_on_img" Source="images\Graduation_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Graduation_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="Graduation_on_img" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Content="시간모양" Grid.Column="3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="SpecificTime_off_img" Source="images\SpecificTime_off.png"/>
+                                    <Image x:Name="SpecificTime_on_img" Source="images\SpecificTime_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="SpecificTime_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="SpecificTime_on_img" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Content="MY GROUP" Grid.Column="4">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="MyGroup_off_img" Source="images\MyGroup_off.png"/>
+                                    <Image x:Name="MyGroup_on_img" Source="images\MyGroup_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="MyGroup_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="MyGroup_on_img" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
-            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
+            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Visible">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-
-
                 <Grid Grid.Row="0" Grid.Column="1" Background="LightGray">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
@@ -417,15 +528,6 @@
                             <ComboBoxItem>경제학부</ComboBoxItem>
                         </ComboBox>
 
-
-
-
-
-
-
-
-
-
                     </Grid>
                     <Grid Grid.Row="1" Margin="10,15">
                         <Grid.ColumnDefinitions>
@@ -488,8 +590,8 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Style="{StaticResource roundedButton}" x:Name="MyGroup_btn" Content="MY GROUP에 담기" Grid.Column="1" Click="MyGroup_btn_Click"/>
-                    <Button Style="{StaticResource roundedButton}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
+                    <Button Style="{StaticResource roundedButton_gray}" x:Name="MyGroup_btn" Content="MY GROUP에 담기" Grid.Column="1" Click="MyGroup_btn_Click"/>
+                    <Button Style="{StaticResource roundedButton_gray}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
                 </Grid>
             </Grid>
             <Grid x:Name="TimeTable_Grid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -883,8 +985,8 @@
                             <Button x:Name="sat13_btn" Content="X" Grid.Row="13" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
                         </Grid>
                     </ScrollViewer>
-                    <StackPanel Grid.Row="1" Background="LightGray">
-                        <Button 
+                <StackPanel Grid.Row="1" Background="LightGray">
+                    <Button 
                             x:Name="TimeTableSave_btn" 
                             Content="시간표 이미지로 저장" 
                             BorderThickness="0"
@@ -893,9 +995,11 @@
                             HorizontalContentAlignment="Right" 
                             Width="200" Height="35" 
                             Margin="0 5 20 0" Padding="0 0 10 0"
-                            Style="{StaticResource roundedButton}"/>
-                    </StackPanel>
+                            Style="{StaticResource roundedButton_gray}">
+                    </Button>
+                </StackPanel>
                 
+
             </Grid>
         </Grid>
     </Grid>

@@ -74,8 +74,14 @@ C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.Properti
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.GenerateResource.cache
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.CopyComplete
-C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\account.png
-C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\password.png
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\squirrel.ico
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\Client_Content.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\add.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\tab_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\tab_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\Graduation_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\Graduation_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\MyGroup_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\MyGroup_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\SpecificTime_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\SpecificTime_on.png

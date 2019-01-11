@@ -1,5 +1,4 @@
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\Client.csprojAssemblyReference.cache
-C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\FilterOption.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MainScreen.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MainWindow.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MyGroup.g.cs
@@ -12,7 +11,6 @@ C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\Client.exe
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\Client.pdb
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\Newtonsoft.Json.dll
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\Newtonsoft.Json.xml
-C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\FilterOption.baml
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MainScreen.baml
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MainWindow.baml
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\MyGroup.baml
@@ -76,3 +74,14 @@ C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.Properti
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.GenerateResource.cache
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\git0108\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.CopyComplete
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\squirrel.ico
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\Client_Content.g.cs
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\add.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\tab_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\tab_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\Graduation_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\Graduation_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\MyGroup_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\MyGroup_on.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\SpecificTime_off.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\images\SpecificTime_on.png

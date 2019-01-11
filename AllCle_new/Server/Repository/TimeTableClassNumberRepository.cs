@@ -25,21 +25,26 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<TimeTableClassNumber> GetTimeTableClassNumbers(string _id, string _timeTableName)
+        public List<string> GetTimeTableClassNumbers(string _id, int _no)
         {
-            string sql = "Select TTCN.ClassNumber " +
-                         "From TimeTableClassNumber TTCN, UserTimeTable UTT " +
-                         "Where UTT.TimeTableName = N'" + _timeTableName + "' " +
-                         "and UTT.ID = N'" + _id+ "' " +
-                         "and UTT.NO = TTCN.NO";
-            return db.Query<TimeTableClassNumber>(sql).ToList();
+            string sql = "Select ClassNumber " +
+                         "From TimeTableClassNumber " +
+                         "Where NO = '" + _no + "' " +
+                         "and ID = N'" + _id + "'";
+            return db.Query<string>(sql).ToList();
         }
 
 
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (NO, TimeTableClassNumber) Values (@NO, @TimeTableClassNumber)";
+            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableClassNumber) Values (@ID, @NO, @TimeTableClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
+        
+        /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)
+        {
+            string sql = "UPDATE TimeTableClassNumber SET TimeTableName = '" + _timeTableClassNumber.TimeTableName + "' WHERE ID = '" + _timeTableClassNumber.ID + "' and TimeTableName = N'" + _timeTableClassNumber.OldTimeTableName + "'";
+            db.Execute(sql, _timeTableClassNumber);
+        }*/
     }
 }

@@ -8,8 +8,8 @@ namespace Client.Models
 {
     class UserTimeTable
     {
-        public int NO { get; set; }
         public string ID { get; set; }
+        public int    NO { get; set; }
         public string TimeTableName { get; set; }
     }
 }

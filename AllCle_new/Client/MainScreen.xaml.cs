@@ -39,12 +39,15 @@ namespace Client
         List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
         List<Subject> UsersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
-        List<TimeTableClassNumber> timeTableClassNumber = new List<TimeTableClassNumber>(); //시간표의 과목들
+        List<string> timeTableClassNumber = new List<string>(); //시간표의 과목들
         List<UserMyGroup> userMyGroup = new List<UserMyGroup>();
-        SolidColorBrush[] br = { Brushes.Red, Brushes.Orange, Brushes.Yellow, Brushes.Green,Brushes.LightBlue,Brushes.Pink, Brushes.LightYellow, Brushes.LightGreen, Brushes.Coral };
+        string[] br = { "#FFCFCFD6", "#FFB1D3D2", "#FF8BC6C1", "#FF2FA5B8", "#FFF4AFA1", "#FFF7B990", "#FF86C26D", "#FF6DE182", "#FFEDE8AD" };
+        /*색 리스트*/
         User user = new User();
         bool tabActive;             //tab bar active or not
-        
+        string tableName = "";      //현재 테이블 이름
+        int userTimeTalbeNO = 0;    //유저 타임테이블
+
         public struct TableSubjects //시간표 한칸의 Data
         {
             public string className;
@@ -86,6 +89,14 @@ namespace Client
 
             UserAdmissionYear.Text = "학번 : " + user.YearOfEntry;
             UserMajor.Text = user.Major;
+
+            GetUserTimeTable();
+            if (userTimeTable.Count() != 0)
+            {
+                TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
+                GetTimeTableClassNumber(userTimeTable[0].NO);
+                RefreshTimeTable();
+            }
         }
         private void GuestLogIn()
         {
@@ -219,12 +230,12 @@ namespace Client
             string Unicode = Encoding.UTF8.GetString(json);
             userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
         }
-        private void GetTimeTableClassNumber(string _timeTableName)
+        private void GetTimeTableClassNumber(int _timeTableNo)
         {
-            url = urlTimeTableClassNumber + "/" + App.ID + "/timetable/" +_timeTableName;
+            url = urlTimeTableClassNumber + "/" + App.ID + "/timetable/" + _timeTableNo;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
-            timeTableClassNumber = JsonConvert.DeserializeObject<List<TimeTableClassNumber>>(Unicode);
+            timeTableClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
         }
         private void GetUserMyGroup()
         {
@@ -582,9 +593,10 @@ namespace Client
                         Run professor = new Run(TimeTableDB[_period + 1, _day + 1].professor);
                         professor.FontSize = 10;
                         schedule[_day, _period].Inlines.Add(professor);
-                        
+
                         //UsersSubjectsList[i].NO
-                        schedule[_day, _period].Background = br[i];
+                        BrushConverter bc = new BrushConverter();
+                        schedule[_day, _period].Background = (Brush)bc.ConvertFrom(br[i]);
                     }
                 }
 
@@ -609,6 +621,7 @@ namespace Client
         {
             App.MW.Show();
             App.first = false;
+            TableEdit_txtbox.Text = "시간표1";
             this.Visibility = Visibility.Collapsed;
         }
 
@@ -817,30 +830,32 @@ namespace Client
             if(!App.guest)
                 InitUserInfo();
             else if(App.guest)            
-                GuestLogIn();            
+                GuestLogIn();         
+            
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             int index = TableList.SelectedIndex;
-            string tableName = userTimeTable[index].TimeTableName;
-            GetTimeTableClassNumber(tableName);
+            tableName = userTimeTable[index].TimeTableName;
+            userTimeTalbeNO = userTimeTable[index].NO;
+            TableEdit_txtbox.Text = tableName;
+            GetTimeTableClassNumber(userTimeTalbeNO);
             UsersSubjectsList.Clear();
             for (int i = 0; i < timeTableClassNumber.Count; i++)
             {
-                UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i].ClassNumber)).ToList().ElementAt(0));
+                UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i])).ToList().ElementAt(0));
             }
             RefreshTimeTable();
         }
         
         private void tab_Click(object sender, RoutedEventArgs e)
         {
-            if(tabActive)
+            if (tabActive)
             {
 
-                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 2);
+                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 2);
                 list_grid.Visibility = Visibility.Collapsed;
-                tab.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
                 tabActive = false;
             }
             else
@@ -851,7 +866,7 @@ namespace Client
                 doubleAnimation.Duration = TimeSpan.FromSeconds(5);*/
 
 
-                TimeTable_scr.SetValue(Grid.ColumnSpanProperty, 1);
+                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 1);
                 /*TimeTable_scr.BeginAnimation(ScrollViewer.WidthProperty, doubleAnimation);
                 TimeTable_scr.Width = 600;
 
@@ -871,23 +886,9 @@ namespace Client
 
                 list_grid.SetValue(Grid.ColumnProperty, 1);
                 list_grid.Visibility = Visibility.Visible;
-                tab.BorderBrush = new SolidColorBrush(Color.FromRgb(239, 192, 80));
                 tabActive = true;
             }
             
-        }
-
-        private void tab_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
-        }
-
-        private void tab_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if(tabActive)
-                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 239, 192, 80));
-            else
-                tab.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 112, 112, 112));
         }
 
         private void normal_DropDownClosed(object sender, EventArgs e)
@@ -1070,6 +1071,60 @@ namespace Client
                 Search_Box.Foreground = new SolidColorBrush(Color.FromArgb(255, 211, 211, 211));
                 Search_Box.Text = "교과명, 학수번호, 교수이름으로 검색하기";
             }
+        }
+
+        private void TableEdit_txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == System.Windows.Input.Key.Enter)
+            {
+                if (userTimeTable.Count() != 0)
+                {
+                    url = urlUserTimeTable +"/"+ App.ID;
+                    String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"NO\" : \"" + userTimeTalbeNO +  "\"}";
+                    HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+                    byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+                    httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+                    httpWebRequest2.Method = "PUT";
+                    httpWebRequest2.ContentLength = sendData2.Length;
+                    Stream requestStream2 = httpWebRequest2.GetRequestStream();
+                    requestStream2.Write(sendData2, 0, sendData2.Length);
+                    requestStream2.Close();
+                    HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+                    StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                    streamReader2.ReadToEnd();
+                    streamReader2.Close();
+                    httpWebResponse2.Close();
+
+                    GetUserTimeTable();
+                    TableList.ItemsSource = userTimeTable;
+                }
+
+
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            url = urlUserTimeTable;
+            String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"NO\" : " + "5" + ", \"TimeTableName\" : \"시간표1\"}";
+            HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+            byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+            httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest2.Method = "POST";
+            httpWebRequest2.ContentLength = sendData2.Length;
+            Stream requestStream2 = httpWebRequest2.GetRequestStream();
+            requestStream2.Write(sendData2, 0, sendData2.Length);
+            requestStream2.Close();
+            HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+            StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+            streamReader2.ReadToEnd();
+            streamReader2.Close();
+            httpWebResponse2.Close();
+
+            GetUserTimeTable();
+            TableList.ItemsSource = userTimeTable;
+            TableEdit_txtbox.Text = "시간표1";
         }
     }
 }

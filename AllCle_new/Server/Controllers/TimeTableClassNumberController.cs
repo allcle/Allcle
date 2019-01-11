@@ -31,10 +31,10 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{_id}/timetalble/{_timeTableName}")]
-        public IEnumerable<TimeTableClassNumber> GetTimeTableClassNumbers(string _id, string _timeTableName)
+        [HttpGet("{_id}/timetable/{_no}")]
+        public IEnumerable<string> GetTimeTableClassNumbers(string _id, int _no)
         {
-            return _repo.GetTimeTableClassNumbers(_id, _timeTableName);
+            return _repo.GetTimeTableClassNumbers(_id, _no);
         }
 
         // POST api/<controller>
@@ -45,10 +45,11 @@ namespace Server.Controllers
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        /*[HttpPut("{_id}/timetable/{_timeTableName}")]
+        public void Put([FromBody]UpdateUserIdTimeTable _timeTableClassNumber)
         {
-        }
+            _repo.UpdateTimeTableClassNumber(_timeTableClassNumber);
+        }*/
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]

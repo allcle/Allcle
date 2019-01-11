@@ -73,31 +73,11 @@ namespace Client
             SU.Show();
         }
 
-        private void PW_Box_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (PW_Box.Password.Length == 0)
-            {
-                PW_.Visibility = Visibility.Visible;
-            }
-        }
-
+      
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             Login_PW();
         }
-
-       
-        private void PW_Box_GotFocus(object sender, RoutedEventArgs e)
-        {
-            PW_.Visibility = Visibility.Collapsed;
-        }
-
-        private void PW__GotFocus(object sender, RoutedEventArgs e)         //패스워드 누르는 칸 클릭시
-        {
-            PW_.Visibility = Visibility.Collapsed;
-            PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
-        }
-
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)       // 프로그램 아무곳이나 누르면 lostfocus
         {
@@ -172,7 +152,6 @@ namespace Client
 
                     App.ID = ID_Box.Text;
                     App.guest = false;
-                    PW_.Visibility = Visibility.Collapsed;
                     ID_Box.Text = "아이디 입력";
                     if (App.first)
                         App.MS.Show();
@@ -192,8 +171,6 @@ namespace Client
                 System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
         }
 
-        
-
         private void PW_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
@@ -201,12 +178,18 @@ namespace Client
                 Login_PW();
             }
         }
-
-        private void PW__MouseDown(object sender, MouseButtonEventArgs e)
+        
+        private void ID_Box_LostFocus(object sender, RoutedEventArgs e)
         {
-            PW_.Visibility = Visibility.Collapsed;
-            PW_Box.Focus();                                                 //패스워드 창으로 포커스 가도록
-
+            if (ID_Box.Text == "")
+                ID_Box.Text = "아이디 입력";
         }
+
+        private void ID_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(ID_Box.Text == "아이디 입력")
+                ID_Box.Text = "";
+        }
+        
     }
 }

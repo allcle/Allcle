@@ -8,8 +8,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/client.exe")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/client.pdb")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("bin/debug/newtonsoft.json.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/add.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/graduation_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/graduation_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/mygroup_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/mygroup_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/specifictime_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/specifictime_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/squirrel.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_on.png")]
 
 

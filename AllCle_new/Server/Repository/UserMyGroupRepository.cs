@@ -31,6 +31,5 @@ namespace Server.Repository
             return this.db.Query<UserMyGroup>(sql).ToList();
         }
 
-
     }
 }

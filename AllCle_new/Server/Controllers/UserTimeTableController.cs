@@ -42,13 +42,14 @@ namespace Server.Controllers
         [HttpPost]
         public void Post([FromBody]UserTimeTable _userTimeTable)
         {
-            _repo.PostTimeTalbe(_userTimeTable);
+            _repo.PostTimeTable(_userTimeTable);
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put([FromBody]UserTimeTable _userTimeTable)
         {
+            _repo.UpdateUserTimeTable(_userTimeTable);
         }
 
         // DELETE api/<controller>/5

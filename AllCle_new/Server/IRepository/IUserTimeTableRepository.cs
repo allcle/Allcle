@@ -9,6 +9,7 @@ namespace Server.IRepository
     public interface IUserTimeTableRepository
     {
         List<UserTimeTable> GetUserTimeTables(string _userId);
-        void PostTimeTalbe(UserTimeTable _userTimeTable);
+        void PostTimeTable(UserTimeTable _userTimeTable);
+        void UpdateUserTimeTable(UserTimeTable _userTimeTable);
     }
 }

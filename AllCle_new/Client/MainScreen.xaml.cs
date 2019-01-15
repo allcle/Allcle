@@ -1126,5 +1126,29 @@ namespace Client
             TableList.ItemsSource = userTimeTable;
             TableEdit_txtbox.Text = "시간표1";
         }
+
+        private void Save_Schedule_Click(object sender, RoutedEventArgs e)
+        {
+            url = urlUserTimeTable;
+
+            String now = DateTime.Now.ToString("MMddHHmmss");
+            String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + now + "\"}";
+            HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+            byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+            httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest2.Method = "POST";
+            httpWebRequest2.ContentLength = sendData2.Length;
+            Stream requestStream2 = httpWebRequest2.GetRequestStream();
+            requestStream2.Write(sendData2, 0, sendData2.Length);
+            requestStream2.Close();
+            HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+            StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+            streamReader2.ReadToEnd();
+            streamReader2.Close();
+            httpWebResponse2.Close();
+
+            GetUserTimeTable();
+            TableList.ItemsSource = userTimeTable;
+        }
     }
 }

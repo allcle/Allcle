@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Icon="images\squirrel.ico"
+        Icon="source\images\squirrel.ico"
         BorderThickness="0" Height="600" Width="400" WindowStartupLocation="CenterScreen" 
         MinHeight="350" MinWidth="300" MaxHeight="800" MaxWidth="600" MouseDown="Window_MouseDown">
 
@@ -246,9 +246,9 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
-    
-    <Grid Background="#FFEFC050">
+
+
+    <Grid Background="#FFF0C05A">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="1*"/>
@@ -263,7 +263,7 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Image Source="images\add.png" Margin="40">
+            <Image Source="source\images\add.png" Margin="40">
                 <Image.OpacityMask>
                     <RadialGradientBrush  Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
                         <GradientStop Color="#ffffffff" Offset="1" />

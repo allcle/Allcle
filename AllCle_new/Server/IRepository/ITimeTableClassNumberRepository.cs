@@ -8,7 +8,7 @@ namespace Server.IRepository
 {
     public interface ITimeTableClassNumberRepository
     {
-        List<string> GetTimeTableClassNumbers(string _id, int _no);
+        List<string> GetTimeTableClassNumbers(string _id, string _no);
         void PostTimeTable(TimeTableClassNumber _timeTableClassNumber);
         //void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber);
     }

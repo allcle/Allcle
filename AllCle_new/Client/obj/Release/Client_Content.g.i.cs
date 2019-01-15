@@ -8,15 +8,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/add.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/graduation_off.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/graduation_on.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/mygroup_off.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/mygroup_on.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/specifictime_off.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/specifictime_on.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/squirrel.ico")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_off.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/tab_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/add.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/mygroup_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/mygroup_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/search_btn.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/specifictime_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/specifictime_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/specific_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/specific_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/squirrel.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/tab_off.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/tab_on.png")]
 
 

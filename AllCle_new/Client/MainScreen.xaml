@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Icon="images\squirrel.ico"
-        Height="635.1" Width="951.2" MinHeight="500" MinWidth="700" MaxWidth="960" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+        Icon="source\images\squirrel.ico"
+        Height="635" Width="971" MinHeight="500" MinWidth="700" MaxWidth="1000" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Window.Resources>
         <Style TargetType="{x:Type Button}" x:Key="roundedButton_yellow">
             <!--버튼 둥글게 하는 템플릿-->
@@ -26,7 +26,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="{x:Type Button}" x:Key="roundedButton_gray">
             <!--버튼 둥글게 하는 템플릿-->
             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -58,8 +58,8 @@
                             <Border
                                 x:Name="Border"
                                 Grid.ColumnSpan="2"
-                                CornerRadius="5"
-                                Background="White"
+                                CornerRadius="8"
+                                Background="#FFFFFFFF"
                                 BorderThickness="0"/>
                             <Path
                                 x:Name="Arrow"
@@ -121,7 +121,7 @@
                                         <RowDefinition Height="3"/>
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                <Grid
+                                    <Grid
                                     Name="DropDown"
                                     Margin="0 0 0 0"
                                     SnapsToDevicePixels="True"               
@@ -155,41 +155,69 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" TargetName="myBorder" Value="#FFEFC050" />
+                                <Setter Property="Background" TargetName="myBorder" Value="#FFF0C05A" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="TextBox" x:Key="roundTextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Background="#fff">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="blue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--폰트는 이런식으로-->
+        <Style x:Key="apple">
+            <Setter Property="TextElement.FontFamily" Value="source\FontFamily\AppleSDGothicNeoB.ttf"/>
+        </Style>
+
     </Window.Resources>
-    
-    
+
     <Grid Name="BigGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="110"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="97"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="#FFEFC050">
+        <Grid Grid.Column="0" Background="#FFF0C05A">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <Grid x:Name="UserInfo" Grid.Row="0" MinWidth="0"  Background="#FFEFC050">
+            <Grid x:Name="UserInfo" Grid.Row="0" MinWidth="0"  Background="#FFF0C05A">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1.4*"/>
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="1.4*"/>
                 </Grid.RowDefinitions>
-                <Border  Grid.Row="0" Margin="10,0,0,0" VerticalAlignment="Center" Background="#FFEFC050">
+                <Border  Grid.Row="0" Margin="10,0,0,0" VerticalAlignment="Center" Background="#FFF0C05A">
                     <TextBlock x:Name="UserId" Text="Guest" Foreground="gray" FontSize="20"/>
                 </Border>
-                <Border  Grid.Row="1" Margin="10,0,0,0" VerticalAlignment="Bottom" Background="#FFEFC050">
+                <Border  Grid.Row="1" Margin="10,0,0,0" VerticalAlignment="Bottom" Background="#FFF0C05A">
                     <TextBlock x:Name="UserAdmissionYear" Text="Guest" Foreground="gray" FontSize="13"/>
                 </Border>
-                <Border  Grid.Row="2" Margin="10,0.4,0.4,0"  Background="#FFEFC050">
+                <Border  Grid.Row="2" Margin="10,0.4,0.4,0"  Background="#FFF0C05A">
                     <TextBlock x:Name="UserMajor" Text="Guest"  Foreground="gray" FontSize="13" Margin="0,-4,0,4.4"/>
                 </Border>
                 <Border Grid.Row="3" Margin="10,0,10,5">
@@ -201,14 +229,14 @@
                     </Button>
                 </Border>
             </Grid>
-            <Border  Grid.Row="1" Background="#FFEFC050" BorderThickness="0" Margin="0" VerticalAlignment="Center">
+            <Border  Grid.Row="1" Background="#FFF0C05A" BorderThickness="0" Margin="0" VerticalAlignment="Center">
                 <Border.Effect>
                     <DropShadowEffect Opacity="0.5" Direction="70" ShadowDepth="1" BlurRadius="3" />
                 </Border.Effect>
                 <TextBlock x:Name="tabBarTimeTable" Text="시간표" Foreground="gray" FontSize="20" Margin="0,0,0,0" 
-                           FontFamily="Malgun Gothic" Background="#FFEFC050"/>
+                           FontFamily="Malgun Gothic" Background="#FFF0C05A"/>
             </Border>
-            <ListView x:Name="TableList" Grid.Row="2" BorderThickness="0" Background="#FFEFC050" 
+            <ListView x:Name="TableList" Grid.Row="2" BorderThickness="0" Background="#FFF0C05A" 
                       ItemsSource="{Binding List}" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" 
                       MouseDoubleClick="TableList_MouseDoubleClick">
                 <ListView.Resources>
@@ -235,36 +263,35 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="59"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*"/>
-                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="0*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Row="0" Grid.Column="0" Background="WhiteSmoke">
+            <Grid Grid.Row="0" Grid.Column="0" Background="#FFF5F5F5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="59"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Name="TableEdit_txtbox" Text="시간표1" FontSize="25" Grid.Column="0" Background="WhiteSmoke" 
+                <TextBox Name="TableEdit_txtbox" Text="시간표1" FontSize="25" Grid.Column="0" Background="#FFF5F5F5" 
                          BorderThickness="0" Padding="10 0 0 0" VerticalContentAlignment="Center" Foreground="#FF808080" KeyDown="TableEdit_txtbox_KeyDown">
-                    
                 </TextBox>
-                <Border Name="year_txtbox" Grid.Column="1" Background="WhiteSmoke" BorderThickness="0" VerticalAlignment="Center">
+                <Border Name="year_txtbox" Grid.Column="1" Background="#FFF5F5F5" BorderThickness="0" VerticalAlignment="Center">
                     <TextBlock>
                         2019년도 <LineBreak/>
                         1학기
                     </TextBlock>
                 </Border>
-                <Button Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" 
-                                                HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">
+                <Button Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Add_img_stkpnl" Background="White">
-                                <Image x:Name="Add_img" Source="images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image x:Name="Add_img" Source="source\images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
@@ -281,22 +308,22 @@
                 </Button>
             </Grid>
 
-            <Grid Grid.Row="0" Grid.Column="1"  Background="WhiteSmoke">
+            <Grid Grid.Row="0" Grid.Column="1"  Background="#FFF0F0F0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.8*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1.8*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="tab" Grid.Column="1" Click="tab_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
                                 <Grid>
-                                    <Image x:Name="tab_off_img" Source="images\tab_off.png"/>
-                                    <Image x:Name="tab_on_img" Source="images\tab_on.png" Visibility="Collapsed"/>
+                                    <Image x:Name="tab_off_img" Source="source\images\tab_off.png"/>
+                                    <Image x:Name="tab_on_img" Source="source\images\tab_on.png" Visibility="Collapsed"/>
                                 </Grid>
                             </DockPanel>
                             <ControlTemplate.Triggers>
@@ -313,8 +340,8 @@
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
                                 <Grid>
-                                    <Image x:Name="Graduation_off_img" Source="images\Graduation_off.png"/>
-                                    <Image x:Name="Graduation_on_img" Source="images\Graduation_on.png" Visibility="Collapsed"/>
+                                    <Image x:Name="Graduation_off_img" Source="source\images\Graduation_off.png"/>
+                                    <Image x:Name="Graduation_on_img" Source="source\images\Graduation_on.png" Visibility="Collapsed"/>
                                 </Grid>
                             </DockPanel>
                             <ControlTemplate.Triggers>
@@ -331,8 +358,8 @@
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
                                 <Grid>
-                                    <Image x:Name="SpecificTime_off_img" Source="images\SpecificTime_off.png"/>
-                                    <Image x:Name="SpecificTime_on_img" Source="images\SpecificTime_on.png" Visibility="Collapsed"/>
+                                    <Image x:Name="SpecificTime_off_img" Source="source\images\SpecificTime_off.png"/>
+                                    <Image x:Name="SpecificTime_on_img" Source="source\images\SpecificTime_on.png" Visibility="Collapsed"/>
                                 </Grid>
                             </DockPanel>
                             <ControlTemplate.Triggers>
@@ -349,8 +376,8 @@
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
                                 <Grid>
-                                    <Image x:Name="MyGroup_off_img" Source="images\MyGroup_off.png"/>
-                                    <Image x:Name="MyGroup_on_img" Source="images\MyGroup_on.png" Visibility="Collapsed"/>
+                                    <Image x:Name="MyGroup_off_img" Source="source\images\MyGroup_off.png"/>
+                                    <Image x:Name="MyGroup_on_img" Source="source\images\MyGroup_on.png" Visibility="Collapsed"/>
                                 </Grid>
                             </DockPanel>
                             <ControlTemplate.Triggers>
@@ -363,52 +390,60 @@
                     </Button.Template>
                 </Button>
             </Grid>
-            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Visible">
+            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="118"/>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Grid.Column="1" Background="LightGray">
+                <Grid Grid.Row="0" Grid.Column="1" Background="#FFE1E1E1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="27*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="26*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="27*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="10,15">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
+                        <ComboBox Grid.Column="1" FontSize="10" Margin="0" SelectedIndex="0">
                             <ComboBoxItem>서울캠퍼스</ComboBoxItem>
                             <ComboBoxItem>세종캠퍼스</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="course" Grid.Column="1" FontSize="10" Margin="2,0" SelectedIndex="0" DropDownClosed="course_DropDownClosed">
+                        <ComboBox x:Name="course" Grid.Column="3" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="course_DropDownClosed">
                             <ComboBoxItem>모든 과목</ComboBoxItem>
                             <ComboBoxItem>교양</ComboBoxItem>
                             <ComboBoxItem>전공</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="all" Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0" DropDownClosed="normal_DropDownClosed">
+                        <ComboBox x:Name="all" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="normal_DropDownClosed">
                             <ComboBoxItem>모든 과목</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="normal" Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="normal_DropDownClosed">
+                        <ComboBox x:Name="normal" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="normal_DropDownClosed">
                             <ComboBoxItem>모든 교양</ComboBoxItem>
                             <ComboBoxItem>공통 교양</ComboBoxItem>
                             <ComboBoxItem>일반 교양</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="engineer" Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="engineer_DropDownClosed">
+                        <ComboBox x:Name="engineer" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="engineer_DropDownClosed">
                             <ComboBoxItem>모든 교양</ComboBoxItem>
                             <ComboBoxItem>ABEEK 교양</ComboBoxItem>
                             <ComboBoxItem>일반 교양</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="architecture" Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="architecture" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모든 교양</ComboBoxItem>
                             <ComboBoxItem>건축 ㅡ.ㅡ</ComboBoxItem>
                             <ComboBoxItem>건축 ㅠ.ㅠ</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="major" Grid.Column="2" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="major_DropDownClosed">
+                        <ComboBox x:Name="major" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="major_DropDownClosed">
                             <ComboBoxItem>공과대학</ComboBoxItem>
                             <ComboBoxItem>경영대학</ComboBoxItem>
                             <ComboBoxItem>문과대학</ComboBoxItem>
@@ -419,14 +454,14 @@
                             <ComboBoxItem>경제학부</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="all_all" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0">
+                        <ComboBox x:Name="all_all" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0">
                             <ComboBoxItem>모든 과목</ComboBoxItem>
                         </ComboBox>
-                        <ComboBox x:Name="all_general" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="all_general" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모든 교양</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="normal_common" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="normal_common" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모든 공통 교양</ComboBoxItem>
                             <ComboBoxItem>예술과디자인</ComboBoxItem>
                             <ComboBoxItem>제2외국어와한문</ComboBoxItem>
@@ -437,7 +472,7 @@
                             <ComboBoxItem>역사와문화</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="normal_normal" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="normal_normal" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모드 일반 교양</ComboBoxItem>
                             <ComboBoxItem>교양필수</ComboBoxItem>
                             <ComboBoxItem>인문계열</ComboBoxItem>
@@ -449,7 +484,7 @@
                             <ComboBoxItem>교직과목</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="engineer_ABEEK" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="engineer_ABEEK" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모든 ABEEK 교양</ComboBoxItem>
                             <ComboBoxItem>기초교양</ComboBoxItem>
                             <ComboBoxItem>일반교양</ComboBoxItem>
@@ -459,7 +494,7 @@
                             <ComboBoxItem>MSC전산</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="engineer_normal" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="engineer_normal" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>모든 일반 교양</ComboBoxItem>
                             <ComboBoxItem>인문계열</ComboBoxItem>
                             <ComboBoxItem>사회계열</ComboBoxItem>
@@ -473,7 +508,7 @@
 
                         <!--건축의 교양 자리-->
 
-                        <ComboBox x:Name="major_engineer" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_engineer" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>전공공통</ComboBoxItem>
                             <ComboBoxItem>건설도시공학부</ComboBoxItem>
                             <ComboBoxItem>전자전기공학부</ComboBoxItem>
@@ -482,18 +517,18 @@
                             <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_business" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_business" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>경영학부</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_language" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_language" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>영어영문학과</ComboBoxItem>
                             <ComboBoxItem>독어독문학과</ComboBoxItem>
                             <ComboBoxItem>불어불문학과</ComboBoxItem>
                             <ComboBoxItem>국어국문학과</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_teach" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_teach" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>수학교육과</ComboBoxItem>
                             <ComboBoxItem>국어교육과</ComboBoxItem>
                             <ComboBoxItem>영어교육과</ComboBoxItem>
@@ -501,7 +536,7 @@
                             <ComboBoxItem>교육학과</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_art" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_art" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>전공공통</ComboBoxItem>
                             <ComboBoxItem>동양학과</ComboBoxItem>
                             <ComboBoxItem>회화과</ComboBoxItem>
@@ -515,32 +550,46 @@
                             <ComboBoxItem>디자인학부</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_architecture" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_architecture" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>건축학부</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_law" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_law" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>전공공통</ComboBoxItem>
                             <ComboBoxItem>법학부</ComboBoxItem>
                         </ComboBox>
 
-                        <ComboBox x:Name="major_economics" Grid.Column="3" FontSize="10" Margin="2,0" SelectedIndex="0" Visibility="Collapsed">
+                        <ComboBox x:Name="major_economics" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
                             <ComboBoxItem>경제학부</ComboBoxItem>
                         </ComboBox>
 
                     </Grid>
-                    <Grid Grid.Row="1" Margin="10,15">
+                    <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="16*"/>
+                            <ColumnDefinition Width="160*"/>
+                            <ColumnDefinition Width="16*"/>
+                            <ColumnDefinition Width="445*"/>
+                            <ColumnDefinition Width="17*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="16*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
+                        <ComboBox Grid.Column="1" FontSize="10" Margin="2,0" SelectedIndex="0">
                             <ComboBoxItem>공강시간만</ComboBoxItem>
                             <ComboBoxItem>전체 시간</ComboBoxItem>
                         </ComboBox>
-                        <TextBox Name="Search_Box" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" TextWrapping="Wrap" Grid.Column="1" KeyDown="Search_Box_KeyDown" GotFocus="Search_Box_GotFocus" LostFocus="Search_Box_LostFocus"/>
-                        <Button Name="Search_btn" Content="검색" Grid.Column="2" Click="Search_btn_Click"/>
+                        <TextBox Name="Search_Box" Background="White" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" 
+                                 TextWrapping="Wrap" Grid.Column="3" KeyDown="Search_Box_KeyDown" VerticalContentAlignment="Center"
+                                 Style="{StaticResource roundTextBox}"
+                                 Padding="10 0 0 0" GotFocus="Search_Box_GotFocus" LostFocus="Search_Box_LostFocus"/>
+                        <Button Name="Search_btn" Content="검색" Background="#FFF0C05A" Grid.Column="5"
+                                Style="{StaticResource roundedButton_yellow}" Click="Search_btn_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="source\images\search_btn.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
 
 
 
@@ -549,11 +598,16 @@
                 </Grid>
 
 
-
                 <ListView x:Name="DataListView_All" 
                           Grid.Row="1" Grid.Column="2" MinHeight="0" 
                           BorderThickness="0" ItemsSource="{Binding aList}" 
                           MouseDoubleClick="DataListView_All_MouseDoubleClick">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Background" Value="#FF707070" />
+                            <Setter Property="Height" Value="22"/>
+                        </Style>
+                    </ListView.Resources>
                     <ListView.Effect>
                         <DropShadowEffect Opacity="0.5" Direction="0"/>
                     </ListView.Effect>
@@ -603,388 +657,388 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <ScrollViewer x:Name="TimeTable_scr" Grid.Row="0" VerticalScrollBarVisibility="Hidden">
-                        <Grid x:Name="TimeTable" >
+                    <Grid x:Name="TimeTable" >
 
-                            <!--Button name은 요일+교시-->
+                        <!--Button name은 요일+교시-->
 
-                            <!--Button color는 Random 메소드로 넣기. Random Color는 .cs파일에 있음-->
+                        <!--Button color는 Random 메소드로 넣기. Random Color는 .cs파일에 있음-->
 
-                            <!--Button Content는 ListView에서 클릭할 때, 출력-->
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="34"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="53"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox  Text="월" Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                            <TextBox  Text="화" Grid.Row="0" Grid.Column="2" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                            <TextBox  Text="수" Grid.Row="0" Grid.Column="3" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                            <TextBox  Text="목" Grid.Row="0" Grid.Column="4" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                            <TextBox  Text="금" Grid.Row="0" Grid.Column="5" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-                            <TextBox  Text="토" Grid.Row="0" Grid.Column="6" Background="LightGray" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <!--Button Content는 ListView에서 클릭할 때, 출력-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="53"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox  Text="월" Grid.Row="0" Grid.Column="1" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <TextBox  Text="화" Grid.Row="0" Grid.Column="2" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <TextBox  Text="수" Grid.Row="0" Grid.Column="3" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <TextBox  Text="목" Grid.Row="0" Grid.Column="4" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <TextBox  Text="금" Grid.Row="0" Grid.Column="5" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+                        <TextBox  Text="토" Grid.Row="0" Grid.Column="6" Background="#FFE1E1E1" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"/>
 
-                            <!--Button 내의 Click을 이용해서 삭제 기능 구현-->
+                        <!--Button 내의 Click을 이용해서 삭제 기능 구현-->
 
-                            <TextBox x:Name="blank"               Grid.Row="0" Grid.Column="0" Background="LightGray" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class1" Text="1교시" Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class2" Text="2교시" Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class3" Text="3교시" Grid.Row="3" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class4" Text="4교시" Grid.Row="4" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class5" Text="5교시" Grid.Row="5" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class6" Text="6교시" Grid.Row="6" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class7" Text="7교시" Grid.Row="7" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class8" Text="8교시" Grid.Row="8" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class9" Text="9교시" Grid.Row="9" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class10" Text="10교시" Grid.Row="10" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class11" Text="11교시" Grid.Row="11" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class12" Text="12교시" Grid.Row="12" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
-                            <TextBox x:Name="class13" Text="13교시" Grid.Row="13" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="blank"               Grid.Row="0" Grid.Column="0" Background="#FFE1E1E1" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class1" Text="1교시" Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class2" Text="2교시" Grid.Row="2" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class3" Text="3교시" Grid.Row="3" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class4" Text="4교시" Grid.Row="4" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class5" Text="5교시" Grid.Row="5" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class6" Text="6교시" Grid.Row="6" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class7" Text="7교시" Grid.Row="7" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class8" Text="8교시" Grid.Row="8" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class9" Text="9교시" Grid.Row="9" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class10" Text="10교시" Grid.Row="10" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class11" Text="11교시" Grid.Row="11" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class12" Text="12교시" Grid.Row="12" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
+                        <TextBox x:Name="class13" Text="13교시" Grid.Row="13" Grid.Column="0" Background="White" BorderBrush="Gray" BorderThickness="0" TextAlignment="Center" IsReadOnly="True"/>
 
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon1_btn" Content="X" Grid.Row="1" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon2_btn" Content="X" Grid.Row="2" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon3_btn" Content="X" Grid.Row="3" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon4_btn" Content="X" Grid.Row="4" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon5_btn" Content="X" Grid.Row="5" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon6_btn" Content="X" Grid.Row="6" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon7_btn" Content="X" Grid.Row="7" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon8_btn" Content="X" Grid.Row="8" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon9_btn" Content="X" Grid.Row="9" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon10_btn" Content="X" Grid.Row="10" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon11_btn" Content="X" Grid.Row="11" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon12_btn" Content="X" Grid.Row="12" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="1" BorderThickness="0">
-                                <TextBlock x:Name="mon13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="mon13_btn" Content="X" Grid.Row="13" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-
-
-
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue1_btn" Content="X" Grid.Row="1" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue2_btn" Content="X" Grid.Row="2" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue3_btn" Content="X" Grid.Row="3" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue4_btn" Content="X" Grid.Row="4" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue5_btn" Content="X" Grid.Row="5" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue6_btn" Content="X" Grid.Row="6" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue7_btn" Content="X" Grid.Row="7" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue8_btn" Content="X" Grid.Row="8" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue9_btn" Content="X" Grid.Row="9" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue10_btn" Content="X" Grid.Row="10" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue11_btn" Content="X" Grid.Row="11" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue12"  Background="White" Padding="5,5,0,0" MouseLeave="MouseEnter" MouseEnter="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue12_btn" Content="X" Grid.Row="12" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="2" BorderThickness="0">
-                                <TextBlock x:Name="tue13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="tue13_btn" Content="X" Grid.Row="13" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-
-
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed1_btn" Content="X" Grid.Row="1" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed2_btn" Content="X" Grid.Row="2" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed3_btn" Content="X" Grid.Row="3" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed4_btn" Content="X" Grid.Row="4" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed5_btn" Content="X" Grid.Row="5" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed6_btn" Content="X" Grid.Row="6" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed7_btn" Content="X" Grid.Row="7" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed8_btn" Content="X" Grid.Row="8" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed9_btn" Content="X" Grid.Row="9" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed10_btn" Content="X" Grid.Row="10" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed11_btn" Content="X" Grid.Row="11" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed12_btn" Content="X" Grid.Row="12" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="3" BorderThickness="0">
-                                <TextBlock x:Name="wed13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="wed13_btn" Content="X" Grid.Row="13" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-
-
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu1_btn" Content="X" Grid.Row="1" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu2_btn" Content="X" Grid.Row="2" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu3_btn" Content="X" Grid.Row="3" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu4_btn" Content="X" Grid.Row="4" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu5_btn" Content="X" Grid.Row="5" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu6_btn" Content="X" Grid.Row="6" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu7_btn" Content="X" Grid.Row="7" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu8_btn" Content="X" Grid.Row="8" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu9_btn" Content="X" Grid.Row="9" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu10_btn" Content="X" Grid.Row="10" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu11_btn" Content="X" Grid.Row="11" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu12_btn" Content="X" Grid.Row="12" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="4" BorderThickness="0">
-                                <TextBlock x:Name="thu13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="thu13_btn" Content="X" Grid.Row="13" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon1_btn" Content="X" Grid.Row="1" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon2_btn" Content="X" Grid.Row="2" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon3_btn" Content="X" Grid.Row="3" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon4_btn" Content="X" Grid.Row="4" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon5_btn" Content="X" Grid.Row="5" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon6_btn" Content="X" Grid.Row="6" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon7_btn" Content="X" Grid.Row="7" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon8_btn" Content="X" Grid.Row="8" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon9_btn" Content="X" Grid.Row="9" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon10_btn" Content="X" Grid.Row="10" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon11_btn" Content="X" Grid.Row="11" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon12_btn" Content="X" Grid.Row="12" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="1" BorderThickness="0">
+                            <TextBlock x:Name="mon13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="mon13_btn" Content="X" Grid.Row="13" Grid.Column="1" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
 
 
 
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue1_btn" Content="X" Grid.Row="1" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue2_btn" Content="X" Grid.Row="2" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue3_btn" Content="X" Grid.Row="3" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue4_btn" Content="X" Grid.Row="4" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue5_btn" Content="X" Grid.Row="5" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue6_btn" Content="X" Grid.Row="6" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue7_btn" Content="X" Grid.Row="7" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue8_btn" Content="X" Grid.Row="8" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue9_btn" Content="X" Grid.Row="9" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue10_btn" Content="X" Grid.Row="10" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue11_btn" Content="X" Grid.Row="11" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue12"  Background="White" Padding="5,5,0,0" MouseLeave="MouseEnter" MouseEnter="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue12_btn" Content="X" Grid.Row="12" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="2" BorderThickness="0">
+                            <TextBlock x:Name="tue13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="tue13_btn" Content="X" Grid.Row="13" Grid.Column="2" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
 
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri1_btn" Content="X" Grid.Row="1" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri2_btn" Content="X" Grid.Row="2" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri3_btn" Content="X" Grid.Row="3" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri4_btn" Content="X" Grid.Row="4" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri5_btn" Content="X" Grid.Row="5" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri6_btn" Content="X" Grid.Row="6" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri7_btn" Content="X" Grid.Row="7" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri8_btn" Content="X" Grid.Row="8" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri9_btn" Content="X" Grid.Row="9" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri10_btn" Content="X" Grid.Row="10" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri11_btn" Content="X" Grid.Row="11" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri12_btn" Content="X" Grid.Row="12" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="5" BorderThickness="0">
-                                <TextBlock x:Name="fri13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="fri13_btn" Content="X" Grid.Row="13" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
 
-                            <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat1_btn" Content="X" Grid.Row="1" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat2_btn" Content="X" Grid.Row="2" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat3_btn" Content="X" Grid.Row="3" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat4_btn" Content="X" Grid.Row="4" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat5_btn" Content="X" Grid.Row="5" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat6_btn" Content="X" Grid.Row="6" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat7_btn" Content="X" Grid.Row="7" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat8_btn" Content="X" Grid.Row="8" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat9_btn" Content="X" Grid.Row="9" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat10_btn" Content="X" Grid.Row="10" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat11_btn" Content="X" Grid.Row="11" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat12_btn" Content="X" Grid.Row="12" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                            <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="6" BorderThickness="0">
-                                <TextBlock x:Name="sat13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
-                            </Border>
-                            <Button x:Name="sat13_btn" Content="X" Grid.Row="13" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
-                        </Grid>
-                    </ScrollViewer>
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed1_btn" Content="X" Grid.Row="1" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed2_btn" Content="X" Grid.Row="2" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed3_btn" Content="X" Grid.Row="3" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed4_btn" Content="X" Grid.Row="4" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed5_btn" Content="X" Grid.Row="5" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed6_btn" Content="X" Grid.Row="6" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed7_btn" Content="X" Grid.Row="7" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed8_btn" Content="X" Grid.Row="8" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed9_btn" Content="X" Grid.Row="9" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed10_btn" Content="X" Grid.Row="10" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed11_btn" Content="X" Grid.Row="11" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed12_btn" Content="X" Grid.Row="12" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="3" BorderThickness="0">
+                            <TextBlock x:Name="wed13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="wed13_btn" Content="X" Grid.Row="13" Grid.Column="3" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+
+
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu1_btn" Content="X" Grid.Row="1" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu2_btn" Content="X" Grid.Row="2" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu3_btn" Content="X" Grid.Row="3" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu4_btn" Content="X" Grid.Row="4" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu5_btn" Content="X" Grid.Row="5" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu6_btn" Content="X" Grid.Row="6" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu7_btn" Content="X" Grid.Row="7" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu8_btn" Content="X" Grid.Row="8" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu9_btn" Content="X" Grid.Row="9" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu10_btn" Content="X" Grid.Row="10" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu11_btn" Content="X" Grid.Row="11" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu12_btn" Content="X" Grid.Row="12" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="4" BorderThickness="0">
+                            <TextBlock x:Name="thu13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="thu13_btn" Content="X" Grid.Row="13" Grid.Column="4" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+
+
+
+
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri1_btn" Content="X" Grid.Row="1" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri2_btn" Content="X" Grid.Row="2" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri3_btn" Content="X" Grid.Row="3" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri4_btn" Content="X" Grid.Row="4" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri5_btn" Content="X" Grid.Row="5" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri6_btn" Content="X" Grid.Row="6" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri7_btn" Content="X" Grid.Row="7" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri8_btn" Content="X" Grid.Row="8" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri9_btn" Content="X" Grid.Row="9" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri10_btn" Content="X" Grid.Row="10" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri11_btn" Content="X" Grid.Row="11" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri12_btn" Content="X" Grid.Row="12" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="5" BorderThickness="0">
+                            <TextBlock x:Name="fri13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="fri13_btn" Content="X" Grid.Row="13" Grid.Column="5" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+
+                        <Border  BorderBrush="Gray"   Grid.Row="1" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat1" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat1_btn" Content="X" Grid.Row="1" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="2" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat2" Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat2_btn" Content="X" Grid.Row="2" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="3" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat3"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat3_btn" Content="X" Grid.Row="3" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="4" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat4"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat4_btn" Content="X" Grid.Row="4" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="5" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat5"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat5_btn" Content="X" Grid.Row="5" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="6" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat6"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat6_btn" Content="X" Grid.Row="6" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="7" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat7"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat7_btn" Content="X" Grid.Row="7" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="8" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat8"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat8_btn" Content="X" Grid.Row="8" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="9" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat9"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat9_btn" Content="X" Grid.Row="9" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" Click="btn_Click" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="10" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat10"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat10_btn" Content="X" Grid.Row="10" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="11" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat11"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat11_btn" Content="X" Grid.Row="11" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="12" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat12"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat12_btn" Content="X" Grid.Row="12" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseDoubleClick="btn_Click" MouseEnter="Btn_MouseEnter" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                        <Border  BorderBrush="Gray"   Grid.Row="13" Grid.Column="6" BorderThickness="0">
+                            <TextBlock x:Name="sat13"  Background="White" Padding="5,5,0,0" MouseEnter="MouseEnter" MouseLeave="MouseLeave"/>
+                        </Border>
+                        <Button x:Name="sat13_btn" Content="X" Grid.Row="13" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
+                    </Grid>
+                </ScrollViewer>
                 <StackPanel Grid.Row="1" Background="LightGray">
                     <Button 
                             x:Name="TimeTableSave_btn" 
@@ -995,10 +1049,11 @@
                             HorizontalContentAlignment="Right" 
                             Width="200" Height="35" 
                             Margin="0 5 20 0" Padding="0 0 10 0"
+                            Click="Save_Schedule_Click"
                             Style="{StaticResource roundedButton_gray}">
                     </Button>
                 </StackPanel>
-                
+
 
             </Grid>
         </Grid>

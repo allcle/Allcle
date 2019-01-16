@@ -93,7 +93,7 @@ namespace Client
             GetUserTimeTable();
             if (userTimeTable.Count() != 0)
             {
-                TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
+                //TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
                 GetTimeTableClassNumber(userTimeTable[0].NO);
                 RefreshTimeTable();
             }
@@ -1132,7 +1132,7 @@ namespace Client
             url = urlUserTimeTable;
 
             String now = DateTime.Now.ToString("MMddHHmmss");
-            String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + now + "\"}";
+            String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
             HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
             httpWebRequest2.ContentType = "application/json; charset=UTF-8";

@@ -65,6 +65,9 @@ namespace Client
             App.guest = true;
             App.MS.Show();                                              //메인 화면 띄우기
             this.Hide();                                                //로그인창 hide
+            ID_Box.Text = "아이디 입력";
+            PW_Box_Text.Visibility = Visibility.Visible;
+            PW_Box.Visibility = Visibility.Hidden;
         }
 
         private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입 화면 열기
@@ -77,6 +80,9 @@ namespace Client
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             Login_PW();
+            ID_Box.Text = "아이디 입력";
+            PW_Box_Text.Visibility = Visibility.Visible;
+            PW_Box.Visibility = Visibility.Hidden;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)       // 프로그램 아무곳이나 누르면 lostfocus
@@ -190,6 +196,30 @@ namespace Client
             if(ID_Box.Text == "아이디 입력")
                 ID_Box.Text = "";
         }
-        
+
+        private void PW_Box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (PW_Box.Password == "")
+            {
+                PW_Box.Visibility = Visibility.Hidden;
+                PW_Box_Text.Visibility = Visibility.Visible;
+            }
+            else if (PW_Box.Password != "")
+            {
+                PW_Box_Text.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void PW_Box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PW_Box_Text.Visibility = Visibility.Hidden;
+            PW_Box.Visibility = Visibility.Visible;
+            PW_Box.Password = "";
+        }
+
+
+        //    <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
+        //    <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->
+        //    <!--PW_Box에서 나갈 때 PW_Box.text!=""이면 PW_Box를 계속 보이도록-->
     }
 }

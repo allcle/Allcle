@@ -25,7 +25,7 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<string> GetTimeTableClassNumbers(string _id, int _no)
+        public List<string> GetTimeTableClassNumbers(string _id, string _no)
         {
             string sql = "Select ClassNumber " +
                          "From TimeTableClassNumber " +

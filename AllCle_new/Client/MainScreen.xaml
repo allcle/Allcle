@@ -1049,6 +1049,7 @@
                             HorizontalContentAlignment="Right" 
                             Width="200" Height="35" 
                             Margin="0 5 20 0" Padding="0 0 10 0"
+                            Click="Save_Schedule_Click"
                             Style="{StaticResource roundedButton_gray}">
                     </Button>
                 </StackPanel>

@@ -198,7 +198,7 @@
                                 <StackPanel>
                                     <Grid>
                                         <ScrollViewer SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" x:Name="PART_ContentHost" Template="{DynamicResource ScrollViewerControlTemplate1}"/>
-                                        <TextBlock x:Name="PW_Cover" Text="비밀번호 입력" Padding="10 0 0 0" Margin="0 5 0 0" Foreground="Gray" FontSize="15" FontWeight="Light"/>
+                                        <TextBlock x:Name="PW_Cover" Text=" " Padding="10 0 0 0" Margin="0 5 0 0" Foreground="Gray" FontSize="15" FontWeight="Light"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
@@ -281,8 +281,14 @@
                      GotFocus="ID_Box_GotFocus"/>
             <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" Background="White"
                          HorizontalContentAlignment="Left" Padding="10 0 0 0" Margin="0 2 0 8" VerticalContentAlignment="Center"  
-                          MaxLength="20" 
-                         KeyDown="PW_Box_KeyDown"/>
+                         MaxLength="20" KeyDown="PW_Box_KeyDown" LostFocus="PW_Box_LostFocus" Visibility="Hidden" />
+            <TextBox x:Name="PW_Box_Text" Text="비밀번호 입력" Grid.Row="3" Foreground="Gray" Background="White" 
+                     FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 2 0 8" HorizontalContentAlignment="Left" 
+                     VerticalContentAlignment="Center" BorderThickness="0" 
+                     GotFocus="PW_Box_GotFocus"/>            
+            <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
+            <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->
+            <!--PW_Box에서 나갈 때 PW_Box.text!=""이면 PW_Box를 계속 보이도록-->
             <Button x:Name="Login_btn" Content="로그인" Grid.Row="4" Grid.Column="1" Margin="3" Foreground="White"
                     BorderThickness="0" Click="Login_btn_Click" Background="#FF5F5656">
                 <Button.Template>

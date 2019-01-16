@@ -35,8 +35,7 @@ namespace Server.Repository
 
         public void PostTimeTable(UserTimeTable _userTimeTable)
         {
-            /*아니 정수형이 post가 안됨 ㅡ.ㅡ ㅠㅠ*/
-            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableName) Values (\"" + _userTimeTable.ID + "\", " + _userTimeTable.NO + ", \"" + _userTimeTable.TimeTableName + "\")";
+            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableName) Values (@ID, @NO, @TimeTableName)";
             db.Execute(sql, _userTimeTable);
         }
 

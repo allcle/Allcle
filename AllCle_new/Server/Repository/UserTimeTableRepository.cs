@@ -35,13 +35,14 @@ namespace Server.Repository
 
         public void PostTimeTable(UserTimeTable _userTimeTable)
         {
-            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableName) Values (@ID, @NO, @TimeTableName)";
+            string sql = "Insert Into UserTimeTable (ID, TimeTableName, SaveTime, EditTime) Values (@ID, @TimeTableName, @SaveTime, @EditTime)";
             db.Execute(sql, _userTimeTable);
         }
 
         public void UpdateUserTimeTable(UserTimeTable _userTimeTable)
         {
-            string sql = "UPDATE UserTimeTable SET TimeTableName = '" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "' and NO = '" + _userTimeTable.NO + "'";
+            // update는 보류
+            string sql = "UPDATE UserTimeTable SET TimeTableName = '" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "'";
             db.Execute(sql, _userTimeTable);
         }
     }

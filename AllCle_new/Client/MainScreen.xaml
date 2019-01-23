@@ -190,13 +190,13 @@
         <Style x:Key="apple">
             <Setter Property="TextElement.FontFamily" Value="source\FontFamily\AppleSDGothicNeoB.ttf"/>
         </Style>
-
     </Window.Resources>
 
     <Grid Name="BigGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="97"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Background="#FFF0C05A">
             <Grid.RowDefinitions>
@@ -210,6 +210,7 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="1.4*"/>
+                    <RowDefinition Height="1.4*"/>
                 </Grid.RowDefinitions>
                 <Border  Grid.Row="0" Margin="10,0,0,0" VerticalAlignment="Center" Background="#FFF0C05A">
                     <TextBlock x:Name="UserId" Text="Guest" Foreground="gray" FontSize="20"/>
@@ -221,8 +222,16 @@
                     <TextBlock x:Name="UserMajor" Text="Guest"  Foreground="gray" FontSize="13" Margin="0,-4,0,4.4"/>
                 </Border>
                 <Border Grid.Row="3" Margin="10,0,10,5">
-                    <Button x:Name="Logout_Button" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
+                    <Button x:Name="Logout_btn" Content="회원정보수정" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
                             BorderThickness="0" Click="Logout_btn_Click" Style="{StaticResource roundedButton_yellow}">
+                        <Button.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
+                        </Button.BitmapEffect>
+                    </Button>
+                </Border>
+                <Border Grid.Row="4" Margin="10,0,10,5">
+                    <Button x:Name="UserInfoEdit_btn" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
+                            BorderThickness="0" Style="{StaticResource roundedButton_yellow}">
                         <Button.BitmapEffect>
                             <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
                         </Button.BitmapEffect>
@@ -261,61 +270,351 @@
                 </ListView.View>
             </ListView>
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid x:Name="list_grid" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="168"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="#FFF0F0F0">
+                <TextBlock Text="과목담기" Foreground="#FF606060" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Grid Grid.Row="1" Background="#FFE1E1E1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1" Background="#FFE1E1E1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="26*"/>
+                        <RowDefinition Height="26*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="26*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="27*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="1" Visibility="Visible">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="10*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" FontSize="10" Margin="0" SelectedIndex="0">
+                            <ComboBoxItem>서울캠퍼스</ComboBoxItem>
+                            <ComboBoxItem>세종캠퍼스</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="course" Grid.Column="2" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="course_DropDownClosed">
+                            <ComboBoxItem>교양</ComboBoxItem>
+                            <ComboBoxItem>전공</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="all" Grid.Column="4" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="normal_DropDownClosed">
+                            <ComboBoxItem>모든 과목</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="normal" Grid.Column="4" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="normal_DropDownClosed">
+                            <ComboBoxItem>모든 교양</ComboBoxItem>
+                            <ComboBoxItem>공통 교양</ComboBoxItem>
+                            <ComboBoxItem>일반 교양</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="engineer" Grid.Column="4" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="engineer_DropDownClosed">
+                            <ComboBoxItem>모든 교양</ComboBoxItem>
+                            <ComboBoxItem>ABEEK 교양</ComboBoxItem>
+                            <ComboBoxItem>일반 교양</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="architecture" Grid.Column="4" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모든 교양</ComboBoxItem>
+                            <ComboBoxItem>건축 ㅡ.ㅡ</ComboBoxItem>
+                            <ComboBoxItem>건축 ㅠ.ㅠ</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="major" Grid.Column="4" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="major_DropDownClosed">
+                            <ComboBoxItem>공과대학</ComboBoxItem>
+                            <ComboBoxItem>경영대학</ComboBoxItem>
+                            <ComboBoxItem>문과대학</ComboBoxItem>
+                            <ComboBoxItem>사범대학</ComboBoxItem>
+                            <ComboBoxItem>미술대학</ComboBoxItem>
+                            <ComboBoxItem>건축대학</ComboBoxItem>
+                            <ComboBoxItem>법과대학</ComboBoxItem>
+                            <ComboBoxItem>경제학부</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="all_all" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0">
+                            <ComboBoxItem>모든 과목</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox x:Name="all_general" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모든 교양</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="normal_common" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모든 공통 교양</ComboBoxItem>
+                            <ComboBoxItem>예술과디자인</ComboBoxItem>
+                            <ComboBoxItem>제2외국어와한문</ComboBoxItem>
+                            <ComboBoxItem>과학과컴퓨터</ComboBoxItem>
+                            <ComboBoxItem>언어와철학</ComboBoxItem>
+                            <ComboBoxItem>법과생활</ComboBoxItem>
+                            <ComboBoxItem>사회와경제</ComboBoxItem>
+                            <ComboBoxItem>역사와문화</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="normal_normal" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모드 일반 교양</ComboBoxItem>
+                            <ComboBoxItem>교양필수</ComboBoxItem>
+                            <ComboBoxItem>인문계열</ComboBoxItem>
+                            <ComboBoxItem>사회계열</ComboBoxItem>
+                            <ComboBoxItem>자연계열</ComboBoxItem>
+                            <ComboBoxItem>예체능계열</ComboBoxItem>
+                            <ComboBoxItem>영어계열</ComboBoxItem>
+                            <ComboBoxItem>제2외국어계열</ComboBoxItem>
+                            <ComboBoxItem>교직과목</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="engineer_ABEEK" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모든 ABEEK 교양</ComboBoxItem>
+                            <ComboBoxItem>기초교양</ComboBoxItem>
+                            <ComboBoxItem>일반교양</ComboBoxItem>
+                            <ComboBoxItem>핵심교양</ComboBoxItem>
+                            <ComboBoxItem>MSC수학</ComboBoxItem>
+                            <ComboBoxItem>MSC과학</ComboBoxItem>
+                            <ComboBoxItem>MSC전산</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="engineer_normal" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>모든 일반 교양</ComboBoxItem>
+                            <ComboBoxItem>인문계열</ComboBoxItem>
+                            <ComboBoxItem>사회계열</ComboBoxItem>
+                            <ComboBoxItem>자연계열</ComboBoxItem>
+                            <ComboBoxItem>예체능계열</ComboBoxItem>
+                            <ComboBoxItem>영어계열</ComboBoxItem>
+                            <ComboBoxItem>제2외국어계열</ComboBoxItem>
+                            <ComboBoxItem>교직</ComboBoxItem>
+                        </ComboBox>
+
+
+                        <!--건축의 교양 자리-->
+
+                        <ComboBox x:Name="major_engineer" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>전공공통</ComboBoxItem>
+                            <ComboBoxItem>건설도시공학부</ComboBoxItem>
+                            <ComboBoxItem>전자전기공학부</ComboBoxItem>
+                            <ComboBoxItem>정보컴퓨터공학부</ComboBoxItem>
+                            <ComboBoxItem>신소재화공시스템공학부</ComboBoxItem>
+                            <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_business" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>경영학부</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_language" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>영어영문학과</ComboBoxItem>
+                            <ComboBoxItem>독어독문학과</ComboBoxItem>
+                            <ComboBoxItem>불어불문학과</ComboBoxItem>
+                            <ComboBoxItem>국어국문학과</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_teach" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>수학교육과</ComboBoxItem>
+                            <ComboBoxItem>국어교육과</ComboBoxItem>
+                            <ComboBoxItem>영어교육과</ComboBoxItem>
+                            <ComboBoxItem>역사교육과</ComboBoxItem>
+                            <ComboBoxItem>교육학과</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_art" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>전공공통</ComboBoxItem>
+                            <ComboBoxItem>동양학과</ComboBoxItem>
+                            <ComboBoxItem>회화과</ComboBoxItem>
+                            <ComboBoxItem>판화과</ComboBoxItem>
+                            <ComboBoxItem>조소과</ComboBoxItem>
+                            <ComboBoxItem>목조형가구학과</ComboBoxItem>
+                            <ComboBoxItem>예술학과</ComboBoxItem>
+                            <ComboBoxItem>금속디자인학과</ComboBoxItem>
+                            <ComboBoxItem>도유유리과</ComboBoxItem>
+                            <ComboBoxItem>섬유미술패션디자인학과</ComboBoxItem>
+                            <ComboBoxItem>디자인학부</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_architecture" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>건축학부</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_law" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>전공공통</ComboBoxItem>
+                            <ComboBoxItem>법학부</ComboBoxItem>
+                        </ComboBox>
+
+                        <ComboBox x:Name="major_economics" Grid.Column="6" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
+                            <ComboBoxItem>경제학부</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0">
+                            <TextBlock Text="점심시간 제외하기" Foreground="#FFa0a0a0"/>
+                        </Border>
+                        <Border Grid.Column="1">
+                            <TextBlock Text="공강 만들기" Foreground="#FFa0a0a0"/>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="LunchFrom" Grid.Column="0" SelectedIndex="3">
+                            <ComboBoxItem>오전 9시</ComboBoxItem>
+                            <ComboBoxItem>오전 10시</ComboBoxItem>
+                            <ComboBoxItem>오전 11시</ComboBoxItem>
+                            <ComboBoxItem>오전 12시</ComboBoxItem>
+                            <ComboBoxItem>오후 1시</ComboBoxItem>
+                            <ComboBoxItem>오후 2시</ComboBoxItem>
+                            <ComboBoxItem>오후 3시</ComboBoxItem>
+                            <ComboBoxItem>오후 4시</ComboBoxItem>
+                            <ComboBoxItem>오후 5시</ComboBoxItem>
+                            <ComboBoxItem>오후 6시</ComboBoxItem>
+                            <ComboBoxItem>오후 7시</ComboBoxItem>
+                            <ComboBoxItem>오후 8시</ComboBoxItem>
+                        </ComboBox>
+                        <Border Grid.Column="1">
+                            <TextBlock Text="~" FontFamily="bold" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ComboBox x:Name="LunchTo" Grid.Column="2" SelectedIndex="5">
+                            <ComboBoxItem>오전 9시</ComboBoxItem>
+                            <ComboBoxItem>오전 10시</ComboBoxItem>
+                            <ComboBoxItem>오전 11시</ComboBoxItem>
+                            <ComboBoxItem>오전 12시</ComboBoxItem>
+                            <ComboBoxItem>오후 1시</ComboBoxItem>
+                            <ComboBoxItem>오후 2시</ComboBoxItem>
+                            <ComboBoxItem>오후 3시</ComboBoxItem>
+                            <ComboBoxItem>오후 4시</ComboBoxItem>
+                            <ComboBoxItem>오후 5시</ComboBoxItem>
+                            <ComboBoxItem>오후 6시</ComboBoxItem>
+                            <ComboBoxItem>오후 7시</ComboBoxItem>
+                            <ComboBoxItem>오후 8시</ComboBoxItem>
+                        </ComboBox>
+                        <Border Grid.Column="4" CornerRadius="8" Background="White">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_mon" Grid.Column="0" Content="월" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_tue" Content="화" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_wed" Content="수" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_thu" Content="목" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_fri" Content="금" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <RadioButton Name="rdo_sat" Content="토" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160*"/>
+                            <ColumnDefinition Width="16*"/>
+                            <ColumnDefinition Width="445*"/>
+                            <ColumnDefinition Width="17*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" FontSize="10" Margin="2,0" SelectedIndex="0">
+                            <ComboBoxItem>공강시간만</ComboBoxItem>
+                            <ComboBoxItem>전체 시간</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Name="Search_Box" Background="White" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" 
+                                 TextWrapping="Wrap" Grid.Column="2" KeyDown="Search_Box_KeyDown" VerticalContentAlignment="Center"
+                                 Style="{StaticResource roundTextBox}"
+                                 Padding="10 0 0 0" GotFocus="Search_Box_GotFocus" LostFocus="Search_Box_LostFocus"/>
+                        <Button Name="Search_btn" Content="검색" Background="#FFF0C05A" Grid.Column="4"
+                                Style="{StaticResource roundedButton_yellow}" Click="Search_btn_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="source\images\search_btn.png"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <ListView x:Name="DataListView_All" 
+                          Grid.Row="2" MinHeight="0" 
+                          BorderThickness="0" ItemsSource="{Binding aList}" 
+                          MouseDoubleClick="DataListView_All_MouseDoubleClick">
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Background" Value="#FF707070" />
+                        <Setter Property="Height" Value="22"/>
+                    </Style>
+                </ListView.Resources>
+                <ListView.Effect>
+                    <DropShadowEffect Opacity="0.5" Direction="0"/>
+                </ListView.Effect>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightGray"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="교과명" Width="80"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="80"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="80"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="80"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="40"/>
+                        <!--<GridViewColumn Header="불" Width="50"
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Tag="{Binding NO}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>-->
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <Grid Name="MainView_grd"  Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="59"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="8*"/>
-                <ColumnDefinition Width="0*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Row="0" Grid.Column="0" Background="#FFF5F5F5">
+            <Grid Grid.Row="0"  Background="#FFF0F0F0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="59"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Name="TableEdit_txtbox" Text="시간표1" FontSize="25" Grid.Column="0" Background="#FFF5F5F5" 
-                         BorderThickness="0" Padding="10 0 0 0" VerticalContentAlignment="Center" Foreground="#FF808080" KeyDown="TableEdit_txtbox_KeyDown">
-                </TextBox>
-                <Border Name="year_txtbox" Grid.Column="1" Background="#FFF5F5F5" BorderThickness="0" VerticalAlignment="Center">
-                    <TextBlock>
-                        2019년도 <LineBreak/>
-                        1학기
-                    </TextBlock>
-                </Border>
-                <Button Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
-                        HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Add_img_stkpnl" Background="White">
-                                <Image x:Name="Add_img" Source="source\images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="true">
-                                                <Setter Property="BorderBrush" Value="Red"/>
-                                                <Setter Property="BorderThickness" Value="2"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Grid>
-
-            <Grid Grid.Row="0" Grid.Column="1"  Background="#FFF0F0F0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Button x:Name="tab" Grid.Column="1" Click="tab_Click">
                     <Button.Template>
@@ -335,43 +634,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="2">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <DockPanel>
-                                <Grid>
-                                    <Image x:Name="Graduation_off_img" Source="source\images\Graduation_off.png"/>
-                                    <Image x:Name="Graduation_on_img" Source="source\images\Graduation_on.png" Visibility="Collapsed"/>
-                                </Grid>
-                            </DockPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Graduation_off_img" Property="Visibility" Value="Collapsed"/>
-                                    <Setter TargetName="Graduation_on_img" Property="Visibility" Value="Visible"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button  Content="시간모양" Grid.Column="3">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <DockPanel>
-                                <Grid>
-                                    <Image x:Name="SpecificTime_off_img" Source="source\images\SpecificTime_off.png"/>
-                                    <Image x:Name="SpecificTime_on_img" Source="source\images\SpecificTime_on.png" Visibility="Collapsed"/>
-                                </Grid>
-                            </DockPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="SpecificTime_off_img" Property="Visibility" Value="Collapsed"/>
-                                    <Setter TargetName="SpecificTime_on_img" Property="Visibility" Value="Visible"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button  Content="MY GROUP" Grid.Column="4">
+                <Button Name="MyGroup_btn" Content="MY GROUP" Grid.Column="2" Click="MyGroup_btn_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <DockPanel>
@@ -389,276 +652,134 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-            </Grid>
-            <Grid x:Name="list_grid" Grid.Row="1" Grid.Column="1" Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="118"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Grid.Column="1" Background="#FFE1E1E1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="27*"/>
-                        <RowDefinition Height="40*"/>
-                        <RowDefinition Height="26*"/>
-                        <RowDefinition Height="40*"/>
-                        <RowDefinition Height="27*"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="10*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="1" FontSize="10" Margin="0" SelectedIndex="0">
-                            <ComboBoxItem>서울캠퍼스</ComboBoxItem>
-                            <ComboBoxItem>세종캠퍼스</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="course" Grid.Column="3" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="course_DropDownClosed">
-                            <ComboBoxItem>모든 과목</ComboBoxItem>
-                            <ComboBoxItem>교양</ComboBoxItem>
-                            <ComboBoxItem>전공</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="all" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" DropDownClosed="normal_DropDownClosed">
-                            <ComboBoxItem>모든 과목</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="normal" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="normal_DropDownClosed">
-                            <ComboBoxItem>모든 교양</ComboBoxItem>
-                            <ComboBoxItem>공통 교양</ComboBoxItem>
-                            <ComboBoxItem>일반 교양</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="engineer" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="engineer_DropDownClosed">
-                            <ComboBoxItem>모든 교양</ComboBoxItem>
-                            <ComboBoxItem>ABEEK 교양</ComboBoxItem>
-                            <ComboBoxItem>일반 교양</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="architecture" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모든 교양</ComboBoxItem>
-                            <ComboBoxItem>건축 ㅡ.ㅡ</ComboBoxItem>
-                            <ComboBoxItem>건축 ㅠ.ㅠ</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="major" Grid.Column="5" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed" DropDownClosed="major_DropDownClosed">
-                            <ComboBoxItem>공과대학</ComboBoxItem>
-                            <ComboBoxItem>경영대학</ComboBoxItem>
-                            <ComboBoxItem>문과대학</ComboBoxItem>
-                            <ComboBoxItem>사범대학</ComboBoxItem>
-                            <ComboBoxItem>미술대학</ComboBoxItem>
-                            <ComboBoxItem>건축대학</ComboBoxItem>
-                            <ComboBoxItem>법과대학</ComboBoxItem>
-                            <ComboBoxItem>경제학부</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="all_all" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0">
-                            <ComboBoxItem>모든 과목</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox x:Name="all_general" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모든 교양</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="normal_common" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모든 공통 교양</ComboBoxItem>
-                            <ComboBoxItem>예술과디자인</ComboBoxItem>
-                            <ComboBoxItem>제2외국어와한문</ComboBoxItem>
-                            <ComboBoxItem>과학과컴퓨터</ComboBoxItem>
-                            <ComboBoxItem>언어와철학</ComboBoxItem>
-                            <ComboBoxItem>법과생활</ComboBoxItem>
-                            <ComboBoxItem>사회와경제</ComboBoxItem>
-                            <ComboBoxItem>역사와문화</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="normal_normal" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모드 일반 교양</ComboBoxItem>
-                            <ComboBoxItem>교양필수</ComboBoxItem>
-                            <ComboBoxItem>인문계열</ComboBoxItem>
-                            <ComboBoxItem>사회계열</ComboBoxItem>
-                            <ComboBoxItem>자연계열</ComboBoxItem>
-                            <ComboBoxItem>예체능계열</ComboBoxItem>
-                            <ComboBoxItem>영어계열</ComboBoxItem>
-                            <ComboBoxItem>제2외국어계열</ComboBoxItem>
-                            <ComboBoxItem>교직과목</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="engineer_ABEEK" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모든 ABEEK 교양</ComboBoxItem>
-                            <ComboBoxItem>기초교양</ComboBoxItem>
-                            <ComboBoxItem>일반교양</ComboBoxItem>
-                            <ComboBoxItem>핵심교양</ComboBoxItem>
-                            <ComboBoxItem>MSC수학</ComboBoxItem>
-                            <ComboBoxItem>MSC과학</ComboBoxItem>
-                            <ComboBoxItem>MSC전산</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="engineer_normal" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>모든 일반 교양</ComboBoxItem>
-                            <ComboBoxItem>인문계열</ComboBoxItem>
-                            <ComboBoxItem>사회계열</ComboBoxItem>
-                            <ComboBoxItem>자연계열</ComboBoxItem>
-                            <ComboBoxItem>예체능계열</ComboBoxItem>
-                            <ComboBoxItem>영어계열</ComboBoxItem>
-                            <ComboBoxItem>제2외국어계열</ComboBoxItem>
-                            <ComboBoxItem>교직</ComboBoxItem>
-                        </ComboBox>
-
-
-                        <!--건축의 교양 자리-->
-
-                        <ComboBox x:Name="major_engineer" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>전공공통</ComboBoxItem>
-                            <ComboBoxItem>건설도시공학부</ComboBoxItem>
-                            <ComboBoxItem>전자전기공학부</ComboBoxItem>
-                            <ComboBoxItem>정보컴퓨터공학부</ComboBoxItem>
-                            <ComboBoxItem>신소재화공시스템공학부</ComboBoxItem>
-                            <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_business" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>경영학부</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_language" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>영어영문학과</ComboBoxItem>
-                            <ComboBoxItem>독어독문학과</ComboBoxItem>
-                            <ComboBoxItem>불어불문학과</ComboBoxItem>
-                            <ComboBoxItem>국어국문학과</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_teach" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>수학교육과</ComboBoxItem>
-                            <ComboBoxItem>국어교육과</ComboBoxItem>
-                            <ComboBoxItem>영어교육과</ComboBoxItem>
-                            <ComboBoxItem>역사교육과</ComboBoxItem>
-                            <ComboBoxItem>교육학과</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_art" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>전공공통</ComboBoxItem>
-                            <ComboBoxItem>동양학과</ComboBoxItem>
-                            <ComboBoxItem>회화과</ComboBoxItem>
-                            <ComboBoxItem>판화과</ComboBoxItem>
-                            <ComboBoxItem>조소과</ComboBoxItem>
-                            <ComboBoxItem>목조형가구학과</ComboBoxItem>
-                            <ComboBoxItem>예술학과</ComboBoxItem>
-                            <ComboBoxItem>금속디자인학과</ComboBoxItem>
-                            <ComboBoxItem>도유유리과</ComboBoxItem>
-                            <ComboBoxItem>섬유미술패션디자인학과</ComboBoxItem>
-                            <ComboBoxItem>디자인학부</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_architecture" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>건축학부</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_law" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>전공공통</ComboBoxItem>
-                            <ComboBoxItem>법학부</ComboBoxItem>
-                        </ComboBox>
-
-                        <ComboBox x:Name="major_economics" Grid.Column="7" FontSize="10" Margin="0" SelectedIndex="0" Visibility="Collapsed">
-                            <ComboBoxItem>경제학부</ComboBoxItem>
-                        </ComboBox>
-
-                    </Grid>
-                    <Grid Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="16*"/>
-                            <ColumnDefinition Width="160*"/>
-                            <ColumnDefinition Width="16*"/>
-                            <ColumnDefinition Width="445*"/>
-                            <ColumnDefinition Width="17*"/>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="16*"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox Grid.Column="1" FontSize="10" Margin="2,0" SelectedIndex="0">
-                            <ComboBoxItem>공강시간만</ComboBoxItem>
-                            <ComboBoxItem>전체 시간</ComboBoxItem>
-                        </ComboBox>
-                        <TextBox Name="Search_Box" Background="White" Foreground="LightGray" Text="교과명, 학수번호, 교수이름으로 검색하기" 
-                                 TextWrapping="Wrap" Grid.Column="3" KeyDown="Search_Box_KeyDown" VerticalContentAlignment="Center"
-                                 Style="{StaticResource roundTextBox}"
-                                 Padding="10 0 0 0" GotFocus="Search_Box_GotFocus" LostFocus="Search_Box_LostFocus"/>
-                        <Button Name="Search_btn" Content="검색" Background="#FFF0C05A" Grid.Column="5"
-                                Style="{StaticResource roundedButton_yellow}" Click="Search_btn_Click">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Image Source="source\images\search_btn.png"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-
-
-
-
-                    </Grid>
-                </Grid>
-
-
-                <ListView x:Name="DataListView_All" 
-                          Grid.Row="1" Grid.Column="2" MinHeight="0" 
-                          BorderThickness="0" ItemsSource="{Binding aList}" 
-                          MouseDoubleClick="DataListView_All_MouseDoubleClick">
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Background" Value="#FF707070" />
-                            <Setter Property="Height" Value="22"/>
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.Effect>
-                        <DropShadowEffect Opacity="0.5" Direction="0"/>
-                    </ListView.Effect>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="LightGray"/>
+                <Button x:Name="jol_btn" Content="졸업요건" Grid.Column="3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="Graduation_off_img" Source="source\images\Graduation_off.png"/>
+                                    <Image x:Name="Graduation_on_img" Source="source\images\Graduation_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Graduation_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="Graduation_on_img" Property="Visibility" Value="Visible"/>
                                 </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding ClassName}" Header="교과명" Width="80"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Header="학수번호" Width="80"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding 강의시간}" Header="강의시간" Width="80"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}" Header="강의실" Width="80"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Professor}" Header="교수명" Width="80"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Header="학점" Width="40"/>
-                            <!--<GridViewColumn Header="불" Width="50"
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox Tag="{Binding NO}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>-->
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Grid Grid.Row="2" Grid.Column="1" Background="LightGray">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.5*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Style="{StaticResource roundedButton_gray}" x:Name="MyGroup_btn" Content="MY GROUP에 담기" Grid.Column="1" Click="MyGroup_btn_Click"/>
-                    <Button Style="{StaticResource roundedButton_gray}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
-                </Grid>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!--
+                <Button  Content="시간모양" Grid.Column="3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <DockPanel>
+                                <Grid>
+                                    <Image x:Name="SpecificTime_off_img" Source="source\images\SpecificTime_off.png"/>
+                                    <Image x:Name="SpecificTime_on_img" Source="source\images\SpecificTime_on.png" Visibility="Collapsed"/>
+                                </Grid>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="SpecificTime_off_img" Property="Visibility" Value="Collapsed"/>
+                                    <Setter TargetName="SpecificTime_on_img" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>-->
             </Grid>
-            <Grid x:Name="TimeTable_Grid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <Grid.Effect>
-                    <DropShadowEffect Opacity="0.5" Direction="0"/>
-                </Grid.Effect>
+            <Grid Name="TimeTable_grd" Grid.Row="1" Visibility="Visible">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
                     <RowDefinition />
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <ScrollViewer x:Name="TimeTable_scr" Grid.Row="0" VerticalScrollBarVisibility="Hidden">
+                <Grid.Effect>
+                    <DropShadowEffect Opacity="0.5" Direction="0"/>
+                </Grid.Effect>
+                <Grid Grid.Row="0" Background="#FFF5F5F5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="TableEdit_txtbox" Text="시간표1" FontSize="10" Grid.Column="0" Background="#FFF5F5F5" 
+                         BorderThickness="0" Padding="10 0 0 0" VerticalContentAlignment="Center" Foreground="#FF808080" KeyDown="TableEdit_txtbox_KeyDown">
+                    </TextBox>
+                    <Border Name="year_txtbox" Grid.Column="1" Background="#FFF5F5F5" BorderThickness="0" VerticalAlignment="Center">
+                        <TextBlock FontSize="10">
+                        2019년도 <LineBreak/>
+                        1학기
+                        </TextBlock>
+                    </Border>
+                    <Button Name="TimeEdit_btn" Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Add_img_stkpnl" Background="White">
+                                    <Image x:Name="Add_img" Source="source\images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="BorderBrush" Value="Red"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Name="TimeAdd_btn" Grid.Column="3" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Click="TimeAdd_btn_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Add_img_stkpnl" Background="White">
+                                    <Image x:Name="Add_img" Source="source\images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="BorderBrush" Value="Red"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Name="TimeDelete_btn" Grid.Column="4" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Add_img_stkpnl" Background="White">
+                                    <Image x:Name="Add_img" Source="source\images\add.png" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="BorderBrush" Value="Red"/>
+                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+                <ScrollViewer x:Name="TimeTable_scr" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
                     <Grid x:Name="TimeTable" >
-
                         <!--Button name은 요일+교시-->
 
                         <!--Button color는 Random 메소드로 넣기. Random Color는 .cs파일에 있음-->
@@ -1039,23 +1160,65 @@
                         <Button x:Name="sat13_btn" Content="X" Grid.Row="13" Grid.Column="6" Background="White" Width="15" Height="15" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="6" Visibility="Collapsed" MouseEnter="Btn_MouseEnter" MouseDoubleClick="btn_Click" Click="btn_Click" MouseLeave="Btn_MouseLeave"/>
                     </Grid>
                 </ScrollViewer>
-                <StackPanel Grid.Row="1" Background="LightGray">
-                    <Button 
-                            x:Name="TimeTableSave_btn" 
-                            Content="시간표 이미지로 저장" 
-                            BorderThickness="0"
+
+                <Grid Grid.Row="2" Background="LightGray">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="152"/>
+                        <ColumnDefinition Width="152"/>
+                    </Grid.ColumnDefinitions>
+                    <Button  Grid.Column="1"
+                            x:Name="TimeTableSaveImage_btn" 
+                            Content="이미지로 저장" 
+                            BorderThickness="0" Background="White"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Right" 
-                            HorizontalContentAlignment="Right" 
-                            Width="200" Height="35" 
-                            Margin="0 5 20 0" Padding="0 0 10 0"
+                            HorizontalAlignment="Right" Padding="40 0 0 0"
+                            HorizontalContentAlignment="Right" Height="35"
                             Click="Save_Schedule_Click"
                             Style="{StaticResource roundedButton_gray}">
                     </Button>
-                </StackPanel>
+                    <Button  Grid.Column="2"
+                            x:Name="TimeTableSave_btn" 
+                            Content="시간표 저장" 
+                            BorderThickness="0" Background="White"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center" 
+                            HorizontalContentAlignment="Right" Height="35"
+                            Style="{StaticResource roundedButton_gray}">
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Name="MyGroup_grd" Grid.Row="1" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition />
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderThickness="0">
+                    <TextBlock>
+                        <Span FontSize="20">시간표 AI 사용하기</Span><LineBreak/>
+                        <Span>그룹별로 1과목 이상 담아두고 결과 보기를 누르면 그룹마다 1과목씩 선택해<LineBreak/>
+                            자동으로 시간표를 만들어 줍니다.
+                        </Span>
+                    </TextBlock>
 
+                </Border>
+                <ListView Name="Group_lst" Grid.Row="1" ItemsSource="{Binding}" BorderThickness="0">
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
 
             </Grid>
+
         </Grid>
     </Grid>
 </Window>
+
+
+<!--
+    <Button Style="{StaticResource roundedButton_gray}" x:Name="MyGroupAdd_btn" Content="MY GROUP에 담기" Grid.Column="1"/>
+    <Button Style="{StaticResource roundedButton_gray}" x:Name="save_btn" Content="시간표에 추가" Grid.Column="2" />
+    -->

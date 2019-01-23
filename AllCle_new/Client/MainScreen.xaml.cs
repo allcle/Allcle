@@ -45,6 +45,7 @@ namespace Client
         /*색 리스트*/
         User user = new User();
         bool tabActive;             //tab bar active or not
+        bool myGroup_btn;           //마이그룹 활성화
         string tableName = "";      //현재 테이블 이름
         int userTimeTalbeNO = 0;    //유저 타임테이블
 
@@ -68,6 +69,7 @@ namespace Client
             DataListView_All.ItemsSource = SubjectList;
             InitDB();
             tabActive = false;
+            myGroup_btn = false;
         }
 
         private void InitUserInfo()
@@ -213,7 +215,7 @@ namespace Client
                 }
             }*/
         }
-        
+
 
         private void GetSubjects()
         {
@@ -613,10 +615,7 @@ namespace Client
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
             UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
         }
-        private void MyGroup_btn_Click(object sender, RoutedEventArgs e)//MyGroup을 누르면 검색창 없어지고, combobox만 뜸 
-        {
-            GetUserTimeTable();
-        }
+
         private void Logout_btn_Click(object sender, RoutedEventArgs e)
         {
             App.MW.Show();
@@ -827,11 +826,11 @@ namespace Client
             GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
             UserId.Text = App.ID;
-            if(!App.guest)
+            if (!App.guest)
                 InitUserInfo();
-            else if(App.guest)            
-                GuestLogIn();         
-            
+            else if (App.guest)
+                GuestLogIn();
+
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -848,47 +847,24 @@ namespace Client
             }
             RefreshTimeTable();
         }
-        
+
         private void tab_Click(object sender, RoutedEventArgs e)
         {
+            MyGroup_grd.Visibility = Visibility.Collapsed;
+            TimeTable_grd.Visibility = Visibility.Visible;
             if (tabActive)
             {
-
-                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 2);
+                MainView_grd.SetValue(Grid.ColumnSpanProperty, 2);
                 list_grid.Visibility = Visibility.Collapsed;
                 tabActive = false;
             }
             else
             {
-                /*DoubleAnimation doubleAnimation = new DoubleAnimation();
-                doubleAnimation.From = 75;
-                doubleAnimation.To = 400;
-                doubleAnimation.Duration = TimeSpan.FromSeconds(5);*/
-
-
-                TimeTable_Grid.SetValue(Grid.ColumnSpanProperty, 1);
-                /*TimeTable_scr.BeginAnimation(ScrollViewer.WidthProperty, doubleAnimation);
-                TimeTable_scr.Width = 600;
-
-                Canvas containerCanvas = new Canvas();
-                containerCanvas.Width = 610;
-                containerCanvas.Height = 300;
-                containerCanvas.Children.Add(TimeTable_scr);
-                
-                Canvas.SetLeft(TimeTable_scr, 300);
-                TranslateTransform animatedTranslateTransform = new TranslateTransform();
-
-                TimeTable_scr.RenderTransform = animatedTranslateTransform;
-
-                 */
-
-
-
-                list_grid.SetValue(Grid.ColumnProperty, 1);
+                MainView_grd.SetValue(Grid.ColumnSpanProperty, 1);
                 list_grid.Visibility = Visibility.Visible;
                 tabActive = true;
             }
-            
+
         }
 
         private void normal_DropDownClosed(object sender, EventArgs e)
@@ -915,8 +891,8 @@ namespace Client
             }
             else
                 System.Windows.MessageBox.Show("일반대학이 아닌데, normal combobox에 접근");
-            
-            
+
+
             /*
             else if (user.College == "건축대학")
             {
@@ -982,7 +958,7 @@ namespace Client
                 all.Visibility = Visibility.Visible;
                 all_all.Visibility = Visibility.Visible;
             }
-            else if(course.Text == "교양")
+            else if (course.Text == "교양")
             {
                 if (user.College == "일반대학")
                 {
@@ -1060,7 +1036,7 @@ namespace Client
         private void Search_Box_GotFocus(object sender, RoutedEventArgs e)
         {
             Search_Box.Foreground = Brushes.Black;
-            if(Search_Box.Text == "교과명, 학수번호, 교수이름으로 검색하기")
+            if (Search_Box.Text == "교과명, 학수번호, 교수이름으로 검색하기")
                 Search_Box.Text = "";
         }
 
@@ -1075,12 +1051,12 @@ namespace Client
 
         private void TableEdit_txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == System.Windows.Input.Key.Enter)
             {
                 if (userTimeTable.Count() != 0)
                 {
-                    url = urlUserTimeTable +"/"+ App.ID;
-                    String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"NO\" : \"" + userTimeTalbeNO +  "\"}";
+                    url = urlUserTimeTable + "/" + App.ID;
+                    String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"NO\" : \"" + userTimeTalbeNO + "\"}";
                     HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
                     byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
                     httpWebRequest2.ContentType = "application/json; charset=UTF-8";
@@ -1103,7 +1079,7 @@ namespace Client
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void TimeAdd_btn_Click(object sender, RoutedEventArgs e)
         {
 
             url = urlUserTimeTable;
@@ -1149,6 +1125,27 @@ namespace Client
 
             GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
+        }
+
+        private void MyGroup_btn_Click(object sender, RoutedEventArgs e)
+        {
+            list_grid.Visibility = Visibility.Visible;
+            MainView_grd.SetValue(Grid.ColumnSpanProperty, 1);
+            if (myGroup_btn)
+            {
+                MyGroup_grd.Visibility = Visibility.Collapsed;
+                TimeTable_grd.Visibility = Visibility.Visible;
+                myGroup_btn = false;
+                tabActive = true;
+            }
+            else
+            {
+                MyGroup_grd.Visibility = Visibility.Visible;
+                TimeTable_grd.Visibility = Visibility.Collapsed;
+                myGroup_btn = true;
+                tabActive = false;
+            }
+
         }
     }
 }

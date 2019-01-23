@@ -92,7 +92,7 @@ namespace Client
                 temp.Focus();
         }
 
-        
+
         private void Login_PW()
         {
             string urlBase = @"https://allcleapp.azurewebsites.net/api/Users"; //기본 url
@@ -105,6 +105,7 @@ namespace Client
                 App.ID = ID_Box.Text;
                 url = urlBase + "/" + App.ID;
                 String postData = "";
+
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
                 byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
                 httpWebRequest.ContentType = "application/json; charset=UTF-8";
@@ -119,6 +120,7 @@ namespace Client
                 User result = JsonConvert.DeserializeObject<User>(Unicode); //유저 정보 post로 가져온거
                 streamReader.Close();
                 httpWebResponse.Close();
+
                 string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
                 string id = result.Id;
                 string yearofentry = result.YearOfEntry;
@@ -141,33 +143,46 @@ namespace Client
                     // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
                     String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
 
-
-                    HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
-                    byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
-                    httpWebRequest2.ContentType = "application/json; charset=UTF-8";
-                    httpWebRequest2.Method = "PUT";
-
-                    httpWebRequest2.ContentLength = sendData2.Length;
-                    Stream requestStream2 = httpWebRequest2.GetRequestStream();
-                    requestStream2.Write(sendData2, 0, sendData2.Length);
-                    requestStream2.Close();
-                    HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
-                    StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-                    streamReader2.ReadToEnd();
-                    streamReader2.Close();
-                    httpWebResponse2.Close();
-
-                    App.ID = ID_Box.Text;
-                    App.guest = false;
-                    ID_Box.Text = "아이디 입력";
-                    if (App.first)
-                        App.MS.Show();
-                    else
-                        App.MS.Visibility = Visibility.Visible;
-                    this.Hide();
-                    ID_Box.Text = "";
-                    PW_Box.Password = "";
-
+                    int check_error = 1;
+                    try
+                    {
+                        Login_Encrypt(NewpostData);
+                        check_error = 0;
+                    }
+                    catch
+                    {
+                        check_error = check_error = 1;
+                    }
+                    if (check_error == 0)
+                    {
+                        App.ID = ID_Box.Text;
+                        App.guest = false;
+                        ID_Box.Text = "아이디 입력";
+                        if (App.first)
+                            App.MS.Show();
+                        else
+                            App.MS.Visibility = Visibility.Visible;
+                        this.Hide();
+                        ID_Box.Text = "";
+                        PW_Box.Password = "";
+                    }
+                    else if (check_error != 0)
+                    {
+                        MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("서버 접속에 문제가 있습니다. 종료 후 다시 이용해주십시오.");
+                        //메세지창 띄우기
+                        if (messageBoxResult == MessageBoxResult.Yes)
+                        {
+                            try
+                            {
+                                App.MS.Close();
+                                this.Close();
+                            }
+                            catch
+                            {
+                                this.Close();
+                            }
+                        }
+                    }
                 }
                 else
                     System.Windows.MessageBox.Show("잘못된 비밀번호입니다.");
@@ -176,6 +191,26 @@ namespace Client
                 System.Windows.MessageBox.Show("아이디를 입력해주세요");
             else                                                            //없다
                 System.Windows.MessageBox.Show(ID_Box.Text + "는 존재하지 않는 아이디 입니다");
+        }
+
+        private void Login_Encrypt(String NewpostData)
+        {
+            String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
+
+            HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
+            byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+            httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest2.Method = "PUT";
+
+            httpWebRequest2.ContentLength = sendData2.Length;
+            Stream requestStream2 = httpWebRequest2.GetRequestStream();
+            requestStream2.Write(sendData2, 0, sendData2.Length);
+            requestStream2.Close();
+            HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+            StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+            streamReader2.ReadToEnd();
+            streamReader2.Close();
+            httpWebResponse2.Close();
         }
 
         private void PW_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -217,8 +252,6 @@ namespace Client
             PW_Box.Visibility = Visibility.Visible;
             PW_Box.Password = "";
         }
-
-
         //    <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
         //    <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->
         //    <!--PW_Box에서 나갈 때 PW_Box.text!=""이면 PW_Box를 계속 보이도록-->

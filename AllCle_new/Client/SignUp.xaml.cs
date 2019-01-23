@@ -25,6 +25,7 @@ namespace Client
     /// <summary>
     /// SignUp.xaml에 대한 상호 작용 논리
     /// </summary>
+
     public partial class SignUp : Window
     {
         bool first = true;
@@ -33,7 +34,7 @@ namespace Client
             InitializeComponent();
             first = true;
         }
-
+        public string callUrl = "http://allcleapp.azurewebsites.net/api/Users";
         public string Encrypt(string strToEncrypt, string strKey)
         {
             TripleDESCryptoServiceProvider objDESCrypto = new TripleDESCryptoServiceProvider();
@@ -49,11 +50,18 @@ namespace Client
                 TransformFinalBlock(byteBuff, 0, byteBuff.Length)); ;
 
         }
-
-        private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
+        public bool IdExists(string idbox)
         {
-            String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
-
+            string url = callUrl + "/" + idbox;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            if (Unicode == "true")
+                return true;
+            else
+                return false;
+        }
+        public void PostUser(string idbox, string password, string yearofentry, string college, string major)
+        {
             // 첫 회원가입 시, Encrypt key 랜덤 생성. 로그인 마다 바뀔 예정
             string setkey = null;
             Random rand = new Random();
@@ -62,30 +70,42 @@ namespace Client
             {
                 setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
             }
-
-            String[] data = new String[10];
-            data[0] = ID_box.Text;              // id
-            data[1] = PW_Box.Password;          // pw
-            data[2] = PWCon_Box.Password;       //confirm pw
-            string url = callUrl + "/" + ID_box.Text;
+            string encrypted = Encrypt(password, setkey);
+            string url = callUrl + "/" + idbox;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
+            String postData = "{ \"Id\" : \"" + idbox + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
+            byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
+            httpWebRequest.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest.Method = "POST";
+            httpWebRequest.ContentLength = sendData.Length;
+            Stream requestStream = httpWebRequest.GetRequestStream();
+            requestStream.Write(sendData, 0, sendData.Length);
+            requestStream.Close();
+            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+            streamReader.ReadToEnd();
+            streamReader.Close();
+            httpWebResponse.Close();
+        }
+
+
+        private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
+        {
             ID_concern.Visibility = Visibility.Hidden;   // 처음엔 일단 숨기기
             PW_corcenrn2.Visibility = Visibility.Hidden; // 처음엔 일단 숨기기
-            if (data[1] != data[2])                     //비밀번호 strcmp
+            if (PW_Box.Password != PWCon_Box.Password)                     //비밀번호 strcmp
                 PW_corcenrn2.Visibility = Visibility.Visible;       //다르다고 경고
 
-            if (Unicode == "true")                                          //있다
+            if (IdExists(ID_box.Text))                                          //있다
             {
                 ID_concern.Visibility = Visibility.Visible;
                 ID_box.Text = "";
                 ID_box.Focus();
             }
-            else if (data[1] == data[2])
+            else if (PW_Box.Password == PWCon_Box.Password)
             {
-                string encrypted = Encrypt(data[1], setkey);
-                string yearofentry = YearOfEntry_cbx.Text;
-                string college = College_cbx.Text;
                 string major = "";
                 if (College_cbx.Text == "일반대학")
                 {
@@ -99,21 +119,7 @@ namespace Client
                 {
                     major = Major_architecture.Text;
                 }
-                String postData = "{ \"Id\" : \"" + data[0] + "\", \"Password\" : \"" + encrypted + "\", \"EncryptKey\" : \"" + setkey + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
-               
-                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
-                byte[] sendData = UTF8Encoding.UTF8.GetBytes(postData);
-                httpWebRequest.ContentType = "application/json; charset=UTF-8";
-                httpWebRequest.Method = "POST";
-                httpWebRequest.ContentLength = sendData.Length;
-                Stream requestStream = httpWebRequest.GetRequestStream();
-                requestStream.Write(sendData, 0, sendData.Length);
-                requestStream.Close();
-                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-                streamReader.ReadToEnd();
-                streamReader.Close();
-                httpWebResponse.Close();
+                PostUser(ID_box.Text, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
                 System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
                 this.Close();
             }

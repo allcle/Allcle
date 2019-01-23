@@ -51,7 +51,12 @@ namespace Client
             return Convert.ToBase64String(objDESCrypto.CreateEncryptor().TransformFinalBlock(byteBuff, 0, byteBuff.Length)); ;
         }
 
-        
+        public void Init()
+        {
+            ID_Box.Text = "아이디 입력";
+            PW_Box_Text.Visibility = Visibility.Visible;
+            PW_Box.Visibility = Visibility.Hidden;                      //원래대로
+        }
 
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -65,9 +70,7 @@ namespace Client
             App.guest = true;
             App.MS.Show();                                              //메인 화면 띄우기
             this.Hide();                                                //로그인창 hide
-            ID_Box.Text = "아이디 입력";
-            PW_Box_Text.Visibility = Visibility.Visible;
-            PW_Box.Visibility = Visibility.Hidden;
+            Init();
         }
 
         private void SingUP_btn_Click(object sender, RoutedEventArgs e)         //회원가입 화면 열기
@@ -80,9 +83,7 @@ namespace Client
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
             Login_PW();
-            ID_Box.Text = "아이디 입력";
-            PW_Box_Text.Visibility = Visibility.Visible;
-            PW_Box.Visibility = Visibility.Hidden;
+            Init();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)       // 프로그램 아무곳이나 누르면 lostfocus

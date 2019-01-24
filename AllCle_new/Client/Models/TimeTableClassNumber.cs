@@ -9,7 +9,7 @@ namespace Client.Models
     class TimeTableClassNumber
     {
         public string ID { get; set; }
-        public int    NO { get; set; }
+        public string TimeTableName { get; set; }
         public string ClassNumber { get; set; }
     }
 }

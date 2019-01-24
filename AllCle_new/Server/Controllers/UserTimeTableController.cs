@@ -44,12 +44,35 @@ namespace Server.Controllers
         {
             _repo.PostTimeTable(_userTimeTable);
         }
+        /*
+        // GET api/<controller>/5
+        [HttpGet("{ID}/update_edittime/{TimeTableName}/EditTime/{EditTime}")]
+        public void UpdateTimeTable(string EditTime, string ID, string TimeTableName)
+        {
+            _repo.UpdateTimeTable(EditTime, ID, TimeTableName);
+        }
+        */
+        // Update api/<controller>
+        [HttpPut]
+        public void UpdateTimeTable([FromBody]UserTimeTable _userTimeTable)
+        {
+            _repo.UpdateTimeTable(_userTimeTable);
+        }
+
+
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public void Put([FromBody]UserTimeTable _userTimeTable)
         {
             _repo.UpdateUserTimeTable(_userTimeTable);
+        }
+
+        // GET api/<controller>/5
+        [HttpGet("{_id}/TimeTableName/{TimeTableName}")]
+        public IEnumerable<UserTimeTable> GetTimeTableClassNumbers(string _id, string TimeTableName)
+        {
+            return _repo.CheckSaveTimeTableName(_id, TimeTableName);
         }
 
         // DELETE api/<controller>/5

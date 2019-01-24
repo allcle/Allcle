@@ -38,12 +38,34 @@ namespace Server.Repository
             string sql = "Insert Into UserTimeTable (ID, TimeTableName, SaveTime, EditTime) Values (@ID, @TimeTableName, @SaveTime, @EditTime)";
             db.Execute(sql, _userTimeTable);
         }
+        /*
+        public void UpdateTimeTable(string EditTime, string ID, string TimeTableName)
+        {
+            // 시간표 다시 저장할 때 쓰는 쿼리
+            string sql = "Update UserTimeTable SET EditTime = '" + EditTime + "' Where ID = '" + ID + "' and TimeTableName = N'" + TimeTableName + "'";
+            db.Execute(sql);
+        }
+        */
+
+        public void UpdateTimeTable(UserTimeTable _userTimeTable)
+        {
+            // 시간표 다시 저장할 때 쓰는 쿼리
+            string sql = "Update UserTimeTable SET EditTime = '" + _userTimeTable.EditTime + "' Where ID = '" + _userTimeTable.ID + "' and TimeTableName = N'" + _userTimeTable.TimeTableName + "'";
+            db.Execute(sql, _userTimeTable);
+        }
 
         public void UpdateUserTimeTable(UserTimeTable _userTimeTable)
         {
-            // update는 보류
-            string sql = "UPDATE UserTimeTable SET TimeTableName = '" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "'";
+            // 시간표 이름 수정할 때 쓰는 쿼리
+            // 보류. 아직 개발 중 =
+            string sql = "UPDATE UserTimeTable SET TimeTableName = N'" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "'";
             db.Execute(sql, _userTimeTable);
+        }
+
+        public List<UserTimeTable> CheckSaveTimeTableName(string _id, string TimeTableName)
+        {
+            string sql = "Select SaveTime from UserTimeTable Where ID = '" + _id + "' and TimeTableName = N'" + TimeTableName + "'";
+            return this.db.Query<UserTimeTable>(sql).ToList();
         }
     }
 }

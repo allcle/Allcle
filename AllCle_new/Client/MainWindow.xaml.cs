@@ -54,8 +54,8 @@ namespace Client
         public void Init()
         {
             ID_Box.Text = "아이디 입력";
-            PW_Box_Text.Visibility = Visibility.Visible;
-            PW_Box.Visibility = Visibility.Hidden;                      //원래대로
+            //PW_Box_Text.Visibility = Visibility.Visible;
+            //PW_Box.Visibility = Visibility.Hidden;                      //원래대로
         }
 
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
@@ -82,6 +82,8 @@ namespace Client
       
         private void Login_btn_Click(object sender, RoutedEventArgs e)
         {
+            PW_Box.Opacity = 0;
+            PW_Box_Text.Opacity = 100;
             Login_PW();
             Init();
         }
@@ -121,6 +123,7 @@ namespace Client
                 streamReader.Close();
                 httpWebResponse.Close();
 
+                // result : 새로 암호화하기 전, DB에 있던 값
                 string encryptedPW = Encrypt(PW_Box.Password, result.EncryptKey);   //비밀번호 암호화하기
                 string id = result.Id;
                 string yearofentry = result.YearOfEntry;
@@ -151,7 +154,7 @@ namespace Client
                     }
                     catch
                     {
-                        check_error = check_error = 1;
+                        check_error = 1;
                     }
                     if (check_error == 0)
                     {
@@ -168,12 +171,25 @@ namespace Client
                     }
                     else if (check_error != 0)
                     {
+                        // 새로운 암호 저장에 문제가 발생.
+                        // 기존 암호로 저장하자.
                         MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("서버 접속에 문제가 있습니다. 종료 후 다시 이용해주십시오.");
                         //메세지창 띄우기
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                             try
                             {
+                                String NewpostData2 = "{ \"Password\" : \"" + result.Password + "\", \"EncryptKey\" : \"" + result.EncryptKey + "\", \"Id\" : \"" + id + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
+                                try
+                                {
+                                    Login_Encrypt(NewpostData2);
+                                }
+                                catch{
+                                    MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("비밀번호가 유실되었을 가능성이 큽니다. 비밀번호를 재 설정 하십시오..");
+                                }
+
+                                /*밑의 2줄이 try문 안에 있어야하는 기본 구문.*/
+                                /*위는 계정 정보가 에러뜨는 문제를 해결하기 위한 실험. 문제가 계속되면 180~187줄은 지워야된다.*/
                                 App.MS.Close();
                                 this.Close();
                             }
@@ -237,20 +253,25 @@ namespace Client
         {
             if (PW_Box.Password == "")
             {
-                PW_Box.Visibility = Visibility.Hidden;
-                PW_Box_Text.Visibility = Visibility.Visible;
+                //PW_Box.Visibility = Visibility.Collapsed;
+                //PW_Box_Text.Visibility = Visibility.Visible;
+                PW_Box.Opacity = 0;
+                PW_Box_Text.Opacity = 100;
             }
             else if (PW_Box.Password != "")
             {
-                PW_Box_Text.Visibility = Visibility.Hidden;
+                //PW_Box_Text.Visibility = Visibility.Collapsed;
+                PW_Box.Opacity = 100;
+                PW_Box_Text.Opacity = 0;
             }
         }
 
         private void PW_Box_GotFocus(object sender, RoutedEventArgs e)
         {
-            PW_Box_Text.Visibility = Visibility.Hidden;
-            PW_Box.Visibility = Visibility.Visible;
-            PW_Box.Password = "";
+            //PW_Box_Text.Visibility = Visibility.Collapsed;
+            //PW_Box.Visibility = Visibility.Visible;
+            PW_Box.Opacity = 100;
+            PW_Box_Text.Opacity = 0;
         }
         //    <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
         //    <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->

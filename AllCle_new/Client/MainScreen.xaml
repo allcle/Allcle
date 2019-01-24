@@ -1174,6 +1174,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right" Padding="40 0 0 0"
                             HorizontalContentAlignment="Right" Height="35"
+                            Click="Save_Image_Click"
                             Style="{StaticResource roundedButton_gray}">
                     </Button>
                     <Button  Grid.Column="2"

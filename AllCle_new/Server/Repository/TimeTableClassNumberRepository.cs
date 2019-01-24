@@ -25,11 +25,11 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<string> GetTimeTableClassNumbers(string _id, string _no)
+        public List<string> GetTimeTableClassNumbers(string _id, string TimeTableName)
         {
             string sql = "Select ClassNumber " +
                          "From TimeTableClassNumber " +
-                         "Where NO = '" + _no + "' " +
+                         "Where TimeTableName = '" + TimeTableName + "' " +
                          "and ID = N'" + _id + "'";
             return db.Query<string>(sql).ToList();
         }

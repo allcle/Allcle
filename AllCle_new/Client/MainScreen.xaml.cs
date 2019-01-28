@@ -96,7 +96,8 @@ namespace Client
             if (userTimeTable.Count() != 0)
             {
                 //TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
-                GetTimeTableClassNumber(userTimeTable[0].NO);
+                //GetTimeTableClassNumber(userTimeTable[0].NO);
+                GetTimeTableClassNumber(userTimeTable[0].TimeTableName);
                 RefreshTimeTable();
             }
         }
@@ -232,9 +233,9 @@ namespace Client
             string Unicode = Encoding.UTF8.GetString(json);
             userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
         }
-        private void GetTimeTableClassNumber(int _timeTableNo)
+        private void GetTimeTableClassNumber(String TimeTableName)
         {
-            url = urlTimeTableClassNumber + "/" + App.ID + "/timetable/" + _timeTableNo;
+            url = urlTimeTableClassNumber + "/" + App.ID + "/TimeTableName/" + TimeTableName;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             timeTableClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
@@ -837,9 +838,10 @@ namespace Client
         {
             int index = TableList.SelectedIndex;
             tableName = userTimeTable[index].TimeTableName;
-            userTimeTalbeNO = userTimeTable[index].NO;
+//            userTimeTalbeNO = userTimeTable[index].NO;
             TableEdit_txtbox.Text = tableName;
-            GetTimeTableClassNumber(userTimeTalbeNO);
+            //GetTimeTableClassNumber(userTimeTalbeNO);
+            GetTimeTableClassNumber(userTimeTable[index].TimeTableName);
             UsersSubjectsList.Clear();
             for (int i = 0; i < timeTableClassNumber.Count; i++)
             {
@@ -1057,25 +1059,11 @@ namespace Client
                 {
                     url = urlUserTimeTable + "/" + App.ID;
                     String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"NO\" : \"" + userTimeTalbeNO + "\"}";
-                    HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
-                    byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
-                    httpWebRequest2.ContentType = "application/json; charset=UTF-8";
-                    httpWebRequest2.Method = "PUT";
-                    httpWebRequest2.ContentLength = sendData2.Length;
-                    Stream requestStream2 = httpWebRequest2.GetRequestStream();
-                    requestStream2.Write(sendData2, 0, sendData2.Length);
-                    requestStream2.Close();
-                    HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
-                    StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-                    streamReader2.ReadToEnd();
-                    streamReader2.Close();
-                    httpWebResponse2.Close();
+                    connect(url, NewpostData, "PUT");
 
                     GetUserTimeTable();
                     TableList.ItemsSource = userTimeTable;
                 }
-
-
             }
         }
 
@@ -1084,19 +1072,7 @@ namespace Client
 
             url = urlUserTimeTable;
             String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"NO\" : " + "5" + ", \"TimeTableName\" : \"시간표1\"}";
-            HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
-            byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
-            httpWebRequest2.ContentType = "application/json; charset=UTF-8";
-            httpWebRequest2.Method = "POST";
-            httpWebRequest2.ContentLength = sendData2.Length;
-            Stream requestStream2 = httpWebRequest2.GetRequestStream();
-            requestStream2.Write(sendData2, 0, sendData2.Length);
-            requestStream2.Close();
-            HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
-            StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-            streamReader2.ReadToEnd();
-            streamReader2.Close();
-            httpWebResponse2.Close();
+            connect(url, NewpostData, "POST");
 
             GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
@@ -1105,14 +1081,46 @@ namespace Client
 
         private void Save_Schedule_Click(object sender, RoutedEventArgs e)
         {
-            url = urlUserTimeTable;
+            string check_url = "";
+            string insert_url = "";
+            string update_url = "";
+            check_url = urlUserTimeTable + "/" + App.ID + "/TimeTableName/" + TableEdit_txtbox.Text;
+            var json = new WebClient().DownloadData(check_url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            if (Unicode == "[]")
+            {
+                // 해당 데이터가 존재하지 않는다! 새로 저장하기
+                insert_url = urlUserTimeTable;
+                String now = DateTime.Now.ToString("MMddHHmmss");
+                //String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
+                String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"SaveTime\" : \"" + now + "\", \"EditTime\" : \"" + now + "\"}";
+                connect(insert_url, NewpostData1, "POST");
+            }
+            else
+            {
+                // 해당 데이터가 이미 존재한다! edittime만 갱신하기
+                String EditTime = DateTime.Now.ToString("MMddHHmmss");
+                //update_url = urlUserTimeTable + "/" + App.ID + "/update_edittime/" + TableEdit_txtbox.Text + "/EditTime/" + EditTime;
+                update_url = "http://allcleapp.azurewebsites.net/api/UserTimeTable";
+                String NewpostData2 = "{ \"EditTime\" : '" + EditTime + "', \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
+                connect(update_url, NewpostData2, "PUT"); // 여기서 에러 발생!
+            }
 
-            String now = DateTime.Now.ToString("MMddHHmmss");
-            String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
+            GetUserTimeTable();
+            TableList.ItemsSource = userTimeTable;
+
+            // 리스트 위에 있는 과목들도 저장해야됨
+            // 얘네는 TimeTableClass DB에 저장해야됨
+        }
+
+        private void connect(String url, String NewpostData, String Method)
+        {
+            // POST : Save_Schedule_Click, TimeAdd_btn_Click
+            // PUT: TableEdit_txtbox_KeyDown
             HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
             byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
             httpWebRequest2.ContentType = "application/json; charset=UTF-8";
-            httpWebRequest2.Method = "POST";
+            httpWebRequest2.Method = Method;
             httpWebRequest2.ContentLength = sendData2.Length;
             Stream requestStream2 = httpWebRequest2.GetRequestStream();
             requestStream2.Write(sendData2, 0, sendData2.Length);
@@ -1122,9 +1130,6 @@ namespace Client
             streamReader2.ReadToEnd();
             streamReader2.Close();
             httpWebResponse2.Close();
-
-            GetUserTimeTable();
-            TableList.ItemsSource = userTimeTable;
         }
 
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)
@@ -1146,6 +1151,35 @@ namespace Client
                 tabActive = false;
             }
 
+        }
+
+        // 시간표 이미지 저장
+        private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            Size visualSize = new Size(visual.ActualWidth, visual.ActualHeight);
+            visual.Measure(visualSize);
+            visual.Arrange(new Rect(visualSize));
+            bitmap.Render(visual);
+            BitmapFrame frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
+            }
+        }
+
+        void SaveToPng(FrameworkElement visual, string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            SaveUsingEncoder(visual, fileName, encoder);
+        }
+
+        private void Save_Image_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToPng(TimeTable, "image.png");
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(684, 353, 96, 96, PixelFormats.Pbgra32);
         }
     }
 }

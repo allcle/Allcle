@@ -279,13 +279,15 @@
                      FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 0 0 10" HorizontalContentAlignment="Left" 
                      VerticalContentAlignment="Center" BorderThickness="0" LostFocus="ID_Box_LostFocus" 
                      GotFocus="ID_Box_GotFocus"/>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" Background="White"
-                         HorizontalContentAlignment="Left" Padding="10 0 0 0" Margin="0 2 0 8" VerticalContentAlignment="Center"  
-                         MaxLength="20" KeyDown="PW_Box_KeyDown" LostFocus="PW_Box_LostFocus" Visibility="Hidden" />
             <TextBox x:Name="PW_Box_Text" Text="비밀번호 입력" Grid.Row="3" Foreground="Gray" Background="White" 
                      FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 2 0 8" HorizontalContentAlignment="Left" 
-                     VerticalContentAlignment="Center" BorderThickness="0" 
-                     GotFocus="PW_Box_GotFocus"/>            
+                     VerticalContentAlignment="Center" BorderThickness="0" Visibility="Visible"
+                     GotFocus="PW_Box_GotFocus"/>
+            <PasswordBox x:Name="PW_Box"  Grid.Row="3" FontSize="15" UseLayoutRounding="False" Background="White"
+                         HorizontalContentAlignment="Left" Padding="10 0 0 0" Margin="0 2 0 8" VerticalContentAlignment="Center"  
+                         MaxLength="20" KeyDown="PW_Box_KeyDown" LostFocus="PW_Box_LostFocus"
+                         Opacity="0" GotFocus="PW_Box_GotFocus"/>
+            
             <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
             <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->
             <!--PW_Box에서 나갈 때 PW_Box.text!=""이면 PW_Box를 계속 보이도록-->

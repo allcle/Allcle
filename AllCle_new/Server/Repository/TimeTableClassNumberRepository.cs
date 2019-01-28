@@ -25,11 +25,11 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<string> GetTimeTableClassNumbers(string _id, string _no)
+        public List<string> GetTimeTableClassNumbers(string _id, string TimeTableName)
         {
             string sql = "Select ClassNumber " +
                          "From TimeTableClassNumber " +
-                         "Where NO = '" + _no + "' " +
+                         "Where TimeTableName = '" + TimeTableName + "' " +
                          "and ID = N'" + _id + "'";
             return db.Query<string>(sql).ToList();
         }
@@ -37,7 +37,7 @@ namespace Server.Repository
 
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (ID, NO, TimeTableClassNumber) Values (@ID, @NO, @TimeTableClassNumber)";
+            string sql = "Insert Into UserTimeTable (ID, TimeTableClassNumber, SaveTime, EditTime) Values (@ID, @TimeTableClassNumber, @SaveTime, @EditTime)";
             db.Execute(sql, _timeTableClassNumber);
         }
         

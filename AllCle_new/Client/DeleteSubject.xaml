@@ -1,0 +1,72 @@
+﻿<Window x:Class="Client.DeleteSubject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="DeleteSubject" Height="400" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" 
+        AllowsTransparency="True">
+    <Window.Background>
+        <SolidColorBrush Opacity="0.5"/>
+    </Window.Background>
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}" x:Key="roundedButton">
+            <!--버튼 둥글게 하는 템플릿-->
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="button_border" CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="button_border" Property="Background" Value="red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="40" Background="Gray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1">
+                <TextBlock Name="SubjectName_Tbk" Text="'전공기초영어' 과목을" FontSize="30" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border Grid.Row="2">
+                <TextBlock Text="시간표에서 삭제하시겠습니까?" FontSize="30" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Name="Cancel_btn" Grid.Column="0" Content="취소" Foreground="White" FontSize="20" FontWeight="SemiBold" Background="#FF404040" Style="{StaticResource roundedButton}" Margin="20 0 10 0" Click="Cancel_btn_Click">
+
+                </Button>
+                <Button Name="Confirm_btn" Grid.Column="1" Content="확인" Foreground="White" FontSize="20" FontWeight="SemiBold" Background="#FFF0C05A" Style="{StaticResource roundedButton}" Margin="10 0 20 0" Click="Confirm_btn_Click">
+
+                </Button>
+
+
+
+            </Grid>
+            
+            
+            
+            
+
+        </Grid>
+    </Border>
+</Window>

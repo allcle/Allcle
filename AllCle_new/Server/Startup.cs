@@ -55,6 +55,9 @@ namespace Server
             services.AddTransient<ITimeTableClassNumberRepository, TimeTableClassNumberRepository>();   //타임테이블 - 과목
             services.AddTransient<IUserMyGroupRepository, UserMyGroupRepository>();         //유저 - MyGroup
             services.AddTransient<IMyGroupClassNumberRepository, MyGroupClassNumberRepository>();       //MyGroup - 과목
+            services.AddTransient<IABEEKRepository, ABEEKRepository>();     //ABEEK 검색을 위해
+            services.AddTransient<IMajorRepository, MajorRepository>();     //Major 검색을 위해
+            services.AddTransient<IEngNormalRepository, EngNormalRepository>();     //공대 일반교양 검색을 위해
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

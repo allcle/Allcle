@@ -25,14 +25,13 @@ namespace Server.Repository
                     "DefaultConnection").Value);
         }
 
-        public List<MyGroupClassNumber> GetMyGroupClassNumbers(string _id, string _myGroupName)
+        public List<string> GetMyGroupClassNumbers(string _id, string MyGroupName)
         {
-            string sql = "Select MGCN.ClassNumber " +
-                         "From MyGroupClassNumber MGCN, UserMyGroup UMG " +
-                         "Where UMG.MyGroupName = N'" + _myGroupName + "' " + 
-                         "UMG.ID = N'" + _id + "' " + 
-                         "UMG.NO = MGCN.NO";
-            return db.Query<MyGroupClassNumber>(sql).ToList();
+            string sql = "Select ClassNumber " +
+                         "From MyGroupClassNumber " +
+                         "Where MyGroupName = '" + MyGroupName + "' " +
+                         "and ID = N'" + _id + "'";
+            return db.Query<string>(sql).ToList();
         }
     }
 }

@@ -15,15 +15,16 @@ namespace Client
     {
         public static MainWindow MW = new MainWindow();
         public static MainScreen MS = new MainScreen();
-        public static MyGroup MG = new MyGroup();
         public static string ID;
         public static bool first;
         public static bool guest;
+        public static bool deleteSubject;
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
             first = true;
             guest = true;
+            deleteSubject = false;
             MW.Show();     
         }
     }

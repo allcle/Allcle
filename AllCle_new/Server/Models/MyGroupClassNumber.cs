@@ -7,7 +7,8 @@ namespace Server.Models
 {
     public class MyGroupClassNumber
     {
-        public int NO { get; set; }
+        public string ID { get; set; }
         public string MyGroupName { get; set; }
+        public string ClassNumber { get; set; }
     }
 }

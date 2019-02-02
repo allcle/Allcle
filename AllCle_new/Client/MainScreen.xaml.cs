@@ -26,6 +26,7 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace Client
 {
@@ -35,12 +36,22 @@ namespace Client
     public partial class MainScreen : Window
     {
         static HttpClient client = new HttpClient();
-        List<Subject> SubjectList = new List<Subject>(); //전체 과목 리스트
-        List<Subject> ResultSubtject = new List<Subject>();     //결과 과목
-        List<Subject> UsersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
+        List<Subject> subjectList = new List<Subject>(); //전체 과목 리스트
+        List<Subject> resultSubtject = new List<Subject>();     //결과 과목
+        List<Subject> usersSubjectsList = new List<Subject>(); //유저가 듣는 과목 리스트
         List<UserTimeTable> userTimeTable = new List<UserTimeTable>();    //유저의 시간표
         List<string> timeTableClassNumber = new List<string>(); //시간표의 과목들
-        List<UserMyGroup> userMyGroup = new List<UserMyGroup>();
+        List<UserMyGroup> userMyGroup = new List<UserMyGroup>();    //유저의 myGroup
+        List<string> myGroupClassNumber = new List<string>();   //하나의 myGroup안에 과목들
+    
+
+        List<ABEEK> aBEEKs = new List<ABEEK>();             //아빅 전체
+        List<ABEEK> resultABEEKs = new List<ABEEK>();       //아빅에서 원하는거만 선택
+        List<EngNormal> engNormals = new List<EngNormal>(); //공대 일반교양 전체
+        List<EngNormal> resultEngNormals = new List<EngNormal>(); //공대 일반교양 선택
+        List<Major> majors = new List<Major>(); //전공 전체
+        List<Major> resultMajors = new List<Major>(); //전공에서 원하는거 선택
+
         string[] br = { "#FFCFCFD6", "#FFB1D3D2", "#FF8BC6C1", "#FF2FA5B8", "#FFF4AFA1", "#FFF7B990", "#FF86C26D", "#FF6DE182", "#FFEDE8AD" };
         /*색 리스트*/
         User user = new User();
@@ -56,21 +67,40 @@ namespace Client
             public bool ableToPut;
         }
         TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
-        string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects2"; //기본 url
+        string urlBase = @"https://allcleapp.azurewebsites.net/api/AllCleSubjects1"; //기본 url
         string urlUserTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable"; //유저의 시간표 리스트를 위한 기본 url
         string urlTimeTableClassNumber = @"https://allcleapp.azurewebsites.net/api/TimeTableClassNumber";       //저장된 시간표의 과목들
         string urlUserMyGroup = @"https://allcleapp.azurewebsites.net/api/UserMyGroup";
+        string urlMyGroupClassNumber = @"https://allcleapp.azurewebsites.net/api/MyGroupClassNumber";       //저장된 MyGroup의 과목들
+        string urlABEEK = @"https://allcleapp.azurewebsites.net/api/ABEEK";
+        string urlEngNormal = @"https://allcleapp.azurewebsites.net/api/EngNormal";
+        string urlMajor = @"https://allcleapp.azurewebsites.net/api/Major";
         string url = null;  //json으로 쓰일 url
 
         public MainScreen()
         {
             InitializeComponent();
             GetSubjects();
-            DataListView_All.ItemsSource = SubjectList;
+            GetMajor();
+            DataListView_All.ItemsSource = subjectList;
             InitDB();
             tabActive = false;
             myGroup_btn = false;
         }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            GetUserTimeTable();
+            TableList.ItemsSource = userTimeTable;
+            SetUserMyGroup();
+            UserId.Text = App.ID;
+            if (!App.guest)
+                InitUserInfo();
+            else if (App.guest)
+                GuestLogIn();
+
+        }
+
 
         private void InitUserInfo()
         {
@@ -100,6 +130,26 @@ namespace Client
                 GetTimeTableClassNumber(userTimeTable[0].TimeTableName);
                 RefreshTimeTable();
             }
+            normal.Visibility = Visibility.Collapsed;
+            engineer.Visibility = Visibility.Collapsed;
+            architecture.Visibility = Visibility.Collapsed;
+            if (user.College == "공과대학")
+            {
+                engineer.Visibility = Visibility.Visible;
+                GetEngineerABEEK();
+                GetEngineerNormal();
+            }
+            else if (user.College == "일반대학")
+            {
+                normal.Visibility = Visibility.Visible;
+
+            }
+            else
+            {
+                architecture.Visibility = Visibility.Visible;
+
+            }
+
         }
         private void GuestLogIn()
         {
@@ -107,124 +157,533 @@ namespace Client
             UserAdmissionYear.Text = "Guest";
             UserMajor.Text = "Guest";
         }
-
-        private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
+        private List<Subject> SearchByWord(List<Subject> subjects)
         {
-            DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-            /*if (FilterOption.timeOption == true)
+            List<Subject> tempSubjects = new List<Subject>();
+            tempSubjects = subjects;
+            string _word = Search_Box.Text;
+            if (_word == "" || _word == "교과명, 학수번호, 교수이름으로 검색하기")
+                return tempSubjects;
+            else
+                tempSubjects = tempSubjects.Where(s => s.ClassName.Contains(_word) || s.Professor.Contains(_word) || s.ClassNumber.Contains(_word)).ToList();
+            return tempSubjects;
+        }
+        private List<Subject> SearchByLunch(List<Subject> subjects)
+        {
+            List<Subject> tempSubjects = new List<Subject>();
+            tempSubjects = subjects;
+            string from = LunchFrom.Text;
+            string to = LunchTo.Text;
+            int fromToInt = 0;
+            int toToInt = 0;
+
+            if (from == "오전 9시")
+                fromToInt = 1;
+            else if (from == "오전 10시")
+                fromToInt = 2;
+            else if (from == "오전 11시")
+                fromToInt = 3;
+            else if (from == "오전 12시")
+                fromToInt = 4;
+            else if (from == "오후 1시")
+                fromToInt = 5;
+            else if (from == "오후 2시")
+                fromToInt = 6;
+            else if (from == "오후 3시")
+                fromToInt = 7;
+            else if (from == "오후 4시")
+                fromToInt = 8;
+            else if (from == "오후 5시")
+                fromToInt = 9;
+            else if (from == "오후 6시")
+                fromToInt = 10;
+            else if (from == "오후 7시")
+                fromToInt = 11;
+            else if (from == "오후 8시")
+                fromToInt = 12;
+            else
+                fromToInt = 13;
+
+            if (to == "오전 9시")
+                toToInt = 1;
+            else if (to == "오전 10시")
+                toToInt = 2;
+            else if (to == "오전 11시")
+                toToInt = 3;
+            else if (to == "오전 12시")
+                toToInt = 4;
+            else if (to == "오후 1시")
+                toToInt = 5;
+            else if (to == "오후 2시")
+                toToInt = 6;
+            else if (to == "오후 3시")
+                toToInt = 7;
+            else if (to == "오후 4시")
+                toToInt = 8;
+            else if (to == "오후 5시")
+                toToInt = 9;
+            else if (to == "오후 6시")
+                toToInt = 10;
+            else if (to == "오후 7시")
+                toToInt = 11;
+            else if (to == "오후 8시")
+                toToInt = 12;
+
+            if (fromToInt == -1)
+                return tempSubjects;
+            else
             {
-                if (FilterOption.subjectOption == true)
+                if (fromToInt == 13)
+                    return tempSubjects;
+                if (toToInt < fromToInt)
                 {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassName(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnProfessor(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassNumber(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
+                    System.Windows.MessageBox.Show("숫자를 잘못설정하였습니다");
+                    return tempSubjects;
                 }
                 else
                 {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassName(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnProfessor(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassNumber(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
+                    for (int i = 0; i < toToInt - fromToInt; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("월" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("화" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("수" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("목" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("금" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("토" + (fromToInt + i).ToString())).ToList();
+                        }
+                    }
                 }
+                return tempSubjects;
+            }
+        }
+        private void SearchEngNormal_All()  //공대 교양 전체 찾기
+        {
+            resultABEEKs = aBEEKs;
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultABEEKs.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultABEEKs[i].ClassNumber)).ToList());
+            }
+            resultEngNormals = engNormals;
+            for (int i = 0; i < resultEngNormals.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultEngNormals[i].ClassNumber)).ToList());
+            }
+           // tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            //tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchABEEKAll()       //공대 아빅 전체 찾기
+        {
+            resultABEEKs = aBEEKs;
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultABEEKs.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultABEEKs[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchABEEKType(string _type)  //공대 아빅에서 MSC과학같은거 찾기
+        {
+            resultABEEKs = aBEEKs.Where(s => s.ABEEKType.Equals(_type)).ToList();
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultABEEKs.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultABEEKs[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchABEEKNormal(string _normal)  //공대 아빅 드래곤볼 분야 찾기
+        {
+            resultABEEKs = aBEEKs.Where(s => s.ABEEKNormal.Equals(_normal)).ToList();
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultABEEKs.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultABEEKs[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchEngNormalAll()
+        {
+            resultEngNormals = engNormals;
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultEngNormals.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultEngNormals[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchEngNormal(string _normal)    //공대 일반교양에서 분야
+        {
+            resultEngNormals = engNormals.Where(s => s.ABEEKNormal.Equals(_normal)).ToList();
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultEngNormals.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultEngNormals[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        
+
+        //여기 일반대, 건축대 자리
+
+        private void SearchMajor(string _major)
+        {
+            resultMajors = majors.Where(s => s.ByMajor.Equals(_major)).ToList();
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int i = 0; i < resultMajors.Count; i++)
+            {
+                tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultMajors[i].ClassNumber)).ToList());
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchMajor(List<string> _major)
+        {
+            List<Subject> tempSubjects = new List<Subject>();
+            for (int j = 0; j < _major.Count; j++)
+            {
+                resultMajors = majors.Where(s => s.ByMajor.Equals(_major[0])).ToList();
+                for (int i = 0; i < resultMajors.Count; i++)
+                {
+                    tempSubjects.AddRange(subjectList.Where(s => s.ClassNumber.Contains(resultMajors[i].ClassNumber)).ToList());
+                }
+            }
+            tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
+            tempSubjects = SearchByWord(tempSubjects);  //이런곳에 검색함수 넣으면 됨 tempsubject
+            DataListView_All.ItemsSource = tempSubjects;
+        }
+        private void SearchMajor()
+        {
+            if (major.Text == "공과대학")
+            {
+                if (major_engineer.Text == "전공공통")
+                {
+                    List<string> tempSubject = new List<string>() { "공대교학과", "기초과학과(서울)", "전공공통" };
+                    SearchMajor(tempSubject);
+                }
+                else if (major_engineer.Text == "건설도시공학부")
+                {
+                    List<string> tempSubject = new List<string>() { "건설·도시공학부", "도시공학전공", "토목공학전공" };
+                    SearchMajor(tempSubject);
+                }
+                else if (major_engineer.Text == "전자전기공학부")
+                    SearchMajor("전자·전기공학부");
+                else if (major_engineer.Text == "정보컴퓨터공학부")
+                {
+                    List<string> tempSubject = new List<string>() { "컴퓨터공학전공", "산업공학전공" };
+                    SearchMajor(tempSubject);
+                }
+                else if (major_engineer.Text == "신소재화공시스템공학부")
+                {
+                    List<string> tempSubject = new List<string>() { "신소재·화공시스템공학부", "화학공학전공", "신소재공학전공" };
+                    SearchMajor(tempSubject);
+                }
+                else if (major_engineer.Text == "기계시스템디자인공학과")
+                    SearchMajor("기계ㆍ시스템디자인공학과");
+            }
+            else if (major.Text == "경영대학")
+            {
+                if (major_business.Text == "경영학부")
+                {
+                    List<string> tempSubject = new List<string>() { "경영학부", "경영학전공" };
+                    SearchMajor(tempSubject);
+                }
+            }
+            else if (major.Text == "문과대학")
+            {
+                if (major_language.Text == "영어영문학과")
+                    SearchMajor("영어영문학과");
+                else if (major_language.Text == "독어독문학과")
+                    SearchMajor("독어독문학과");
+                if (major_language.Text == "불어불문학과")
+                    SearchMajor("불어불문학과");
+                else if (major_language.Text == "국어국문학과")
+                    SearchMajor("국어국문학과");
+            }
+            else if (major.Text == "사범대학")
+            {
+                if (major_language.Text == "교직과(서울)")
+                    SearchMajor("교직과(서울)");
+                else if (major_language.Text == "수학교육과")
+                    SearchMajor("수학교육과");
+                if (major_language.Text == "국어교육과")
+                    SearchMajor("국어교육과");
+                else if (major_language.Text == "영어교육과")
+                    SearchMajor("영어교육과");
+                if (major_language.Text == "역사교육과")
+                    SearchMajor("역사교육과");
+                else if (major_language.Text == "교육학과")
+                    SearchMajor("교육학과");
+            }
+            else if (major.Text == "미술대학")
+            {
+                if (major_language.Text == "전공공통")
+                    SearchMajor("전공공통");
+                else if (major_language.Text == "수학교육과")
+                    SearchMajor("수학교육과");
+                else if (major_language.Text == "동양학과")
+                    SearchMajor("동양학과");
+                else if (major_language.Text == "회화과")
+                    SearchMajor("회화과");
+                else if (major_language.Text == "판화과")
+                    SearchMajor("판화과");
+                else if (major_language.Text == "조소과")
+                    SearchMajor("조소과");
+                else if (major_language.Text == "목조형가구학과")
+                    SearchMajor("목조형가구학과");
+                else if (major_language.Text == "예술학과")
+                    SearchMajor("예술학과");
+                else if (major_language.Text == "금속디자인학과")
+                    SearchMajor("금속디자인학과");
+                else if (major_language.Text == "도유유리과")
+                    SearchMajor("도유유리과");
+                else if (major_language.Text == "섬유미술패션디자인학과")
+                    SearchMajor("섬유미술패션디자인학과");
+                else if (major_language.Text == "디자인학부")
+                    SearchMajor("디자인학부");
+            }
+            else if (major.Text == "건축대학")
+            {
+                if (major_architecture.Text == "건축학부")
+                    SearchMajor("건축학부");
+            }
+            else if (major.Text == "법과대학")
+            {
+                if (major_law.Text == "전공공통")
+                    SearchMajor("법과대 교학과");
+                if (major_law.Text == "법학부")
+                {
+                    List<string> tempSubject = new List<string>() { "법학부", "사법(비즈니스·정보법)전공", "공법(공공서비스법)전공" };
+                    SearchMajor(tempSubject);
+                }
+            }
+            else if (major.Text == "경제학부")
+                if (major_economics.Text == "경제학부")
+                {
+                    List<string> tempSubject = new List<string>() { "경제학전공", "경제학부" };
+                    SearchMajor(tempSubject);
+                }
+        }
+
+        private void SearchEngineer()   //공대 search 함수
+        {
+            if (course.Text == "교양")
+            {
+                if(engineer.Text == "전체")
+                {
+                    SearchEngNormal_All();
+                }
+                else if(engineer.Text == "ABEEK 교양")
+                {
+                    if(engineer_ABEEK.Text == "전체")
+                        SearchABEEKAll();
+                    else if (engineer_ABEEK.Text == "기초교양")
+                    {
+                        SearchABEEKType("교양필수");
+                    }
+                    else if (engineer_ABEEK.Text == "일반교양")
+                    {
+                        if (engineer_type_normal.Text == "언어와논리")
+                            SearchABEEKType("언어와논리");
+                        else if (engineer_type_normal.Text == "사회와경제")
+                            SearchABEEKType("사회와경제");
+                        else if (engineer_type_normal.Text == "역사와문화")
+                            SearchABEEKType("역사와문화");
+                        else if (engineer_type_normal.Text == "예술과철학")
+                            SearchABEEKType("예술과철학");
+                        else if (engineer_type_normal.Text == "제2외국어")
+                            SearchABEEKType("제2외국어");
+                        else
+                            System.Windows.MessageBox.Show("교양->ABEEK->일반교양->에러");
+                    }
+                    else if (engineer_ABEEK.Text == "핵심교양")
+                    {
+                        if (engineer_type_mainpoint.Text == "경영과법률")
+                            SearchABEEKType("경영과법률");
+                        else if (engineer_type_mainpoint.Text == "공학의이해")
+                            SearchABEEKType("공학의이해");
+                        else if (engineer_type_mainpoint.Text == "의사소통")
+                            SearchABEEKType("의사소통");
+                        else
+                            System.Windows.MessageBox.Show("교양->ABEEK->핵심교양->에러");
+                    }
+                    else if (engineer_ABEEK.Text == "MSC수학")
+                        SearchABEEKNormal("MSC수학");
+                    else if (engineer_ABEEK.Text == "MSC과학")
+                        SearchABEEKNormal("MSC과학");
+                    else if (engineer_ABEEK.Text == "MSC전산")
+                        SearchABEEKNormal("MSC전산");
+                    else
+                    {
+                        System.Windows.MessageBox.Show("교양->ABEEK->에러");
+                    }
+                }
+                else if (engineer.Text == "일반교양")
+                {
+                    if (engineer_normal.Text == "전체")
+                        SearchEngNormalAll();
+                    else if (engineer_normal.Text == "인문계열")
+                        SearchEngNormal("인문계열");
+                    else if (engineer_normal.Text == "사회계열")
+                        SearchEngNormal("사회계열");
+                    else if (engineer_normal.Text == "자연계열")
+                        SearchEngNormal("자연계열");
+                    else if (engineer_normal.Text == "예체능계열")
+                        SearchEngNormal("예체능계열");
+                    else if (engineer_normal.Text == "제2외국어계열")
+                        SearchEngNormal("제2외국어계열");
+                    else if (engineer_normal.Text == "교직계열")
+                        SearchEngNormal("교직계열");
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("교양->에러");
+                }
+            }
+            else if (course.Text == "전공")
+            {
+                SearchMajor();
+            }
+            else
+                System.Windows.MessageBox.Show("전공 vs 교양에서 오류 ㄷㄷ");
+
+            /*if (TimeOp_cbx.Text == "전체 시간")
+            {
+                DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+            }
+            else if (TimeOp_cbx.Text == "빈 시간만 적용")
+            {
+                DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
             }
             else
             {
-                if (FilterOption.subjectOption == true)
-                {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassName(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnProfessor(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassNumber(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
-                }
-                else
-                {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassName(Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnProfessor(Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassNumber(Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-                }
+                System.Windows.MessageBox.Show("hi");
             }*/
+
+
         }
-        private void Search_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)//엔터키 눌렀을 때
-        {
-            DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-            /*if (FilterOption.timeOption == true)
+        private void SearchNormal()     //일반대 search 함수
+        {   //수정요망
+            if (course.Text == "공통교양")
             {
-                if (FilterOption.subjectOption == true)
+                if (engineer.Text == "전체")
                 {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassName(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnProfessor(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOnClassNumber(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList), Search_Box.Text);
+                    SearchEngNormal_All();
+                }
+                else if (engineer.Text == "ABEEK 교양")
+                {
+                    if (engineer_ABEEK.Text == "전체")
+                        SearchABEEKAll();
+                    else if (engineer_ABEEK.Text == "기초교양")
+                    {
+                        SearchABEEKType("교양필수");
+                    }
+                    else if (engineer_ABEEK.Text == "일반교양")
+                    {
+                        if (engineer_type_normal.Text == "언어와논리")
+                            SearchABEEKType("언어와논리");
+                        else if (engineer_type_normal.Text == "사회와경제")
+                            SearchABEEKType("사회와경제");
+                        else if (engineer_type_normal.Text == "역사와문화")
+                            SearchABEEKType("역사와문화");
+                        else if (engineer_type_normal.Text == "예술과철학")
+                            SearchABEEKType("예술과철학");
+                        else if (engineer_type_normal.Text == "제2외국어")
+                            SearchABEEKType("제2외국어");
+                        else
+                            System.Windows.MessageBox.Show("교양->ABEEK->일반교양->에러");
+                    }
+                    else if (engineer_ABEEK.Text == "핵심교양")
+                    {
+                        if (engineer_type_mainpoint.Text == "경영과법률")
+                            SearchABEEKType("경영과법률");
+                        else if (engineer_type_mainpoint.Text == "공학의이해")
+                            SearchABEEKType("공학의이해");
+                        else if (engineer_type_mainpoint.Text == "의사소통")
+                            SearchABEEKType("의사소통");
+                        else
+                            System.Windows.MessageBox.Show("교양->ABEEK->핵심교양->에러");
+                    }
+                    else if (engineer_ABEEK.Text == "MSC수학")
+                        SearchABEEKNormal("MSC수학");
+                    else if (engineer_ABEEK.Text == "MSC과학")
+                        SearchABEEKNormal("MSC과학");
+                    else if (engineer_ABEEK.Text == "MSC전산")
+                        SearchABEEKNormal("MSC전산");
                     else
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOnSearchOff(TimeInList(UsersSubjectsList), SubjectInList(UsersSubjectsList));
+                    {
+                        System.Windows.MessageBox.Show("교양->ABEEK->에러");
+                    }
+                }
+                else if (engineer.Text == "일반교양")
+                {
+                    if (engineer_normal.Text == "전체")
+                        SearchEngNormalAll();
+                    else if (engineer_normal.Text == "인문계열")
+                        SearchEngNormal("인문계열");
+                    else if (engineer_normal.Text == "사회계열")
+                        SearchEngNormal("사회계열");
+                    else if (engineer_normal.Text == "자연계열")
+                        SearchEngNormal("자연계열");
+                    else if (engineer_normal.Text == "예체능계열")
+                        SearchEngNormal("예체능계열");
+                    else if (engineer_normal.Text == "제2외국어계열")
+                        SearchEngNormal("제2외국어계열");
+                    else if (engineer_normal.Text == "교직계열")
+                        SearchEngNormal("교직계열");
                 }
                 else
                 {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassName(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnProfessor(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOnClassNumber(TimeInList(UsersSubjectsList), Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
+                    System.Windows.MessageBox.Show("교양->에러");
                 }
+            }
+            else if (course.Text == "전공")
+            {
+                SearchMajor();
+            }
+            else
+                System.Windows.MessageBox.Show("전공 vs 교양에서 오류 ㄷㄷ");
+
+            /*if (TimeOp_cbx.Text == "전체 시간")
+            {
+                DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
+            }
+            else if (TimeOp_cbx.Text == "빈 시간만 적용")
+            {
+                DataListView_All.ItemsSource = ShowTimeOnSubjectOffSearchOff(TimeInList(UsersSubjectsList));
             }
             else
             {
-                if (FilterOption.subjectOption == true)
-                {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassName(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnProfessor(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOnClassNumber(SubjectInList(UsersSubjectsList), Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOnSearchOff(SubjectInList(UsersSubjectsList));
-                }
-                else
-                {
-                    if (FilterOption.searchOption == 1)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassName(Search_Box.Text);
-                    else if (FilterOption.searchOption == 2)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnProfessor(Search_Box.Text);
-                    else if (FilterOption.searchOption == 3)
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOnClassNumber(Search_Box.Text);
-                    else
-                        DataListView_All.ItemsSource = ShowTimeOffSubjectOffSearchOff();
-                }
+                System.Windows.MessageBox.Show("hi");
             }*/
+
+
         }
+        private void SearchArchitecture()
+        {//수정요망
 
-
+        }
         private void GetSubjects()
         {
             url = urlBase;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
-            SubjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
-            ResultSubtject = SubjectList;
+            subjectList = JsonConvert.DeserializeObject<List<Subject>>(Unicode);
+            resultSubtject = subjectList;
         }
         private void GetUserTimeTable()
         {
@@ -247,252 +706,37 @@ namespace Client
             string Unicode = Encoding.UTF8.GetString(json);
             userMyGroup = JsonConvert.DeserializeObject<List<UserMyGroup>>(Unicode);
         }
+        private void GetmyGroupClassNumber(string MyGroupName)
+        {
+            url = urlMyGroupClassNumber + "/" + App.ID + "/MyGroupName/" + MyGroupName;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            myGroupClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
+        }
+        private void GetEngineerABEEK()
+        {
+            url = urlABEEK;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            aBEEKs = JsonConvert.DeserializeObject<List<ABEEK>>(Unicode);
+        }
+        private void GetEngineerNormal()
+        {
+            url = urlEngNormal;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            engNormals = JsonConvert.DeserializeObject<List<EngNormal>>(Unicode);
 
-        private List<Subject> ShowTimeOnSubjectOnSearchOff(List<string> _time, List<string> _subject)  //남은시간에서만, 담은과목 제외
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            return ResultSubtject;
         }
-        private List<Subject> ShowTimeOnSubjectOffSearchOff(List<string> _time)                 //남은 시간만에서만
+        private void GetMajor()
         {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOnSearchOff(List<string> _subject)                //담은 과목만 제외
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOffSearchOff()                             //전체 모든 과목 보기
-        {
-            ResultSubtject = SubjectList;
-            return ResultSubtject;
-        }
+            url = urlMajor;
+            var json = new WebClient().DownloadData(url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            majors = JsonConvert.DeserializeObject<List<Major>>(Unicode);
 
-        private List<Subject> ShowTimeOnSubjectOnSearchOnClassName(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
-            return ResultSubtject;
         }
-        private List<Subject> ShowTimeOnSubjectOnSearchOnProfessor(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOnSubjectOnSearchOnClassNumber(List<string> _time, List<string> _subject, string _search) //남은시간에서만, 담은과목제외, 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-
-        private List<Subject> ShowTimeOnSubjectOffSearchOnClassName(List<string> _time, string _search)                 //남은 시간에서만 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOnSubjectOffSearchOnProfessor(List<string> _time, string _search)                 //남은 시간에서만 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOnSubjectOffSearchOnClassNumber(List<string> _time, string _search)                 //남은 시간에서만 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _time.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.Times.Contains(_time[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-
-        private List<Subject> ShowTimeOffSubjectOnSearchOnClassName(List<string> _subject, string _search)              //담은 과목 제외하고 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOnSearchOnProfessor(List<string> _subject, string _search)              //담은 과목 제외하고 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOnSearchOnClassNumber(List<string> _subject, string _search)              //담은 과목 제외하고 검색
-        {
-            ResultSubtject = SubjectList;
-            for (int i = 0; i < _subject.Count; i++)
-            {
-                ResultSubtject = ResultSubtject.Where(s => !s.ClassName.Contains(_subject[i])).ToList();
-            }
-            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-
-        private List<Subject> ShowTimeOffSubjectOffSearchOnClassName(string _search)                              //그냥 과목검색
-        {
-            ResultSubtject = SubjectList;
-            ResultSubtject = ResultSubtject.Where(s => s.ClassName.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOffSearchOnProfessor(string _search)                              //그냥 과목검색
-        {
-            ResultSubtject = SubjectList;
-            ResultSubtject = ResultSubtject.Where(s => s.Professor.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-        private List<Subject> ShowTimeOffSubjectOffSearchOnClassNumber(string _search)                              //그냥 과목검색
-        {
-            ResultSubtject = SubjectList;
-            ResultSubtject = ResultSubtject.Where(s => s.ClassNumber.Contains(_search)).ToList();
-            return ResultSubtject;
-        }
-
-
-
-        private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
-        {
-            bool totalAbleToPut = false;
-            int index = DataListView_All.SelectedIndex;
-            int period1 = 0; string day1 = null;
-            int period2 = 0; string day2 = null;
-            int period3 = 0; string day3 = null;
-            int period4 = 0; string day4 = null;
-            int period5 = 0; string day5 = null;
-            int period6 = 0; string day6 = null;
-            int period7 = 0; string day7 = null;
-            int period8 = 0; string day8 = null;
-
-            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
-
-            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
-
-            if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
-            {
-                string[] time = new string[] { ResultSubtject[index].Time1, ResultSubtject[index].Time2, ResultSubtject[index].Time3, ResultSubtject[index].Time4, ResultSubtject[index].Time5, ResultSubtject[index].Time6, ResultSubtject[index].Time7, ResultSubtject[index].Time8 };
-
-                if (time[0] != "")
-                {
-                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
-                    daylist[0] = time[0].Substring(0, 1);
-                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-
-                for (int i = 1; i < 8; i++)
-                {
-                    if (time[i] != "" && totalAbleToPut == true)
-                    {
-                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
-                        daylist[i] = time[i].Substring(0, 1);
-                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
-                        else
-                        {
-                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                            totalAbleToPut = false;
-                        }
-                    }
-                }
-            }
-
-            if (totalAbleToPut == true) //과목을 넣을 수 있다면
-            {
-                UsersSubjectsList.Add(new Subject()
-                {
-                    NO = ResultSubtject[index].NO,
-                    Grade = ResultSubtject[index].Grade,
-                    ClassNumber = ResultSubtject[index].ClassNumber,
-                    ClassName = ResultSubtject[index].ClassName,
-                    CreditCourse = ResultSubtject[index].CreditCourse,
-                    Professor = ResultSubtject[index].Professor,
-                    강의시간 = ResultSubtject[index].강의시간,
-                    Time1 = ResultSubtject[index].Time1,
-                    Time2 = ResultSubtject[index].Time2,
-                    Time3 = ResultSubtject[index].Time3,
-                    Time4 = ResultSubtject[index].Time4,
-                    Time5 = ResultSubtject[index].Time5,
-                    Time6 = ResultSubtject[index].Time6,
-                    Time7 = ResultSubtject[index].Time7,
-                    Time8 = ResultSubtject[index].Time8,
-                }); //과목추가
-                RefreshTimeTable();
-            }
-        }
+        
         private List<string> TimeInList(List<Subject> _UsersSubjectList) //유저가 듣는 시간을 string으로
         {
             List<string> result = new List<string>();
@@ -524,6 +768,50 @@ namespace Client
                     TimeTableDB[_row, _col].professor = null;
                     TimeTableDB[_row, _col].ableToPut = true;
                 }
+        }
+        
+        // 시간표 이미지 저장
+        private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            Size visualSize = new Size(visual.ActualWidth, visual.ActualHeight);
+            visual.Measure(visualSize);
+            visual.Arrange(new Rect(visualSize));
+            bitmap.Render(visual);
+            BitmapFrame frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
+            }
+        }
+
+        void SaveToPng(FrameworkElement visual, string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            SaveUsingEncoder(visual, fileName, encoder);
+        }
+
+        private void SetUserMyGroup()   //MyGroup 불러오고, 화면에 세팅
+        {
+            TextBlock[] myGroupTbk = new TextBlock[] { Group1Name_tbk, Group2Name_tbk };
+            System.Windows.Controls.ListView[] myGroupLst = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst };
+            Grid[] myGroupGrd = new Grid[] { Group1_grd, Group2_grd };
+            GetUserMyGroup();
+            for (int i = 0; i < userMyGroup.Count; i++)
+            {
+                myGroupGrd[i].Visibility = Visibility;
+                myGroupTbk[i].Text = userMyGroup[i].MyGroupName;
+                GetmyGroupClassNumber(userMyGroup[i].MyGroupName);
+                List<Subject> subjectFromMyGroup = new List<Subject>();            //MyGroup에서 가져온 과목들
+                for (int j = 0; j < myGroupClassNumber.Count; j++)
+                {
+                    subjectFromMyGroup.AddRange(subjectList.Where(s => s.ClassNumber.Equals(myGroupClassNumber[j])).ToList());
+                }
+                myGroupLst[i].ItemsSource = subjectFromMyGroup;
+            }
+
         }
 
         private void RefreshTimeTable() //시간표 갱신
@@ -566,9 +854,9 @@ namespace Client
             }
 
             //여기부터는 User의 과목들을 색칠, 2차원 배열에 넣기
-            for (int i = 0; i < UsersSubjectsList.Count(); i++)
+            for (int i = 0; i < usersSubjectsList.Count(); i++)
             {
-                string[] time = new string[] { UsersSubjectsList[i].Time1, UsersSubjectsList[i].Time2, UsersSubjectsList[i].Time3, UsersSubjectsList[i].Time4, UsersSubjectsList[i].Time5, UsersSubjectsList[i].Time6, UsersSubjectsList[i].Time7, UsersSubjectsList[i].Time8 };
+                string[] time = new string[] { usersSubjectsList[i].Time1, usersSubjectsList[i].Time2, usersSubjectsList[i].Time3, usersSubjectsList[i].Time4, usersSubjectsList[i].Time5, usersSubjectsList[i].Time6, usersSubjectsList[i].Time7, usersSubjectsList[i].Time8 };
                 for (int j = 0; j < 8; j++)
                 {
                     if (time[j] != "")
@@ -587,8 +875,8 @@ namespace Client
                         _period -= 1;
 
                         TimeTableDB[_period + 1, _day + 1].ableToPut = false;
-                        TimeTableDB[_period + 1, _day + 1].className = UsersSubjectsList[i].ClassName;
-                        TimeTableDB[_period + 1, _day + 1].professor = UsersSubjectsList[i].Professor;
+                        TimeTableDB[_period + 1, _day + 1].className = usersSubjectsList[i].ClassName;
+                        TimeTableDB[_period + 1, _day + 1].professor = usersSubjectsList[i].Professor;
                         Run className = new Run(TimeTableDB[_period + 1, _day + 1].className + "\n");
                         className.FontSize = 12;
                         className.FontWeight = FontWeights.Bold;
@@ -596,8 +884,7 @@ namespace Client
                         Run professor = new Run(TimeTableDB[_period + 1, _day + 1].professor);
                         professor.FontSize = 10;
                         schedule[_day, _period].Inlines.Add(professor);
-
-                        //UsersSubjectsList[i].NO
+                        
                         BrushConverter bc = new BrushConverter();
                         schedule[_day, _period].Background = (Brush)bc.ConvertFrom(br[i]);
                     }
@@ -605,16 +892,138 @@ namespace Client
 
             } //User의 과목들을 색칠, 2차원 배열에 넣기
         }
+
         private void DeleteSubjectInTimeTable(string _dayAndPeriod)//매개변수 시간에 있는 과목 삭제
         {
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time1 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time2 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time3 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time4 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time5 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time6 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
-            UsersSubjectsList.Remove(UsersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time1 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time2 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time3 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time4 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time5 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time6 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
+            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
+        }
+        
+
+
+
+        private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
+        {
+            if (user.College == "공과대학")
+                SearchEngineer();
+            else if (user.College == "일반대학")
+            {
+
+            }
+            else if (user.College == "건축대학")
+            {
+
+            }
+            else
+                System.Windows.MessageBox.Show("유저 정보 error in search_btn_clic");
+        }
+
+        private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
+        {
+            bool totalAbleToPut = false;
+            int index = DataListView_All.SelectedIndex;
+            int period1 = 0; string day1 = null;
+            int period2 = 0; string day2 = null;
+            int period3 = 0; string day3 = null;
+            int period4 = 0; string day4 = null;
+            int period5 = 0; string day5 = null;
+            int period6 = 0; string day6 = null;
+            int period7 = 0; string day7 = null;
+            int period8 = 0; string day8 = null;
+
+            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
+
+            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
+
+            if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
+            {
+                string[] time = new string[] { resultSubtject[index].Time1, resultSubtject[index].Time2, resultSubtject[index].Time3, resultSubtject[index].Time4, resultSubtject[index].Time5, resultSubtject[index].Time6, resultSubtject[index].Time7, resultSubtject[index].Time8 };
+
+                if (time[0] != "")
+                {
+                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
+                    daylist[0] = time[0].Substring(0, 1);
+                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
+                    else
+                    {
+                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                        totalAbleToPut = false;
+                    }
+                }
+
+                for (int i = 1; i < 8; i++)
+                {
+                    if (time[i] != "" && totalAbleToPut == true)
+                    {
+                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
+                        daylist[i] = time[i].Substring(0, 1);
+                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
+                        else
+                        {
+                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                            totalAbleToPut = false;
+                        }
+                    }
+                }
+            }
+
+            if (totalAbleToPut == true) //과목을 넣을 수 있다면
+            {
+                usersSubjectsList.Add(new Subject()
+                {
+                    NO = resultSubtject[index].NO,
+                    Grade = resultSubtject[index].Grade,
+                    ClassNumber = resultSubtject[index].ClassNumber,
+                    ClassName = resultSubtject[index].ClassName,
+                    CreditCourse = resultSubtject[index].CreditCourse,
+                    Professor = resultSubtject[index].Professor,
+                    강의시간 = resultSubtject[index].강의시간,
+                    Time1 = resultSubtject[index].Time1,
+                    Time2 = resultSubtject[index].Time2,
+                    Time3 = resultSubtject[index].Time3,
+                    Time4 = resultSubtject[index].Time4,
+                    Time5 = resultSubtject[index].Time5,
+                    Time6 = resultSubtject[index].Time6,
+                    Time7 = resultSubtject[index].Time7,
+                    Time8 = resultSubtject[index].Time8,
+                }); //과목추가
+                RefreshTimeTable();
+            }
+        }
+
+        private void Search_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)//엔터키 눌렀을 때
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (user.College == "공과대학")
+                    SearchEngineer();
+                else if (user.College == "일반대학")
+                {
+
+                }
+                else if (user.College == "건축대학")
+                {
+
+                }
+                else
+                    System.Windows.MessageBox.Show("유저 정보 error in search_btn_clic");
+            }
         }
 
         private void Logout_btn_Click(object sender, RoutedEventArgs e)
@@ -668,6 +1077,7 @@ namespace Client
                 schedule[week - 1, period - 1].Visibility = Visibility.Visible;
 
         }
+
         private void Btn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
@@ -700,6 +1110,7 @@ namespace Client
                 schedule[week - 1, period - 1].Visibility = Visibility.Visible;
 
         }
+
         private void MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
 
@@ -742,6 +1153,7 @@ namespace Client
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
 
         }
+
         private void Btn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
@@ -773,6 +1185,7 @@ namespace Client
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
 
         }
+
         private void btn_Click(object sender, RoutedEventArgs e) //x버튼 한번 클릭
         {
             System.Windows.Controls.Button[,] schedule = new System.Windows.Controls.Button[,]
@@ -812,26 +1225,38 @@ namespace Client
                 }
             }
 
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(TimeTableDB[period, week].className + "를 삭제하시겠습니까?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+            DeleteSubject DS = new DeleteSubject(TimeTableDB[period, week].className);
+            DS.Show();
+            //과목을 지울때 새로운 창을 띄워서 하고 싶은데 문제.
+            // MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(TimeTableDB[period, week].className + "를 삭제하시겠습니까?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
             //메세지창 띄우기
-            if (messageBoxResult == MessageBoxResult.Yes)
+            /*if (DS.Result(null))
+               {
+                   DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
+                   RefreshTimeTable(); //새로고침
+               }
+               schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;*/
+
+            /*while (true)
             {
-                DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
-                RefreshTimeTable(); //새로고침
-            }
-            schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
-        }
+                Thread.Sleep(1000);
+                if (DS.Result() == 1)
+                    continue;
+                else if (DS.Result() == 2)
+                    break;
+                else
+                {
+                    DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
+                    RefreshTimeTable(); //새로고침
+                    break;
+                }
+            }*/
 
-        private void Window_Activated(object sender, EventArgs e)
-        {
-            GetUserTimeTable();
-            TableList.ItemsSource = userTimeTable;
-            UserId.Text = App.ID;
-            if (!App.guest)
-                InitUserInfo();
-            else if (App.guest)
-                GuestLogIn();
 
+
+
+           
+            
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -842,10 +1267,10 @@ namespace Client
             TableEdit_txtbox.Text = tableName;
             //GetTimeTableClassNumber(userTimeTalbeNO);
             GetTimeTableClassNumber(userTimeTable[index].TimeTableName);
-            UsersSubjectsList.Clear();
+            usersSubjectsList.Clear();
             for (int i = 0; i < timeTableClassNumber.Count; i++)
             {
-                UsersSubjectsList.Add(SubjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i])).ToList().ElementAt(0));
+                usersSubjectsList.Add(subjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i])).ToList().ElementAt(0));
             }
             RefreshTimeTable();
         }
@@ -871,20 +1296,25 @@ namespace Client
 
         private void normal_DropDownClosed(object sender, EventArgs e)
         {
+            engineer_type_all.Visibility = Visibility.Visible;
+            engineer_type_normal.Visibility = Visibility.Collapsed;
+            engineer_type_mainpoint.Visibility = Visibility.Collapsed;
+            engineer_type_all.Visibility = Visibility.Visible;
+            major_grade.Visibility = Visibility.Collapsed;
             if (user.College == "일반대학")
             {
-                all_general.Visibility = Visibility.Collapsed;
+                all_all.Visibility = Visibility.Collapsed;
                 normal_common.Visibility = Visibility.Collapsed;
                 normal_normal.Visibility = Visibility.Collapsed;
-                if (normal.Text == "모든 교양")
+                if (normal.Text == "전체")
                 {
-                    all_general.Visibility = Visibility.Visible;
+                    all_all.Visibility = Visibility.Visible;
                 }
-                else if (normal.Text == "공통 교양")
+                else if (normal.Text == "공통교양")
                 {
                     normal_common.Visibility = Visibility.Visible;
                 }
-                else if (normal.Text == "일반 교양")
+                else if (normal.Text == "일반교양")
                 {
                     normal_normal.Visibility = Visibility.Visible;
                 }
@@ -894,35 +1324,27 @@ namespace Client
             else
                 System.Windows.MessageBox.Show("일반대학이 아닌데, normal combobox에 접근");
 
-
-            /*
-            else if (user.College == "건축대학")
-            {
-                normal.Visibility = Visibility.Collapsed;
-                engineer.Visibility = Visibility.Collapsed;
-                architecture.Visibility = Visibility.Visible;
-            }
-            */
-
-
         }
 
         private void engineer_DropDownClosed(object sender, EventArgs e)
         {
+            engineer_type_all.Visibility = Visibility.Visible;
+            engineer_type_normal.Visibility = Visibility.Collapsed;
+            engineer_type_mainpoint.Visibility = Visibility.Collapsed;
             if (user.College == "공과대학")
             {
-                all_general.Visibility = Visibility.Collapsed;
+                all_all.Visibility = Visibility.Collapsed;
                 engineer_ABEEK.Visibility = Visibility.Collapsed;
                 engineer_normal.Visibility = Visibility.Collapsed;
-                if (engineer.Text == "모든 교양")
+                if (engineer.Text == "전체")
                 {
-                    all_general.Visibility = Visibility.Visible;
+                    all_all.Visibility = Visibility.Visible;
                 }
                 else if (engineer.Text == "ABEEK 교양")
                 {
                     engineer_ABEEK.Visibility = Visibility.Visible;
                 }
-                else if (engineer.Text == "일반 교양")
+                else if (engineer.Text == "일반교양")
                 {
                     engineer_normal.Visibility = Visibility.Visible;
                 }
@@ -935,12 +1357,10 @@ namespace Client
 
         private void course_DropDownClosed(object sender, EventArgs e)
         {
-            all.Visibility = Visibility.Collapsed;
             normal.Visibility = Visibility.Collapsed;
             engineer.Visibility = Visibility.Collapsed;
             architecture.Visibility = Visibility.Collapsed;
             all_all.Visibility = Visibility.Collapsed;
-            all_general.Visibility = Visibility.Collapsed;
             normal_normal.Visibility = Visibility.Collapsed;
             normal_common.Visibility = Visibility.Collapsed;
             engineer_ABEEK.Visibility = Visibility.Collapsed;
@@ -954,28 +1374,31 @@ namespace Client
             major_architecture.Visibility = Visibility.Collapsed;
             major_law.Visibility = Visibility.Collapsed;
             major_economics.Visibility = Visibility.Collapsed;
+            engineer_type_all.Visibility = Visibility.Visible;
+            engineer_type_normal.Visibility = Visibility.Collapsed;
+            engineer_type_mainpoint.Visibility = Visibility.Collapsed;
 
-            if (course.Text == "모든 과목")
+            if (course.Text == "전체")
             {
-                all.Visibility = Visibility.Visible;
                 all_all.Visibility = Visibility.Visible;
+                engineer_type_all.Visibility = Visibility.Visible;
             }
             else if (course.Text == "교양")
             {
                 if (user.College == "일반대학")
                 {
                     normal.Visibility = Visibility.Visible;
-                    all_general.Visibility = Visibility.Visible;
+                    all_all.Visibility = Visibility.Visible;
                 }
                 else if (user.College == "공과대학")
                 {
                     engineer.Visibility = Visibility.Visible;
-                    all_general.Visibility = Visibility.Visible;
+                    all_all.Visibility = Visibility.Visible;
                 }
                 else if (user.College == "건축대학")
                 {
                     architecture.Visibility = Visibility.Visible;
-                    all_general.Visibility = Visibility.Visible;
+                    all_all.Visibility = Visibility.Visible;
                 }
             }
             else if (course.Text == "전공")
@@ -999,6 +1422,10 @@ namespace Client
             major_architecture.Visibility = Visibility.Collapsed;
             major_law.Visibility = Visibility.Collapsed;
             major_economics.Visibility = Visibility.Collapsed;
+            engineer_type_normal.Visibility = Visibility.Collapsed;
+            engineer_type_mainpoint.Visibility = Visibility.Collapsed;
+            engineer_type_all.Visibility = Visibility.Collapsed;
+            major_grade.Visibility = Visibility.Visible;
             if (major.Text == "공과대학")
             {
                 major_engineer.Visibility = Visibility.Visible;
@@ -1153,33 +1580,29 @@ namespace Client
 
         }
 
-        // 시간표 이미지 저장
-        private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
-        {
-            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)visual.ActualWidth, (int)visual.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            Size visualSize = new Size(visual.ActualWidth, visual.ActualHeight);
-            visual.Measure(visualSize);
-            visual.Arrange(new Rect(visualSize));
-            bitmap.Render(visual);
-            BitmapFrame frame = BitmapFrame.Create(bitmap);
-            encoder.Frames.Add(frame);
-
-            using (var stream = File.Create(fileName))
-            {
-                encoder.Save(stream);
-            }
-        }
-
-        void SaveToPng(FrameworkElement visual, string fileName)
-        {
-            var encoder = new PngBitmapEncoder();
-            SaveUsingEncoder(visual, fileName, encoder);
-        }
-
         private void Save_Image_Click(object sender, RoutedEventArgs e)
         {
             SaveToPng(TimeTable, "image.png");
             RenderTargetBitmap bitmap = new RenderTargetBitmap(684, 353, 96, 96, PixelFormats.Pbgra32);
+        }
+
+        private void engineer_ABEEK_DropDownClosed(object sender, EventArgs e)
+        {
+            engineer_type_all.Visibility = Visibility.Collapsed;
+            engineer_type_normal.Visibility = Visibility.Collapsed;
+            engineer_type_mainpoint.Visibility = Visibility.Collapsed;
+            if (engineer_ABEEK.Text == "일반교양")
+            {
+                engineer_type_normal.Visibility = Visibility.Visible;
+            }
+            else if(engineer_ABEEK.Text == "핵심교양")
+            {
+                engineer_type_mainpoint.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                engineer_type_all.Visibility = Visibility.Visible;
+            }
         }
     }
 }

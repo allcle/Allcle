@@ -7,8 +7,9 @@ namespace Server.Models
 {
     public class UserMyGroup
     {
-        public int NO { get; set; }
         public string ID { get; set; }
         public string MyGroupName { get; set; }
+        public string SaveTime { get; set; }
+        public string EditTime { get; set; }
     }
 }

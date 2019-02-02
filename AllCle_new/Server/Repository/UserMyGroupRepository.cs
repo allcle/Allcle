@@ -27,7 +27,7 @@ namespace Server.Repository
 
         public List<UserMyGroup> GetUserMyGroups(string _userId)
         {
-            string sql = "Select * From UserMyGroup Where ID = '" + _userId + "'";
+            string sql = "Select * From UserMyGroup Where ID = '" + _userId + "' Order by SaveTime";
             return this.db.Query<UserMyGroup>(sql).ToList();
         }
 

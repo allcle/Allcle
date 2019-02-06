@@ -496,7 +496,7 @@
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <ComboBox x:Name="LunchFrom" Grid.Column="0" SelectedIndex="3">
+                        <ComboBox x:Name="LunchFrom" Grid.Column="0" SelectedIndex="0">
                             <ComboBoxItem>선택안함</ComboBoxItem>
                             <ComboBoxItem>오전 9시</ComboBoxItem>
                             <ComboBoxItem>오전 10시</ComboBoxItem>
@@ -539,22 +539,22 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_mon" Grid.Column="0" Content="월" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_mon" Grid.Column="0" Content="월" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_tue" Content="화" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_tue" Content="화" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_wed" Content="수" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_wed" Content="수" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_thu" Content="목" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_thu" Content="목" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_fri" Content="금" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_fri" Content="금" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <RadioButton Name="rdo_sat" Content="토" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_sat" Content="토" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1228,7 +1228,7 @@
                         </Span>
                     </TextBlock>
                 </Border>
-                <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <Grid Grid.Row ="1" ScrollViewer.HorizontalScrollBarVisibility ="Hidden">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="150"/>
@@ -1238,8 +1238,10 @@
                             <RowDefinition Height="150"/>
                             <RowDefinition Height="150"/>
                             <RowDefinition Height="150"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
-                        <Grid Name="Group1_grd" Grid.Row="0" Background="Yellow" Visibility="Collapsed">
+                        <Grid Name="Group1_grd" Grid.Row="0" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition />
@@ -1265,7 +1267,7 @@
                                 </ListView.View>
                             </ListView>
                         </Grid>
-                        <Grid Name="Group2_grd" Grid.Row="1" Visibility="Collapsed">
+                        <Grid Name="Group2_grd" Grid.Row="1" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition />
@@ -1291,8 +1293,191 @@
                                 </ListView.View>
                             </ListView>
                         </Grid>
+                        <Grid Name="Group3_grd" Grid.Row="2" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group3Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group3_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group4_grd" Grid.Row="3" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group4Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group4_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group5_grd" Grid.Row="4" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group5Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group5_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group6_grd" Grid.Row="5" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group6Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group6_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group7_grd" Grid.Row="6" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group7Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group7_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group8_grd" Grid.Row="7" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group8Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group8_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        <Grid Name="Group9_grd" Grid.Row="8" Background="gray" Margin="0 0 0 10" Visibility="Collapsed" MouseDown="Group_grd_MouseDown">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0">
+                                <TextBlock Name="Group9Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
+                            </Border>
+                            <ListView Name="Group9_lst" Grid.Row="1" ItemsSource="{Binding List}" Margin="8 0 8 8" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility ="Hidden" >
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassName}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding ClassNumber}" Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding 강의시간}"  Width="80"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding LectureRoom}"  Width="60"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Professor}"  Width="40"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding CreditCourse}" Width="30"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
                     </Grid>
                 </ScrollViewer>
+                
             </Grid>
 
         </Grid>

@@ -20,33 +20,27 @@ namespace Client
     public partial class DeleteSubject : Window
     {
         private string subjectName;
-        private int deleteAsk;
         public DeleteSubject()
         {
             InitializeComponent();
-            deleteAsk = 1;
         }
         public DeleteSubject(string subjectName)
         {
             InitializeComponent();
             this.subjectName = subjectName;
             SubjectName_Tbk.Text ="'"+ subjectName + "' 과목을";
-            deleteAsk = 1;
         }
-        public int Result()
-        {
-            return deleteAsk;
-        }
+       
 
         public  void Cancel_btn_Click(object sender, RoutedEventArgs e)
         {
-            deleteAsk = 2;
+            this.DialogResult = false;
             this.Hide();
         }
 
         public void Confirm_btn_Click(object sender, RoutedEventArgs e)
         {
-            deleteAsk = 3;
+            this.DialogResult = true;
             this.Hide();
         }
     }

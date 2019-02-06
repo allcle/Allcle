@@ -59,6 +59,7 @@ namespace Client
         bool myGroup_btn;           //마이그룹 활성화
         string tableName = "";      //현재 테이블 이름
         int userTimeTalbeNO = 0;    //유저 타임테이블
+        int groupNum = 0;
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -157,7 +158,7 @@ namespace Client
             UserAdmissionYear.Text = "Guest";
             UserMajor.Text = "Guest";
         }
-        private List<Subject> SearchByWord(List<Subject> subjects)
+        private List<Subject> SearchByWord(List<Subject> subjects)//검색함수
         {
             List<Subject> tempSubjects = new List<Subject>();
             tempSubjects = subjects;
@@ -168,7 +169,7 @@ namespace Client
                 tempSubjects = tempSubjects.Where(s => s.ClassName.Contains(_word) || s.Professor.Contains(_word) || s.ClassNumber.Contains(_word)).ToList();
             return tempSubjects;
         }
-        private List<Subject> SearchByLunch(List<Subject> subjects)
+        private List<Subject> SearchByLunch(List<Subject> subjects)//점심시간
         {
             List<Subject> tempSubjects = new List<Subject>();
             tempSubjects = subjects;
@@ -202,7 +203,7 @@ namespace Client
             else if (from == "오후 8시")
                 fromToInt = 12;
             else
-                fromToInt = 13;
+                fromToInt = -1;
 
             if (to == "오전 9시")
                 toToInt = 1;
@@ -233,9 +234,8 @@ namespace Client
                 return tempSubjects;
             else
             {
-                if (fromToInt == 13)
-                    return tempSubjects;
-                if (toToInt < fromToInt)
+                Console.WriteLine(fromToInt + " ~ " + toToInt);
+                if (toToInt <= fromToInt)
                 {
                     System.Windows.MessageBox.Show("숫자를 잘못설정하였습니다");
                     return tempSubjects;
@@ -246,17 +246,78 @@ namespace Client
                     {
                         for (int j = 0; j < 8; j++)
                         {
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("월" + (fromToInt + i).ToString())).ToList();
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("화" + (fromToInt + i).ToString())).ToList();
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("수" + (fromToInt + i).ToString())).ToList();
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("목" + (fromToInt + i).ToString())).ToList();
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("금" + (fromToInt + i).ToString())).ToList();
-                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("토" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("월" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("화" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("수" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("목" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("금" + (fromToInt + i).ToString())).ToList();
+                            tempSubjects = tempSubjects.Where(s => !s.Times[j].Equals("토" + (fromToInt + i).ToString())).ToList();
                         }
                     }
                 }
                 return tempSubjects;
             }
+        }
+        private List<Subject> SearchByDay(List<Subject> subjects)//공강만들기
+        {
+            List<Subject> tempSubjects = new List<Subject>();
+            tempSubjects = subjects;
+            if (rdo_mon.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)                    
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("월" + i.ToString())).ToList();                    
+            }
+            if (rdo_tue.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("화" + i.ToString())).ToList();
+            }
+            if (rdo_wed.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("수" + i.ToString())).ToList();
+            }
+            if (rdo_thu.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("목" + i.ToString())).ToList();
+            }
+            if (rdo_fri.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("금" + i.ToString())).ToList();
+            }
+            if (rdo_sat.IsChecked == true)
+            {
+                for (int j = 0; j < 8; j++)
+                    for (int i = 1; i <= 13; i++)
+                        tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains("토" + i.ToString())).ToList();
+            }
+           
+            return tempSubjects;
+
+        }
+        private List<Subject> SearchByEmpty(List<Subject> subjects)//빈시간만 적용
+        {
+            
+            List<Subject> tempSubjects = new List<Subject>();
+            tempSubjects = subjects;
+            if (TimeOp_cbx.Text == "전체 시간")
+                return tempSubjects;
+            List<string> tempStrings = new List<string>();
+            tempStrings = TimeInList(usersSubjectsList);
+            for (int i = 0; i < tempStrings.Count; i++)
+            {
+                Console.WriteLine(tempStrings[i] + "  ");
+                for (int j = 0; j < 8; j++)
+                    tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains(tempStrings[i])).ToList();
+            }
+            return tempSubjects;
         }
         private void SearchEngNormal_All()  //공대 교양 전체 찾기
         {
@@ -285,6 +346,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchABEEKType(string _type)  //공대 아빅에서 MSC과학같은거 찾기
@@ -297,6 +361,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchABEEKNormal(string _normal)  //공대 아빅 드래곤볼 분야 찾기
@@ -309,6 +376,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchEngNormalAll()
@@ -321,6 +391,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchEngNormal(string _normal)    //공대 일반교양에서 분야
@@ -333,6 +406,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         
@@ -349,6 +425,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);//이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchMajor(List<string> _major)
@@ -364,6 +443,9 @@ namespace Client
             }
             tempSubjects = SearchByLunch(tempSubjects); //점심시간 제외
             tempSubjects = SearchByWord(tempSubjects);  //이런곳에 검색함수 넣으면 됨 tempsubject
+            tempSubjects = SearchByDay(tempSubjects);   //공강만들기
+            tempSubjects = SearchByEmpty(tempSubjects); //빈시간만 적용
+            resultSubtject = tempSubjects;
             DataListView_All.ItemsSource = tempSubjects;
         }
         private void SearchMajor()
@@ -713,6 +795,7 @@ namespace Client
             string Unicode = Encoding.UTF8.GetString(json);
             myGroupClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
         }
+
         private void GetEngineerABEEK()
         {
             url = urlABEEK;
@@ -795,11 +878,11 @@ namespace Client
 
         private void SetUserMyGroup()   //MyGroup 불러오고, 화면에 세팅
         {
-            TextBlock[] myGroupTbk = new TextBlock[] { Group1Name_tbk, Group2Name_tbk };
-            System.Windows.Controls.ListView[] myGroupLst = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst };
-            Grid[] myGroupGrd = new Grid[] { Group1_grd, Group2_grd };
+            TextBlock[] myGroupTbk = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk,  };
+            System.Windows.Controls.ListView[] myGroupLst = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst, Group3_lst, Group4_lst, Group5_lst, Group6_lst, Group7_lst, Group8_lst, Group9_lst };
+            Grid[] myGroupGrd = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
             GetUserMyGroup();
-            for (int i = 0; i < userMyGroup.Count; i++)
+            for (int i = 0; i < Math.Min(userMyGroup.Count,9); i++)
             {
                 myGroupGrd[i].Visibility = Visibility;
                 myGroupTbk[i].Text = userMyGroup[i].MyGroupName;
@@ -903,8 +986,90 @@ namespace Client
             usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time6 == _dayAndPeriod));
             usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
             usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
-        }
+        }  
         
+        private void AddSubjectToTimeTable()
+        {
+            bool totalAbleToPut = false;
+            int index = DataListView_All.SelectedIndex;
+            int period1 = 0; string day1 = null;
+            int period2 = 0; string day2 = null;
+            int period3 = 0; string day3 = null;
+            int period4 = 0; string day4 = null;
+            int period5 = 0; string day5 = null;
+            int period6 = 0; string day6 = null;
+            int period7 = 0; string day7 = null;
+            int period8 = 0; string day8 = null;
+
+            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
+
+            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
+
+            if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
+            {
+                string[] time = new string[] { resultSubtject[index].Time1, resultSubtject[index].Time2, resultSubtject[index].Time3, resultSubtject[index].Time4, resultSubtject[index].Time5, resultSubtject[index].Time6, resultSubtject[index].Time7, resultSubtject[index].Time8 };
+
+                if (time[0] != "")
+                {
+                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
+                    daylist[0] = time[0].Substring(0, 1);
+                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
+                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
+                    else
+                    {
+                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                        totalAbleToPut = false;
+                    }
+                }
+
+                for (int i = 1; i < 8; i++)
+                {
+                    if (time[i] != "" && totalAbleToPut == true)
+                    {
+                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
+                        daylist[i] = time[i].Substring(0, 1);
+                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
+                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
+                        else
+                        {
+                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                            totalAbleToPut = false;
+                        }
+                    }
+                }
+            }
+
+            if (totalAbleToPut == true) //과목을 넣을 수 있다면
+            {
+                usersSubjectsList.Add(new Subject()
+                {
+                    NO = resultSubtject[index].NO,
+                    Grade = resultSubtject[index].Grade,
+                    ClassNumber = resultSubtject[index].ClassNumber,
+                    ClassName = resultSubtject[index].ClassName,
+                    CreditCourse = resultSubtject[index].CreditCourse,
+                    Professor = resultSubtject[index].Professor,
+                    강의시간 = resultSubtject[index].강의시간,
+                    Time1 = resultSubtject[index].Time1,
+                    Time2 = resultSubtject[index].Time2,
+                    Time3 = resultSubtject[index].Time3,
+                    Time4 = resultSubtject[index].Time4,
+                    Time5 = resultSubtject[index].Time5,
+                    Time6 = resultSubtject[index].Time6,
+                    Time7 = resultSubtject[index].Time7,
+                    Time8 = resultSubtject[index].Time8,
+                }); //과목추가
+                RefreshTimeTable();
+            }
+        }
 
 
 
@@ -926,6 +1091,13 @@ namespace Client
 
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
+            if (myGroup_btn)
+            {
+
+                return;
+            }
+
+
             bool totalAbleToPut = false;
             int index = DataListView_All.SelectedIndex;
             int period1 = 0; string day1 = null;
@@ -1226,37 +1398,13 @@ namespace Client
             }
 
             DeleteSubject DS = new DeleteSubject(TimeTableDB[period, week].className);
-            DS.Show();
-            //과목을 지울때 새로운 창을 띄워서 하고 싶은데 문제.
-            // MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(TimeTableDB[period, week].className + "를 삭제하시겠습니까?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
-            //메세지창 띄우기
-            /*if (DS.Result(null))
-               {
-                   DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
-                   RefreshTimeTable(); //새로고침
-               }
-               schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;*/
-
-            /*while (true)
+            bool? diagResult = DS.ShowDialog();
+            if (diagResult == true)
             {
-                Thread.Sleep(1000);
-                if (DS.Result() == 1)
-                    continue;
-                else if (DS.Result() == 2)
-                    break;
-                else
-                {
-                    DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
-                    RefreshTimeTable(); //새로고침
-                    break;
-                }
-            }*/
-
-
-
-
-           
-            
+                DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
+                RefreshTimeTable(); //새로고침
+            }
+            schedule[week - 1, period - 1].Visibility = Visibility.Collapsed; 
         }
 
         private void TableList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1604,5 +1752,23 @@ namespace Client
                 engineer_type_all.Visibility = Visibility.Visible;
             }
         }
+
+        private void Group_grd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Grid[] grids = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
+            var panel = sender as Grid;
+            for (int i = 0; i < 9; i++) 
+            {
+                grids[i].Background = Brushes.Gray;
+                if (grids[i].Name == panel.Name)
+                {
+                    grids[i].Background = Brushes.Yellow;
+                    groupNum = i + 1;
+                }
+            }
+            
+        }
+
+
     }
 }

@@ -37,7 +37,7 @@ namespace Server.Repository
 
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (ID, TimeTableClassNumber, SaveTime, EditTime) Values (@ID, @TimeTableClassNumber, @SaveTime, @EditTime)";
+            string sql = "Insert Into UserTimeTable (ID, TimeTableClassNumber, ClassNumber) Values (@ID, @TimeTableClassNumber, @ClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
         

@@ -30,5 +30,12 @@ namespace Server.Repository
             string sql = "Select * From SubjectTable$ Order by NO Asc";
             return this.db.Query<Subject>(sql).ToList();
         }
+
+        //.. 여기부터 실험중
+        public List<UserTimeTable> SaveSubject(string classname, string classTeach, string classtime)
+        {
+            string sql = "Select classnumber, 학수번호(대표) from SubjectTable1 Where ID = '" + classname + "' and TimeTableName = '" + classTeach + "' and TimeTableName = '" + classTeach + "'";
+            return this.db.Query<UserTimeTable>(sql).ToList();
+        }
     }
 }

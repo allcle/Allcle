@@ -1686,6 +1686,52 @@ namespace Client
 
             // 리스트 위에 있는 과목들도 저장해야됨
             // 얘네는 TimeTableClass DB에 저장해야됨
+            Save_Schedule_Subject_Click();
+        }
+
+        private void Save_Schedule_Subject_Click()
+        {
+            // 시간표 이름에 맞춰서 UI에 등록된 과목들 순차적으로 저장
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("자 이제 과목을 저장해보자..!!!");
+            
+
+
+            TextBlock[,] _schedule = new TextBlock[,]
+            {
+                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
+                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
+                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
+                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
+                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
+                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
+            };
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j=0; j<13; j++)
+                {
+                    if (_schedule[i, j].Text != "")
+                    {
+                        // 강의시간, 강좌명, 강사 나오니까 이걸로 ClassNumber select
+                        String[] str = _schedule[i, j].Text.Split('\n');
+                        String classname = str[0];
+                        String classTeach = str[1];
+                        String classtime = _schedule[i, j].Text;
+                        // ClassNumber select
+
+                        // TimeTableClassNumber Table에 해당 ClassNumber 있는지 확인
+
+                        // 없으면, 삽입 있으면 스킵
+                    }
+                }
+            }
+
+
+            // 강의시간, 강좌명, 강사 이용해서 학수번호 출력
+            // 얻은 학수번호를 밑의 ClassNumber 변수에 저장
+
+            //String url = urlTimeTableClassNumber;
+            //String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + ClassNumber + "\"}";
+            //connect(url, NewpostData1, "POST");
         }
 
         private void connect(String url, String NewpostData, String Method)

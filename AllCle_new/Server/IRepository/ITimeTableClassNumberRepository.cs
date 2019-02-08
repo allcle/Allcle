@@ -10,6 +10,8 @@ namespace Server.IRepository
     {
         List<string> GetTimeTableClassNumbers(string _id, string TimeTableName);
         void PostTimeTable(TimeTableClassNumber _timeTableClassNumber);
+        bool GetClassNumber(string ID, string TimeTableName, string ClassNumber);
+
         //void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber);
     }
 }

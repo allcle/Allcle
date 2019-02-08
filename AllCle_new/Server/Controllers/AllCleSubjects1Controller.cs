@@ -32,5 +32,11 @@ namespace Server.Controllers
         {
             return _repo.GetSubjects();
         }
+        // GET api/<controller>/5
+        [HttpGet("{classname}/{classTeach}/{classtime}")]
+        public IEnumerable<Subject> GetClassNumber(string classname, string classTeach, string classtime)
+        {
+            return _repo.GetClassNumber(classname, classTeach, classtime);
+        }
     }
 }

@@ -44,6 +44,12 @@ namespace Server.Controllers
             _repo.PostTimeTable(_timeTalbeClassNumber);
         }
 
+        [HttpGet("{ID}/{TimeTableName}/{ClassNumber}")]
+        public bool GetClassNumber(string ID, string TimeTableName, string ClassNumber)
+        {
+            return _repo.GetClassNumber(ID, TimeTableName, ClassNumber);
+        }
+
         // PUT api/<controller>/5
         /*[HttpPut("{_id}/timetable/{_timeTableName}")]
         public void Put([FromBody]UpdateUserIdTimeTable _timeTableClassNumber)

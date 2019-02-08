@@ -1692,10 +1692,6 @@ namespace Client
         private void Save_Schedule_Subject_Click()
         {
             // 시간표 이름에 맞춰서 UI에 등록된 과목들 순차적으로 저장
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("자 이제 과목을 저장해보자..!!!");
-            
-
-
             TextBlock[,] _schedule = new TextBlock[,]
             {
                 {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
@@ -1705,6 +1701,15 @@ namespace Client
                 {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
                 {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
             };
+            string[,] day_time = new string[,]
+             {
+                {"월1", "월2", "월3", "월4", "월5", "월6", "월7", "월8", "월9", "월10", "월11", "월12", "월13"},
+                {"화1", "화2", "화3", "화4", "화5", "화6", "화7", "화8", "화9", "화10", "화11", "화12", "화13"},
+                {"수1", "수2", "수3", "수4", "수5", "수6", "수7", "수8", "수9", "수10", "수11", "수12", "수13"},
+                {"목1", "목2", "목3", "목4", "목5", "목6", "목7", "목8", "목9", "목10", "목11", "목12", "목13"},
+                {"금1", "금2", "금3", "금4", "금5", "금6", "금7", "금8", "금9", "금10", "금11", "금12", "금13"},
+                {"토1", "토2", "토3", "토4", "토5", "토6", "토7", "토8", "토9", "토10", "토11", "토12", "토13"}
+             };
             for (int i = 0; i < 6; i++)
             {
                 for (int j=0; j<13; j++)
@@ -1714,13 +1719,49 @@ namespace Client
                         // 강의시간, 강좌명, 강사 나오니까 이걸로 ClassNumber select
                         String[] str = _schedule[i, j].Text.Split('\n');
                         String classname = str[0];
-                        String classTeach = str[1];
-                        String classtime = _schedule[i, j].Text;
-                        // ClassNumber select
+                        String temp_classTeach = str[1];
+                        String classTeach = "";
+                        String classtime = day_time[i, j];
+
+                        String[] parsing_classTeach = temp_classTeach.Split(' ');
+                        for(int k = 0; k<parsing_classTeach.Length; k++)
+                        {
+                            classTeach = classTeach + "_" + parsing_classTeach[k];
+                        }
+
+                        string ClassNumber_url = urlBase + "/" + classname + "/" + classTeach + "/" + classtime;
+                        var json = new WebClient().DownloadData(ClassNumber_url);
+                        string temp_classnumber = Encoding.UTF8.GetString(json);
+                        string[] temp = temp_classnumber.Split('"');
+                        string classnumber = temp[7];
 
                         // TimeTableClassNumber Table에 해당 ClassNumber 있는지 확인
-
-                        // 없으면, 삽입 있으면 스킵
+                        string CheckClassNumber = urlTimeTableClassNumber + "/" + App.ID + "/" + TableEdit_txtbox.Text + "/" + classnumber;
+                        var json2 = new WebClient().DownloadData(CheckClassNumber);
+                        string Unicode = Encoding.UTF8.GetString(json2);
+                        if (Unicode == "true")
+                            // 이미 해당 classnumber를 저장한 경우
+                            continue;
+                        else
+                        {
+                            // 해당 classnumber가 없는 경우 삽입.
+                            // 여기서 에러 발생. 현재 저장만 하면 된다..
+                            string insert_ClassNumber_url = urlTimeTableClassNumber;
+                            String ClassNumber_postData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableClassNumber\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + classnumber + "\"}";
+                            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(insert_ClassNumber_url);// 인코딩 UTF-8
+                            byte[] sendData = UTF8Encoding.UTF8.GetBytes(ClassNumber_postData);
+                            httpWebRequest.ContentType = "application/json; charset=UTF-8";
+                            httpWebRequest.Method = "POST";
+                            httpWebRequest.ContentLength = sendData.Length;
+                            Stream requestStream = httpWebRequest.GetRequestStream();
+                            requestStream.Write(sendData, 0, sendData.Length);
+                            requestStream.Close();
+                            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                            streamReader.ReadToEnd();
+                            streamReader.Close();
+                            httpWebResponse.Close();
+                        }
                     }
                 }
             }
@@ -1815,6 +1856,6 @@ namespace Client
             
         }
 
-
+        // 시간표 정보(이름, 수강 과목 등) 수정 시 On update cascade해놨으니까 UserTimeTable만 업데이트하고, TimeTableClassNumber는 바로 insert하면 된다.
     }
 }

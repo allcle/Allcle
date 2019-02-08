@@ -40,7 +40,17 @@ namespace Server.Repository
             string sql = "Insert Into UserTimeTable (ID, TimeTableClassNumber, ClassNumber) Values (@ID, @TimeTableClassNumber, @ClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
-        
+
+        public bool GetClassNumber(string ID, string TimeTableName, string ClassNumber)
+        {
+            string sql = "Select * From TimeTableClassNumber Where Id ='" + ID + "' and TimeTableName ='" + TimeTableName + "' and ClassNumber = '" + ClassNumber + "'";
+            int num = this.db.Query<User>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
+        }
+
         /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)
         {
             string sql = "UPDATE TimeTableClassNumber SET TimeTableName = '" + _timeTableClassNumber.TimeTableName + "' WHERE ID = '" + _timeTableClassNumber.ID + "' and TimeTableName = N'" + _timeTableClassNumber.OldTimeTableName + "'";

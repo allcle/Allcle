@@ -195,6 +195,7 @@ namespace Client
                             }
                             catch
                             {
+                                PW_Box.Password = "";
                                 this.Close();
                             }
                         }

@@ -1735,32 +1735,25 @@ namespace Client
                         string[] temp = temp_classnumber.Split('"');
                         string classnumber = temp[7];
 
+                        /*
+                         * 현재로서는 불필요한 부분. 이 부분을 예외처리로 대신함
                         // TimeTableClassNumber Table에 해당 ClassNumber 있는지 확인
                         string CheckClassNumber = urlTimeTableClassNumber + "/" + App.ID + "/" + TableEdit_txtbox.Text + "/" + classnumber;
-                        var json2 = new WebClient().DownloadData(CheckClassNumber);
-                        string Unicode = Encoding.UTF8.GetString(json2);
-                        if (Unicode == "true")
-                            // 이미 해당 classnumber를 저장한 경우
-                            continue;
-                        else
+                        var Check_ClassNumber_json = new WebClient().DownloadData(CheckClassNumber);
+                        string Check_ClassNumber_Unicode = Encoding.UTF8.GetString(Check_ClassNumber_json);
+                        */
+
+                        try
                         {
                             // 해당 classnumber가 없는 경우 삽입.
                             // 여기서 에러 발생. 현재 저장만 하면 된다..
                             string insert_ClassNumber_url = urlTimeTableClassNumber;
-                            String ClassNumber_postData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableClassNumber\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + classnumber + "\"}";
-                            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(insert_ClassNumber_url);// 인코딩 UTF-8
-                            byte[] sendData = UTF8Encoding.UTF8.GetBytes(ClassNumber_postData);
-                            httpWebRequest.ContentType = "application/json; charset=UTF-8";
-                            httpWebRequest.Method = "POST";
-                            httpWebRequest.ContentLength = sendData.Length;
-                            Stream requestStream = httpWebRequest.GetRequestStream();
-                            requestStream.Write(sendData, 0, sendData.Length);
-                            requestStream.Close();
-                            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-                            streamReader.ReadToEnd();
-                            streamReader.Close();
-                            httpWebResponse.Close();
+                            String ClassNumber_postData = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + classnumber + "\"}";
+                            connect(insert_ClassNumber_url, ClassNumber_postData, "POST");
+                        }
+                        catch
+                        {
+                            // 이미 데이터가 존재하는 경우
                         }
                     }
                 }

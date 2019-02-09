@@ -1,5 +1,5 @@
-C:\Users\한인수\Desktop\AllCle_new\Server
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Server
 --output-path=obj\Release\netcoreapp2.0\
 --application-name=Server
---content-root=C:\Users\한인수\Desktop\AllCle_new\Server
+--content-root=C:\Users\한인수\Desktop\Allcle\AllCle_new\Server
 --file=

@@ -13304,11 +13304,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\한인수\\Desktop\\AllCle_new\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\한인수\\Desktop\\Allcle\\AllCle_new\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\한인수\\Desktop\\AllCle_new\\Server\\Server.csproj",
+      "projectPath": "C:\\Users\\한인수\\Desktop\\Allcle\\AllCle_new\\Server\\Server.csproj",
       "packagesPath": "C:\\Users\\한인수\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\한인수\\Desktop\\AllCle_new\\Server\\obj\\",
+      "outputPath": "C:\\Users\\한인수\\Desktop\\Allcle\\AllCle_new\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

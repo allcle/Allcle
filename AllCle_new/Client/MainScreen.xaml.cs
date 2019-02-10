@@ -1411,6 +1411,7 @@ namespace Client
         {
             int index = TableList.SelectedIndex;
             tableName = userTimeTable[index].TimeTableName;
+            Show_Subject(tableName);
 //            userTimeTalbeNO = userTimeTable[index].NO;
             TableEdit_txtbox.Text = tableName;
             //GetTimeTableClassNumber(userTimeTalbeNO);
@@ -1421,6 +1422,45 @@ namespace Client
                 usersSubjectsList.Add(subjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i])).ToList().ElementAt(0));
             }
             RefreshTimeTable();
+        }
+
+        private void Show_Subject(string tableName)
+        {
+            // 해당 테이블이름, 아이디에 해당하는 내용 출력
+            // 서버에서 데이터 가져오고
+            string get_classnumber_url = urlTimeTableClassNumber + "/" + App.ID + "/" + tableName;
+            System.Windows.MessageBox.Show(get_classnumber_url);
+            var json = new WebClient().DownloadData(get_classnumber_url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            System.Windows.MessageBox.Show(Unicode);
+
+            // 시간표 UI 한번 초기화 하고
+            // InitDB();
+
+            // 서버에서 가져온 내용 출력
+            // 학수번호 갯수만큼 반복하면서
+            // 학수번호로 sql 때려서 저 정보들 가져와서 넣기
+            /*
+            usersSubjectsList.Add(new Subject()
+            {
+                NO = resultSubtject[index].NO,
+                Grade = resultSubtject[index].Grade,
+                ClassNumber = resultSubtject[index].ClassNumber,
+                ClassName = resultSubtject[index].ClassName,
+                CreditCourse = resultSubtject[index].CreditCourse,
+                Professor = resultSubtject[index].Professor,
+                강의시간 = resultSubtject[index].강의시간,
+                Time1 = resultSubtject[index].Time1,
+                Time2 = resultSubtject[index].Time2,
+                Time3 = resultSubtject[index].Time3,
+                Time4 = resultSubtject[index].Time4,
+                Time5 = resultSubtject[index].Time5,
+                Time6 = resultSubtject[index].Time6,
+                Time7 = resultSubtject[index].Time7,
+                Time8 = resultSubtject[index].Time8,
+            }); //과목추가
+            RefreshTimeTable();
+            */
         }
 
         private void tab_Click(object sender, RoutedEventArgs e)

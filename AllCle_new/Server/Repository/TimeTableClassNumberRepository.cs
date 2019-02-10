@@ -34,7 +34,6 @@ namespace Server.Repository
             return db.Query<string>(sql).ToList();
         }
 
-
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
             string sql = "Insert Into TimeTableClassNumber (ID, TimeTableName, ClassNumber) Values (@ID, @TimeTableName, @ClassNumber)";
@@ -49,6 +48,12 @@ namespace Server.Repository
                 return true;
             else
                 return false;
+        }
+
+        public List<TimeTableClassNumber> GetClassNumber2(string ID, string TimeTableName)
+        {
+            string sql = "Select ClassNumber From TimeTableClassNumber Where ID = '" + ID + "' and TimeTableName ='" + TimeTableName + "'";
+            return this.db.Query<TimeTableClassNumber>(sql).ToList();
         }
 
         /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)

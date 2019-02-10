@@ -34,13 +34,28 @@ namespace Server.Repository
             return db.Query<string>(sql).ToList();
         }
 
-
         public void PostTimeTable(TimeTableClassNumber _timeTableClassNumber)
         {
-            string sql = "Insert Into UserTimeTable (ID, TimeTableClassNumber, SaveTime, EditTime) Values (@ID, @TimeTableClassNumber, @SaveTime, @EditTime)";
+            string sql = "Insert Into TimeTableClassNumber (ID, TimeTableName, ClassNumber) Values (@ID, @TimeTableName, @ClassNumber)";
             db.Execute(sql, _timeTableClassNumber);
         }
-        
+
+        public bool GetClassNumber(string ID, string TimeTableName, string ClassNumber)
+        {
+            string sql = "Select * From TimeTableClassNumber Where Id ='" + ID + "' and TimeTableName ='" + TimeTableName + "' and ClassNumber = '" + ClassNumber + "'";
+            int num = this.db.Query<User>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
+        }
+
+        public List<TimeTableClassNumber> GetClassNumber2(string ID, string TimeTableName)
+        {
+            string sql = "Select ClassNumber From TimeTableClassNumber Where ID = '" + ID + "' and TimeTableName ='" + TimeTableName + "'";
+            return this.db.Query<TimeTableClassNumber>(sql).ToList();
+        }
+
         /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)
         {
             string sql = "UPDATE TimeTableClassNumber SET TimeTableName = '" + _timeTableClassNumber.TimeTableName + "' WHERE ID = '" + _timeTableClassNumber.ID + "' and TimeTableName = N'" + _timeTableClassNumber.OldTimeTableName + "'";

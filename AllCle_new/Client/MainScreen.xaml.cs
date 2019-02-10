@@ -1411,6 +1411,7 @@ namespace Client
         {
             int index = TableList.SelectedIndex;
             tableName = userTimeTable[index].TimeTableName;
+            Show_Subject(tableName);
 //            userTimeTalbeNO = userTimeTable[index].NO;
             TableEdit_txtbox.Text = tableName;
             //GetTimeTableClassNumber(userTimeTalbeNO);
@@ -1421,6 +1422,45 @@ namespace Client
                 usersSubjectsList.Add(subjectList.Where(s => s.ClassNumber.Contains(timeTableClassNumber[i])).ToList().ElementAt(0));
             }
             RefreshTimeTable();
+        }
+
+        private void Show_Subject(string tableName)
+        {
+            // 해당 테이블이름, 아이디에 해당하는 내용 출력
+            // 서버에서 데이터 가져오고
+            string get_classnumber_url = urlTimeTableClassNumber + "/" + App.ID + "/" + tableName;
+            System.Windows.MessageBox.Show(get_classnumber_url);
+            var json = new WebClient().DownloadData(get_classnumber_url);
+            string Unicode = Encoding.UTF8.GetString(json);
+            System.Windows.MessageBox.Show(Unicode);
+
+            // 시간표 UI 한번 초기화 하고
+            // InitDB();
+
+            // 서버에서 가져온 내용 출력
+            // 학수번호 갯수만큼 반복하면서
+            // 학수번호로 sql 때려서 저 정보들 가져와서 넣기
+            /*
+            usersSubjectsList.Add(new Subject()
+            {
+                NO = resultSubtject[index].NO,
+                Grade = resultSubtject[index].Grade,
+                ClassNumber = resultSubtject[index].ClassNumber,
+                ClassName = resultSubtject[index].ClassName,
+                CreditCourse = resultSubtject[index].CreditCourse,
+                Professor = resultSubtject[index].Professor,
+                강의시간 = resultSubtject[index].강의시간,
+                Time1 = resultSubtject[index].Time1,
+                Time2 = resultSubtject[index].Time2,
+                Time3 = resultSubtject[index].Time3,
+                Time4 = resultSubtject[index].Time4,
+                Time5 = resultSubtject[index].Time5,
+                Time6 = resultSubtject[index].Time6,
+                Time7 = resultSubtject[index].Time7,
+                Time8 = resultSubtject[index].Time8,
+            }); //과목추가
+            RefreshTimeTable();
+            */
         }
 
         private void tab_Click(object sender, RoutedEventArgs e)
@@ -1686,6 +1726,86 @@ namespace Client
 
             // 리스트 위에 있는 과목들도 저장해야됨
             // 얘네는 TimeTableClass DB에 저장해야됨
+            Save_Schedule_Subject_Click();
+        }
+
+        private void Save_Schedule_Subject_Click()
+        {
+            // 시간표 이름에 맞춰서 UI에 등록된 과목들 순차적으로 저장
+            TextBlock[,] _schedule = new TextBlock[,]
+            {
+                {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
+                {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
+                {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
+                {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
+                {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
+                {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
+            };
+            string[,] day_time = new string[,]
+             {
+                {"월1", "월2", "월3", "월4", "월5", "월6", "월7", "월8", "월9", "월10", "월11", "월12", "월13"},
+                {"화1", "화2", "화3", "화4", "화5", "화6", "화7", "화8", "화9", "화10", "화11", "화12", "화13"},
+                {"수1", "수2", "수3", "수4", "수5", "수6", "수7", "수8", "수9", "수10", "수11", "수12", "수13"},
+                {"목1", "목2", "목3", "목4", "목5", "목6", "목7", "목8", "목9", "목10", "목11", "목12", "목13"},
+                {"금1", "금2", "금3", "금4", "금5", "금6", "금7", "금8", "금9", "금10", "금11", "금12", "금13"},
+                {"토1", "토2", "토3", "토4", "토5", "토6", "토7", "토8", "토9", "토10", "토11", "토12", "토13"}
+             };
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j=0; j<13; j++)
+                {
+                    if (_schedule[i, j].Text != "")
+                    {
+                        // 강의시간, 강좌명, 강사 나오니까 이걸로 ClassNumber select
+                        String[] str = _schedule[i, j].Text.Split('\n');
+                        String classname = str[0];
+                        String temp_classTeach = str[1];
+                        String classTeach = "";
+                        String classtime = day_time[i, j];
+
+                        String[] parsing_classTeach = temp_classTeach.Split(' ');
+                        for(int k = 0; k<parsing_classTeach.Length; k++)
+                        {
+                            classTeach = classTeach + "_" + parsing_classTeach[k];
+                        }
+
+                        string ClassNumber_url = urlBase + "/" + classname + "/" + classTeach + "/" + classtime;
+                        var json = new WebClient().DownloadData(ClassNumber_url);
+                        string temp_classnumber = Encoding.UTF8.GetString(json);
+                        string[] temp = temp_classnumber.Split('"');
+                        string classnumber = temp[7];
+
+                        /*
+                         * 현재로서는 불필요한 부분. 이 부분을 예외처리로 대신함
+                        // TimeTableClassNumber Table에 해당 ClassNumber 있는지 확인
+                        string CheckClassNumber = urlTimeTableClassNumber + "/" + App.ID + "/" + TableEdit_txtbox.Text + "/" + classnumber;
+                        var Check_ClassNumber_json = new WebClient().DownloadData(CheckClassNumber);
+                        string Check_ClassNumber_Unicode = Encoding.UTF8.GetString(Check_ClassNumber_json);
+                        */
+
+                        try
+                        {
+                            // 해당 classnumber가 없는 경우 삽입.
+                            // 여기서 에러 발생. 현재 저장만 하면 된다..
+                            string insert_ClassNumber_url = urlTimeTableClassNumber;
+                            String ClassNumber_postData = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + classnumber + "\"}";
+                            connect(insert_ClassNumber_url, ClassNumber_postData, "POST");
+                        }
+                        catch
+                        {
+                            // 이미 데이터가 존재하는 경우
+                        }
+                    }
+                }
+            }
+
+
+            // 강의시간, 강좌명, 강사 이용해서 학수번호 출력
+            // 얻은 학수번호를 밑의 ClassNumber 변수에 저장
+
+            //String url = urlTimeTableClassNumber;
+            //String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + ClassNumber + "\"}";
+            //connect(url, NewpostData1, "POST");
         }
 
         private void connect(String url, String NewpostData, String Method)
@@ -1769,6 +1889,6 @@ namespace Client
             
         }
 
-
+        // 시간표 정보(이름, 수강 과목 등) 수정 시 On update cascade해놨으니까 UserTimeTable만 업데이트하고, TimeTableClassNumber는 바로 insert하면 된다.
     }
 }

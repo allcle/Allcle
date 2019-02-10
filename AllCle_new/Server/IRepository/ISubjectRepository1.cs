@@ -9,5 +9,6 @@ namespace Server.IRepository
     public interface ISubjectRepository1
     {
         List<Subject> GetSubjects();                             //전체 모든 과목 보기
+        List<Subject> GetClassNumber(string classname, string classTeach, string classtime);
     }
 }

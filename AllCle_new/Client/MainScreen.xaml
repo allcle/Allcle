@@ -250,7 +250,7 @@
                       MouseDoubleClick="TableList_MouseDoubleClick">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Setter Property="Visibility" Value="Collapsed"/>
                     </Style>
                     <Style TargetType="ListViewItem">
                         <Style.Triggers>

@@ -164,3 +164,6 @@ C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.Core
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client.csproj.CopyComplete
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client.exe
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client.pdb
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\source\images\Delete_white.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\source\images\Modify_white.png
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\bin\Debug\source\images\Add_white.png

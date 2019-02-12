@@ -40,20 +40,23 @@ namespace Server.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]UserMyGroup _userMyGroup)
         {
+            _repo.PostMyGroup(_userMyGroup);
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public void UpdateTimeTable([FromBody]UserMyGroup _userMyGroup)
         {
+            _repo.UpdateMyGroup(_userMyGroup);
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public void Delete([FromBody]IdMyGroup idMyGroup)
         {
+            _repo.DeleteMyGroup(idMyGroup);
         }
     }
 }

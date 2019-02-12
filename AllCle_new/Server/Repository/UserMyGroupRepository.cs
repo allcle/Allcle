@@ -31,5 +31,33 @@ namespace Server.Repository
             return this.db.Query<UserMyGroup>(sql).ToList();
         }
 
+        public void PostMyGroup(UserMyGroup _userMyGroup)
+        {
+            string sql = "Insert Into UserMyGroup (ID, MyGroupName, SaveTime, EditTime) Values (@ID, @MyGroupName, @SaveTime, @EditTime)";
+            db.Execute(sql, _userMyGroup);
+        }
+
+        public void UpdateMyGroup(UserMyGroup _userMyGroup)
+        {
+            // 시간표 다시 저장할 때 쓰는 쿼리
+            string sql = "Update UserMyGroup SET EditTime = '" + _userMyGroup.EditTime + "' Where ID = '" + _userMyGroup.ID + "' and MyGroupName = N'" + _userMyGroup.MyGroupName + "'";
+            db.Execute(sql, _userMyGroup);
+        }
+
+        public List<UserMyGroup> CheckSaveMyGroupName(string _id, string MyGroupName)
+        {
+            string sql = "Select SaveTime from UserMyGroup Where ID = '" + _id + "' and MyGroupName = '" + MyGroupName + "'";
+            return this.db.Query<UserMyGroup>(sql).ToList();
+        }
+        
+        public void DeleteMyGroup(IdMyGroup idMyGroup)
+        {
+            string sql = "DELETE FROM UserMyGroup WHERE ID = '"+ idMyGroup .ID + "' AND MyGroupName = '" + idMyGroup.MyGroupName + "'";
+            db.Execute(sql);
+        }
+
+
+
+
     }
 }

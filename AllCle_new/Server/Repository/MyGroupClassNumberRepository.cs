@@ -29,9 +29,25 @@ namespace Server.Repository
         {
             string sql = "Select ClassNumber " +
                          "From MyGroupClassNumber " +
-                         "Where MyGroupName = '" + MyGroupName + "' " +
+                         "Where MyGroupName = N'" + MyGroupName + "' " +
                          "and ID = N'" + _id + "'";
             return db.Query<string>(sql).ToList();
+        }
+
+        public void PostSubjectToMyGroup(MyGroupClassNumber _myGroupClassNumber)
+        {
+            string sql = "Insert Into MyGroupClassNumber (ID, MyGroupName, ClassNumber) Values (@ID, @MyGroupName, @ClassNumber)";
+            db.Execute(sql, _myGroupClassNumber);
+        }
+
+        public bool GetClassNumber(string ID, string MyGroupName, string ClassNumber)
+        {
+            string sql = "Select * From MyGroupClassNumber Where Id ='" + ID + "' and MyGroupName ='" + MyGroupName + "' and ClassNumber = '" + ClassNumber + "'";
+            int num = this.db.Query<MyGroupClassNumber>(sql).Count();
+            if (num == 1)
+                return true;
+            else
+                return false;
         }
     }
 }

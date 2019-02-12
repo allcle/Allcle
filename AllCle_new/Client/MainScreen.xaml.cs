@@ -59,7 +59,7 @@ namespace Client
         bool myGroup_btn;           //마이그룹 활성화
         string tableName = "";      //현재 테이블 이름
         int userTimeTalbeNO = 0;    //유저 타임테이블
-        int groupNum = 0;
+        string groupName = "";      //그룹네임 저장, 나중에 그룹에 과목추가를 위해
 
         public struct TableSubjects //시간표 한칸의 Data
         {
@@ -790,7 +790,7 @@ namespace Client
         }
         private void GetmyGroupClassNumber(string MyGroupName)
         {
-            url = urlMyGroupClassNumber + "/" + App.ID + "/MyGroupName/" + MyGroupName;
+            url = urlMyGroupClassNumber + "/" + App.ID + "/" + MyGroupName;
             var json = new WebClient().DownloadData(url);
             string Unicode = Encoding.UTF8.GetString(json);
             myGroupClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
@@ -842,6 +842,32 @@ namespace Client
             }
             return result;
         }
+        private void connect(String url, String NewpostData, String Method)     //post or put을 결정
+        {
+            // POST : Save_Schedule_Click, TimeAdd_btn_Click
+            // PUT: TableEdit_txtbox_KeyDown
+            try
+            {
+                HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+                byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
+                httpWebRequest2.ContentType = "application/json; charset=UTF-8";
+                httpWebRequest2.Method = Method;
+                httpWebRequest2.ContentLength = sendData2.Length;
+                Stream requestStream2 = httpWebRequest2.GetRequestStream();
+                requestStream2.Write(sendData2, 0, sendData2.Length);
+                requestStream2.Close();
+                HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
+                StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                streamReader2.ReadToEnd();
+                streamReader2.Close();
+                httpWebResponse2.Close();
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("다시 시도해주세요");
+            }
+        }
+
         private void InitDB() //TimeTable 초기화
         {
             for (int _row = 0; _row < 14; _row++)
@@ -882,6 +908,8 @@ namespace Client
             System.Windows.Controls.ListView[] myGroupLst = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst, Group3_lst, Group4_lst, Group5_lst, Group6_lst, Group7_lst, Group8_lst, Group9_lst };
             Grid[] myGroupGrd = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
             GetUserMyGroup();
+            for (int i = 0; i < 9; i++)
+                myGroupGrd[i].Visibility = Visibility.Collapsed;
             for (int i = 0; i < Math.Min(userMyGroup.Count,9); i++)
             {
                 myGroupGrd[i].Visibility = Visibility;
@@ -1071,6 +1099,48 @@ namespace Client
             }
         }
 
+        private void AddMyGroup()       //그룹추가 함수
+        {
+            String now = DateTime.Now.ToString("MMddHHmmss");       //날짜
+            if (userMyGroup.Count < 9)
+            {
+                url = urlUserMyGroup;
+                String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"MyGroupName\" : " + "\"group" + now + "\"" + ", \"SaveTime\" : \"" + now + "\", \"EditTime\" : \"" + now + "\"}";
+                connect(url, NewpostData, "POST");  //마이그룹 추가
+                GetUserMyGroup();       //마이그룹 다시 가져오기
+                SetUserMyGroup();       //마이그룹 다시 세팅
+            }
+            else
+                return;
+        }
+
+        private void AddSubjectToMyGroup()
+        {
+            url = urlMyGroupClassNumber;
+            int index = DataListView_All.SelectedIndex;             //유저가 더블클릭한 과목의 인덱스
+            string ClassNumber = resultSubtject[index].ClassNumber; //유저가 더블클릭한 과목의 학수번호
+            url = url + "/" + App.ID + "/" + groupName + "/" + ClassNumber;
+            try
+            {
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                if (Unicode == "true")
+                {
+                    System.Windows.MessageBox.Show("해당 과목은 이미 존재합니다.");
+                    return;
+                }
+                url = urlMyGroupClassNumber;
+                string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"MyGroupName\" : " + "\"" + groupName + "\"" + ", \"ClassNumber\" : \"" + ClassNumber + "\"}";
+                connect(url, NewpostData, "POST");  //마이그룹 추가
+                GetUserMyGroup();                   //get + set => 새로고침
+                SetUserMyGroup();                   //get + set => 새로고침
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("그룹을 선택해주세요.");
+            }
+        }
+
 
 
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
@@ -1091,10 +1161,13 @@ namespace Client
 
         private void DataListView_All_MouseDoubleClick(object sender, MouseButtonEventArgs e) //리스트에 있는 과목을 더블클릭했을때
         {
-            if (myGroup_btn)
+            if (myGroup_btn && !tabActive)    //그룹보기가 활성화 상태
             {
-
-                return;
+                if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
+                {
+                    AddSubjectToMyGroup();  //클릭하면 그룹에 저장됨
+                }
+                return;               
             }
 
 
@@ -1198,7 +1271,7 @@ namespace Client
             }
         }
 
-        private void Logout_btn_Click(object sender, RoutedEventArgs e)
+        private void Logout_btn_Click(object sender, RoutedEventArgs e)     //로그아웃 버튼 클릭
         {
             App.MW.Show();
             App.first = false;
@@ -1206,7 +1279,7 @@ namespace Client
             this.Visibility = Visibility.Collapsed;
         }
 
-        private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)   //시간표에 Mouse Enter
         {
 
             TextBlock[,] _schedule = new TextBlock[,]
@@ -1283,7 +1356,7 @@ namespace Client
 
         }
 
-        private void MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)       //시간표에서 Mouse Out
         {
 
             TextBlock[,] _schedule = new TextBlock[,]
@@ -1807,26 +1880,7 @@ namespace Client
             //String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + ClassNumber + "\"}";
             //connect(url, NewpostData1, "POST");
         }
-
-        private void connect(String url, String NewpostData, String Method)
-        {
-            // POST : Save_Schedule_Click, TimeAdd_btn_Click
-            // PUT: TableEdit_txtbox_KeyDown
-            HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
-            byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
-            httpWebRequest2.ContentType = "application/json; charset=UTF-8";
-            httpWebRequest2.Method = Method;
-            httpWebRequest2.ContentLength = sendData2.Length;
-            Stream requestStream2 = httpWebRequest2.GetRequestStream();
-            requestStream2.Write(sendData2, 0, sendData2.Length);
-            requestStream2.Close();
-            HttpWebResponse httpWebResponse2 = (HttpWebResponse)httpWebRequest2.GetResponse();
-            StreamReader streamReader2 = new StreamReader(httpWebResponse2.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-            streamReader2.ReadToEnd();
-            streamReader2.Close();
-            httpWebResponse2.Close();
-        }
-
+        
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)
         {
             list_grid.Visibility = Visibility.Visible;
@@ -1873,9 +1927,10 @@ namespace Client
             }
         }
 
-        private void Group_grd_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Group_grd_MouseDown(object sender, MouseButtonEventArgs e) //마이그룹 리스트 중 하나를 누르면 색변환, 선택
         {
             Grid[] grids = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
+            TextBlock[] myGroupTbk = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk, };
             var panel = sender as Grid;
             for (int i = 0; i < 9; i++) 
             {
@@ -1883,12 +1938,40 @@ namespace Client
                 if (grids[i].Name == panel.Name)
                 {
                     grids[i].Background = Brushes.Yellow;
-                    groupNum = i + 1;
+                    groupName = myGroupTbk[i].Text;
                 }
             }
             
         }
 
+        private void AddGroup_btn_Click(object sender, RoutedEventArgs e)       //그룹추가 버튼 클릭
+        {
+            AddMyGroup();       //그룹추가 함수
+        }
+
+         private void DelMyGroup_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.Button[] button = new System.Windows.Controls.Button[] { DelGroup1_btn, DelGroup2_btn, DelGroup3_btn, DelGroup4_btn, DelGroup5_btn, DelGroup6_btn, DelGroup7_btn, DelGroup8_btn, DelGroup9_btn };
+            TextBlock[] textBlocks = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk, };
+            url = urlUserMyGroup;
+            var panel = sender as System.Windows.Controls.Button;
+            for(int i=0;i<9;i++)
+                if(panel.Name == button[i].Name)
+                {
+                    string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"MyGroupName\" : \"" + textBlocks[i].Text + "\"}";
+                    connect(url, NewpostData, "DELETE");
+                    break;
+                }
+            GetUserMyGroup();
+            SetUserMyGroup();
+
+        }
+
+        private void DelSubjectInMyGroup_btn_Click(object sender, RoutedEventArgs e)
+        {
+
+           // MyGroup_lst.
+        }
         // 시간표 정보(이름, 수강 과목 등) 수정 시 On update cascade해놨으니까 UserTimeTable만 업데이트하고, TimeTableClassNumber는 바로 insert하면 된다.
     }
 }

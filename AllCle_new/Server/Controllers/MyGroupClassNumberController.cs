@@ -32,16 +32,22 @@ namespace Server.Controllers
         }
 
         // GET api/<controller>/5
-        [HttpGet("{_id}/MyGroupName/{_myGroupName}")]
-        public IEnumerable<string> Get(string _id, string _myGroupName)
+        [HttpGet("{ID}/{MyGroupName}")]
+        public IEnumerable<string> Get(string ID, string MyGroupName)
         {
-            return _repo.GetMyGroupClassNumbers(_id,_myGroupName);
+            return _repo.GetMyGroupClassNumbers(ID,MyGroupName);
         }
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]MyGroupClassNumber myGroupClassNumber)
         {
+            _repo.PostSubjectToMyGroup(myGroupClassNumber);
+        }
+        [HttpGet("{ID}/{MyGroupName}/{ClassNumber}")]
+        public bool GetClassNumber(string ID, string MyGroupName, string ClassNumber)
+        {
+            return _repo.GetClassNumber(ID, MyGroupName, ClassNumber);
         }
 
         // PUT api/<controller>/5

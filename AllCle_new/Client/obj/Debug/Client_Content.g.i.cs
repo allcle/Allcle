@@ -9,8 +9,11 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/add.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/add_white.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/delete_white.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_off.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_on.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/modify_white.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/mygroup_off.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/mygroup_on.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/search_btn.png")]

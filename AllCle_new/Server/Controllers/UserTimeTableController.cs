@@ -62,10 +62,10 @@ namespace Server.Controllers
 
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put([FromBody]UserTimeTable _userTimeTable)
+        [HttpPut("name")]
+        public void Put([FromBody]UpdateTImeTableName updateTImeTableName)
         {
-            _repo.UpdateUserTimeTable(_userTimeTable);
+            _repo.UpdateTimeTableName(updateTImeTableName);
         }
 
         // GET api/<controller>/5
@@ -76,9 +76,10 @@ namespace Server.Controllers
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public void Delete([FromBody]Del del)
         {
+            _repo.DeleteTimeTable(del);
         }
     }
 }

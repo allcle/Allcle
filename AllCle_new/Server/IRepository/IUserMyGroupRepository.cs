@@ -9,5 +9,9 @@ namespace Server.IRepository
     public interface IUserMyGroupRepository
     {
         List<UserMyGroup> GetUserMyGroups(string _userId);
+        void PostMyGroup(UserMyGroup _userMyGroup);
+        void UpdateMyGroup(UserMyGroup _userMyGroup);
+        List<UserMyGroup> CheckSaveMyGroupName(string _id, string MyGroupName);
+        void DeleteMyGroup(Del idMyGroup);
     }
 }

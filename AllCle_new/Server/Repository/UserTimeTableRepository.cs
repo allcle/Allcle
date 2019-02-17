@@ -29,7 +29,7 @@ namespace Server.Repository
 
         public List<UserTimeTable> GetUserTimeTables(string _userId)
         {
-            string sql = "Select * From UserTimeTable Where ID = '" + _userId + "'";
+            string sql = "Select * From UserTimeTable Where ID = N'" + _userId + "'";
             return this.db.Query<UserTimeTable>(sql).ToList();
         }
 
@@ -54,18 +54,22 @@ namespace Server.Repository
             db.Execute(sql, _userTimeTable);
         }
 
-        public void UpdateUserTimeTable(UserTimeTable _userTimeTable)
+        public void UpdateTimeTableName(UpdateTImeTableName updateTImeTableName)
         {
             // 시간표 이름 수정할 때 쓰는 쿼리
-            // 보류. 아직 개발 중 =
-            string sql = "UPDATE UserTimeTable SET TimeTableName = N'" + _userTimeTable.TimeTableName + "' WHERE ID = '" + _userTimeTable.ID + "'";
-            db.Execute(sql, _userTimeTable);
+            string sql = "UPDATE UserTimeTable SET TimeTableName = N'" + updateTImeTableName.NewTiemTableName + "' WHERE ID = '" + updateTImeTableName.ID + "' AND TimeTableName = N'" + updateTImeTableName.OldTimeTableName + "'";
+            db.Execute(sql, updateTImeTableName);
         }
 
         public List<UserTimeTable> CheckSaveTimeTableName(string _id, string TimeTableName)
         {
             string sql = "Select SaveTime from UserTimeTable Where ID = '" + _id + "' and TimeTableName = N'" + TimeTableName + "'";
             return this.db.Query<UserTimeTable>(sql).ToList();
+        }
+        public void DeleteTimeTable(Del del)
+        {
+            string sql = "DELETE FROM UserTimeTable WHERE ID = '" + del.ID + "' AND MyGroupName = N'" + del.Name + "'";
+            db.Execute(sql);
         }
     }
 }

@@ -58,6 +58,7 @@ namespace Server
             services.AddTransient<IABEEKRepository, ABEEKRepository>();     //ABEEK 검색을 위해
             services.AddTransient<IMajorRepository, MajorRepository>();     //Major 검색을 위해
             services.AddTransient<IEngNormalRepository, EngNormalRepository>();     //공대 일반교양 검색을 위해
+            services.AddTransient<ITypeRepository, TypeRepository>();               //type을 통한 과목 추출
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

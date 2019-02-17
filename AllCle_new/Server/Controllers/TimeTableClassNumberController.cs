@@ -28,14 +28,9 @@ namespace Server.Controllers
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
-        }
+        }     
 
-        // GET api/<controller>/5
-        [HttpGet("{_id}/TimeTableName/{TimeTableName}")]
-        public IEnumerable<string> GetTimeTableClassNumbers(string _id, string TimeTableName)
-        {
-            return _repo.GetTimeTableClassNumbers(_id, TimeTableName);
-        }
+       
 
         // POST api/<controller>
         [HttpPost]
@@ -52,10 +47,10 @@ namespace Server.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{ID}/{TimeTableName}")]
-        public IEnumerable<TimeTableClassNumber> GetClassNumber2(string ID, string TimeTableName)
+        public IEnumerable<string> GetClassNumber (string ID, string TimeTableName)
         {
-            return _repo.GetClassNumber2(ID, TimeTableName);
-        }
+            return _repo.GetTimeTableClassNumbers(ID, TimeTableName);
+        }    
 
         // PUT api/<controller>/5
         /*[HttpPut("{_id}/timetable/{_timeTableName}")]
@@ -65,9 +60,10 @@ namespace Server.Controllers
         }*/
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public void Delete([FromBody]DelNameClassNum delNameClassNum)
         {
+            _repo.DeleteSubjectInTimeTable(delNameClassNum);
         }
     }
 }

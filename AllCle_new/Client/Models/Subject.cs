@@ -8,8 +8,8 @@ namespace Client.Models
 {
     class Subject
     {
-        public int NO { get; set; }
         public int Grade { get; set; }
+        public string deparment { get; set; }
         public string ClassNumber { get; set; }
         public string ClassName { get; set; }
         public int CreditCourse { get; set; }

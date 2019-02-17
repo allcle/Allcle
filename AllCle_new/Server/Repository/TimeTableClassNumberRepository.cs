@@ -27,10 +27,7 @@ namespace Server.Repository
 
         public List<string> GetTimeTableClassNumbers(string _id, string TimeTableName)
         {
-            string sql = "Select ClassNumber " +
-                         "From TimeTableClassNumber " +
-                         "Where TimeTableName = '" + TimeTableName + "' " +
-                         "and ID = N'" + _id + "'";
+            string sql = "Select ClassNumber From TimeTableClassNumber Where TimeTableName = N'" + TimeTableName + "' and ID = '" + _id + "'";
             return db.Query<string>(sql).ToList();
         }
 
@@ -42,7 +39,7 @@ namespace Server.Repository
 
         public bool GetClassNumber(string ID, string TimeTableName, string ClassNumber)
         {
-            string sql = "Select * From TimeTableClassNumber Where Id ='" + ID + "' and TimeTableName ='" + TimeTableName + "' and ClassNumber = '" + ClassNumber + "'";
+            string sql = "Select * From TimeTableClassNumber Where Id ='" + ID + "' and TimeTableName = N'" + TimeTableName + "' and ClassNumber = '" + ClassNumber + "'";
             int num = this.db.Query<User>(sql).Count();
             if (num == 1)
                 return true;
@@ -50,10 +47,16 @@ namespace Server.Repository
                 return false;
         }
 
-        public List<TimeTableClassNumber> GetClassNumber2(string ID, string TimeTableName)
+        public List<TimeTableClassNumber> GetClassNumber(string ID, string TimeTableName)
         {
-            string sql = "Select ClassNumber From TimeTableClassNumber Where ID = '" + ID + "' and TimeTableName ='" + TimeTableName + "'";
+            string sql = "Select ClassNumber From TimeTableClassNumber Where ID = '" + ID + "' and TimeTableName = N'" + TimeTableName + "'";
             return this.db.Query<TimeTableClassNumber>(sql).ToList();
+        }
+
+        public void DeleteSubjectInTimeTable(DelNameClassNum delNameClassNum)
+        {
+            string sql = "DELETE FROM MyGroupClassNumber WHERE ID = '" + delNameClassNum.ID + "' AND MyGroupName = N'" + delNameClassNum.Name + "' AND ClassNumber = '" + delNameClassNum.ClassNumber + "'";
+            db.Execute(sql);
         }
 
         /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)

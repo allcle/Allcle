@@ -79,20 +79,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DeleteSubject.xaml.cs">
-      <DependentUpon>DeleteSubject.xaml</DependentUpon>
+    <Compile Include="DelSubInTable.xaml.cs">
+      <DependentUpon>DelSubInTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ForgetPassword.xaml.cs">
+      <DependentUpon>ForgetPassword.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ABEEK.cs" />
     <Compile Include="Models\EngNormal.cs" />
     <Compile Include="Models\Major.cs" />
     <Compile Include="Models\TimeTableClassNumber.cs" />
+    <Compile Include="Models\TypeClassNum.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserMyGroup.cs" />
     <Compile Include="Models\UserTimeTable.cs" />
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
     </Compile>
-    <Page Include="DeleteSubject.xaml">
+    <Page Include="DelSubInTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ForgetPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

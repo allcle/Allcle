@@ -12,6 +12,6 @@ namespace Server.IRepository
         void PostMyGroup(UserMyGroup _userMyGroup);
         void UpdateMyGroup(UserMyGroup _userMyGroup);
         List<UserMyGroup> CheckSaveMyGroupName(string _id, string MyGroupName);
-        void DeleteMyGroup(IdMyGroup idMyGroup);
+        void DeleteMyGroup(Del idMyGroup);
     }
 }

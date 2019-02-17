@@ -40,7 +40,7 @@ namespace Server.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]MyGroupClassNumber myGroupClassNumber)
+        public void Post([FromBody]DelNameClassNum myGroupClassNumber)
         {
             _repo.PostSubjectToMyGroup(myGroupClassNumber);
         }
@@ -57,9 +57,10 @@ namespace Server.Controllers
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public void Delete([FromBody]DelNameClassNum myGroupClassNumber)
         {
+            _repo.DeleteSubjectInMyGroup(myGroupClassNumber);
         }
     }
 }

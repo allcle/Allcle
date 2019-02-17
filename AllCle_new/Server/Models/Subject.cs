@@ -7,10 +7,10 @@ namespace Server.Models
 {
     public class Subject
     {
-        public int NO { get; set; }
         public int Grade { get; set; }
         public string ClassNumber { get; set; }
         public string ClassName { get; set; }
+        public string Type { get; set; }
         public int CreditCourse { get; set; }
         public string Professor { get; set; }
         public string 강의시간 { get; set; }

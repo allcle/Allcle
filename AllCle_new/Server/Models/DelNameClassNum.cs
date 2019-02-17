@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Server.Models
 {
-    public class IdMyGroup
+    public class DelNameClassNum
     {
         public string ID { get; set; }
-        public string MyGroupName { get; set; }
+        public string Name { get; set; }
+        public string ClassNumber { get; set; }
     }
 }

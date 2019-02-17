@@ -19,6 +19,7 @@ using System.Threading;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace Client
 {
@@ -93,16 +94,24 @@ namespace Client
 
         private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
         {
-            ID_concern.Visibility = Visibility.Hidden;   // 처음엔 일단 숨기기
-            PW_corcenrn2.Visibility = Visibility.Hidden; // 처음엔 일단 숨기기
+            ID_concern.Visibility = Visibility.Hidden;      // 처음엔 일단 숨기기
+            PW_corcenrn.Visibility = Visibility.Hidden;     //처음엔 일단 숨기기
+            PW_corcenrn2.Visibility = Visibility.Hidden;    // 처음엔 일단 숨기기
+            Regex regexPW = new Regex(@"(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$");     //비밀번호 정규식
+            string id = null;                                                           //id가 id + 이메일이라서 필요
+            Boolean foundMatch = regexPW.IsMatch(PW_Box.Password);
             if (PW_Box.Password != PWCon_Box.Password)                     //비밀번호 strcmp
                 PW_corcenrn2.Visibility = Visibility.Visible;       //다르다고 경고
 
-            if (IdExists(ID_box.Text))                                          //있다
+            if (IdExists(ID_box.Text))                                          //이미 아이디가 존재하거나 이메일 형식이 아니다
             {
                 ID_concern.Visibility = Visibility.Visible;
                 ID_box.Text = "";
                 ID_box.Focus();
+            }
+            else if (PW_Box.Password.Length < 8 || !foundMatch)
+            {
+                PW_corcenrn.Visibility = Visibility.Visible;
             }
             else if (PW_Box.Password == PWCon_Box.Password)
             {
@@ -119,7 +128,11 @@ namespace Client
                 {
                     major = Major_architecture.Text;
                 }
-                PostUser(ID_box.Text, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
+                if (email_cbx.Text == "직접입력")
+                    id = ID_box.Text + "@" + emailWrite_tbx.Text;
+                else
+                    id = ID_box.Text + "@" + email_tbk.Text;
+                PostUser(id, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
                 System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
                 this.Close();
             }
@@ -197,6 +210,22 @@ namespace Client
             }
             else
                 System.Windows.MessageBox.Show("3개대학 이외 다른게 존재. error");
+        }
+
+        private void email_cbx_DropDownClosed(object sender, EventArgs e)
+        {
+            email_tbk.Visibility = Visibility.Collapsed;
+            emailWrite_tbx.Visibility = Visibility.Collapsed;
+            if (email_cbx.Text == "직접입력")
+            {
+                emailWrite_tbx.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                email_tbk.Visibility = Visibility.Visible;
+                email_tbk.Text = email_cbx.Text;
+            }
+
         }
     }
 }

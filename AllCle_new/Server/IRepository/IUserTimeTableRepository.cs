@@ -12,7 +12,8 @@ namespace Server.IRepository
         void PostTimeTable(UserTimeTable _userTimeTable);
         //void UpdateTimeTable(string EditTime, string ID, string TimeTableName);
         void UpdateTimeTable(UserTimeTable _userTimeTable);
-        void UpdateUserTimeTable(UserTimeTable _userTimeTable);
+        void UpdateTimeTableName(UpdateTImeTableName updateTImeTableName);
         List<UserTimeTable> CheckSaveTimeTableName(string _id, string TimeTableName);
+        void DeleteTimeTable(Del del);
     }
 }

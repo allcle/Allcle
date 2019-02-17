@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Models
+namespace Client.Models
 {
-    public class MyGroupClassNumber
+    class TypeClassNum
     {
-        public string ID { get; set; }
-        public string MyGroupName { get; set; }
+        public string Type { get; set; }
         public string ClassNumber { get; set; }
     }
 }

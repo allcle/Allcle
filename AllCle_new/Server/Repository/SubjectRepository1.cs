@@ -27,7 +27,7 @@ namespace Server.Repository
 
         public List<Subject> GetSubjects()                             //전체 모든 과목 보기
         {
-            string sql = "Select * From SubjectTable$ Order by NO Asc";
+            string sql = "Select * From Sub19_1";
             return this.db.Query<Subject>(sql).ToList();
         }
 
@@ -47,7 +47,7 @@ namespace Server.Repository
                     real_classTeach = real_classTeach + " " + temp_real_classTeach[i];
                 }
             }
-            string sql = "Select classnumber from SubjectTable$ Where ClassName = N'" + classname + "' and Professor = N'" + real_classTeach + "' and (Time1 = N'" + classtime + "' or Time2 = N'" + classtime + "' or Time3 = N'" + classtime + "' or Time4 = N'" + classtime + "' or Time5 = N'" + classtime + "' or Time6 = N'" + classtime + "' or Time7 = N'" + classtime + "' or Time8 = N'" + classtime + "')";
+            string sql = "Select classnumber from Sub19_1 Where ClassName = N'" + classname + "' and Professor = N'" + real_classTeach + "' and (Time1 = N'" + classtime + "' or Time2 = N'" + classtime + "' or Time3 = N'" + classtime + "' or Time4 = N'" + classtime + "' or Time5 = N'" + classtime + "' or Time6 = N'" + classtime + "' or Time7 = N'" + classtime + "' or Time8 = N'" + classtime + "')";
             return this.db.Query<Subject>(sql).ToList();
         }
     }

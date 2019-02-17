@@ -46,13 +46,13 @@ namespace Server.Repository
 
         public List<UserMyGroup> CheckSaveMyGroupName(string _id, string MyGroupName)
         {
-            string sql = "Select SaveTime from UserMyGroup Where ID = '" + _id + "' and MyGroupName = '" + MyGroupName + "'";
+            string sql = "Select SaveTime from UserMyGroup Where ID = '" + _id + "' and MyGroupName = N'" + MyGroupName + "'";
             return this.db.Query<UserMyGroup>(sql).ToList();
         }
         
-        public void DeleteMyGroup(IdMyGroup idMyGroup)
+        public void DeleteMyGroup(Del del)
         {
-            string sql = "DELETE FROM UserMyGroup WHERE ID = '"+ idMyGroup .ID + "' AND MyGroupName = '" + idMyGroup.MyGroupName + "'";
+            string sql = "DELETE FROM UserMyGroup WHERE ID = '"+ del .ID + "' AND MyGroupName = N'" + del.Name + "'";
             db.Execute(sql);
         }
 

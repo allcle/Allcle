@@ -17,14 +17,14 @@ namespace Client
     /// <summary>
     /// DeleteSubject.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class DeleteSubject : Window
+    public partial class DelSubInTable : Window
     {
         private string subjectName;
-        public DeleteSubject()
+        public DelSubInTable()
         {
             InitializeComponent();
         }
-        public DeleteSubject(string subjectName)
+        public DelSubInTable(string subjectName)
         {
             InitializeComponent();
             this.subjectName = subjectName;

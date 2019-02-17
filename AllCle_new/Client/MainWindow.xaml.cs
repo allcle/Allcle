@@ -34,7 +34,6 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
         public string Encrypt(string strToEncrypt, string strKey)               //암호화
@@ -60,8 +59,8 @@ namespace Client
 
         private void Forget_btn_Button_Click(object sender, RoutedEventArgs e)
         {
-            // 비밀번호 찾기 기능
-            // 추후에 아이디 찾기 기능 부가
+            ForgetPassword forgetPassword = new ForgetPassword();
+            forgetPassword.Show();
         }
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)

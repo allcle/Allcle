@@ -89,7 +89,7 @@
             <Border Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="학번" Foreground="#FF7D7676" Background="White" FontSize="17"/>
             </Border>
-            <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="9" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
+            <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="9" SelectedIndex="3" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -99,6 +99,7 @@
                 <ComboBoxItem>16</ComboBoxItem>
                 <ComboBoxItem>17</ComboBoxItem>
                 <ComboBoxItem>18</ComboBoxItem>
+                <ComboBoxItem>19</ComboBoxItem>
             </ComboBox>
             <Border Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="단과대학" Foreground="#FF7D7676" Background="White" FontSize="17"/>

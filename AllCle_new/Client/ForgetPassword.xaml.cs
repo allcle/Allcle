@@ -106,7 +106,7 @@ namespace Client
                 setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
             }
             string NewEncryptedPW = Encrypt(tempPW, setkey);
-            mail.Body = "고객님의 임시 비밀번호는" + tempPW + "입니다.";
+            mail.Body = "회원님의 임시 비밀번호는 " + tempPW + "입니다.";
             try
             {
                 client.Send(mail);

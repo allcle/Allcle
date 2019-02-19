@@ -280,15 +280,15 @@
                     <TextBlock x:Name="UserMajor" Text="Guest"  Foreground="gray" FontSize="13" Margin="0,-4,0,4.4"/>
                 </Border>
                 <Border Grid.Row="3" Margin="10,0,10,5">
-                    <Button x:Name="Logout_btn" Content="회원정보수정" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
-                            BorderThickness="0" Style="{StaticResource roundedButton_yellow}">
+                    <Button x:Name="UserInfoEdit_btn" Content="회원정보수정" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
+                            BorderThickness="0" Style="{StaticResource roundedButton_yellow}" Click="UserInfoEdit_btn_Click">
                         <Button.BitmapEffect>
                             <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
                         </Button.BitmapEffect>
                     </Button>
                 </Border>
                 <Border Grid.Row="4" Margin="10,0,10,5">
-                    <Button x:Name="UserInfoEdit_btn" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
+                    <Button x:Name="Logout_btn" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
                             BorderThickness="0" Click="Logout_btn_Click" Style="{StaticResource roundedButton_yellow}">
                         <Button.BitmapEffect>
                             <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
@@ -803,7 +803,7 @@
                         </TextBlock>
                     </Border>
                     <Button Name="TimeEdit_btn" Grid.Column="2" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
-                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Click="TimeEdit_btn_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="Add_img_stkpnl" Background="White">
@@ -843,7 +843,7 @@
                         </Button.Template>
                     </Button>
                     <Button Name="TimeDelete_btn" Grid.Column="4" Background="White" BorderThickness="0" DockPanel.Dock="Right" Margin="0"
-                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Click="TimeDelete_btn_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="Add_img_stkpnl" Background="White">
@@ -1262,16 +1262,7 @@
                             Click="Save_Image_Click"
                             Style="{StaticResource roundedButton_gray}">
                     </Button>
-                    <Button  Grid.Column="2"
-                            x:Name="TimeTableSave_btn" 
-                            Content="시간표 저장" 
-                            BorderThickness="0" Background="White"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center" 
-                            HorizontalContentAlignment="Right" Height="35"
-                            Click="Save_Schedule_Click"
-                            Style="{StaticResource roundedButton_gray}">
-                    </Button>
+                    
                 </Grid>
             </Grid>
             <Grid Name="MyGroup_grd" Grid.Row="1" Visibility="Collapsed">

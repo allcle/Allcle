@@ -54,9 +54,9 @@ namespace Server.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete]
-        public void Delete([FromBody]Del delGrp)
+        public void Delete([FromBody]Del del)
         {
-            _repo.DeleteMyGroup(delGrp);
+            _repo.DeleteMyGroup(del);
         }
     }
 }

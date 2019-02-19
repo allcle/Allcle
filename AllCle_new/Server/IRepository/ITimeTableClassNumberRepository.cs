@@ -12,7 +12,7 @@ namespace Server.IRepository
         void PostTimeTable(TimeTableClassNumber _timeTableClassNumber);
         bool GetClassNumber(string ID, string TimeTableName, string ClassNumber);
         List<TimeTableClassNumber> GetClassNumber(string ID, string TimeTableName);
-        void DeleteSubjectInTimeTable(DelNameClassNum delNameClassNum);
+        void DeleteSubjectInTimeTable(TimeTableClassNumber timeTableClassNumber);
         //void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber);
     }
 }

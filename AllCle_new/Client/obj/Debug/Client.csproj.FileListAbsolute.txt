@@ -169,3 +169,5 @@ C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\DelSubInTable.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\DelSubInTable.baml
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.baml
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.g.cs
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.baml

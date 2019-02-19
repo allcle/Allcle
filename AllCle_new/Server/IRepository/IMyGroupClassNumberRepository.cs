@@ -9,8 +9,8 @@ namespace Server.IRepository
     public interface IMyGroupClassNumberRepository
     {
         List<string> GetMyGroupClassNumbers(string _id, string MyGroupName);
-        void PostSubjectToMyGroup(DelNameClassNum _myGroupClassNumber);
+        void PostSubjectToMyGroup(MyGroupClassNumber _myGroupClassNumber);
         bool GetClassNumber(string ID, string MyGroupName, string ClassNumber);
-        void DeleteSubjectInMyGroup(DelNameClassNum myGroupClassNumber);
+        void DeleteSubjectInMyGroup(MyGroupClassNumber myGroupClassNumber);
     }
 }

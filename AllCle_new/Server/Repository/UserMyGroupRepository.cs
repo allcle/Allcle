@@ -53,7 +53,7 @@ namespace Server.Repository
         public void DeleteMyGroup(Del del)
         {
             string sql = "DELETE FROM UserMyGroup WHERE ID = '"+ del .ID + "' AND MyGroupName = N'" + del.Name + "'";
-            db.Execute(sql);
+            db.Execute(sql,del);
         }
 
 

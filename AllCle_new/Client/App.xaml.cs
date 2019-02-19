@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Client
 {
@@ -15,6 +9,7 @@ namespace Client
     {
         public static MainWindow MW = new MainWindow();
         public static MainScreen MS = new MainScreen();
+        
         public static string ID;
         public static bool first;
         public static bool guest;

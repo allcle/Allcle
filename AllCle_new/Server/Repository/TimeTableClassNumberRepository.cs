@@ -53,10 +53,10 @@ namespace Server.Repository
             return this.db.Query<TimeTableClassNumber>(sql).ToList();
         }
 
-        public void DeleteSubjectInTimeTable(DelNameClassNum delNameClassNum)
+        public void DeleteSubjectInTimeTable(TimeTableClassNumber timeTableClassNumber)
         {
-            string sql = "DELETE FROM MyGroupClassNumber WHERE ID = '" + delNameClassNum.ID + "' AND MyGroupName = N'" + delNameClassNum.Name + "' AND ClassNumber = '" + delNameClassNum.ClassNumber + "'";
-            db.Execute(sql);
+            string sql = "DELETE FROM TimeTableClassNumber WHERE ID = '" + timeTableClassNumber.ID + "' AND TimeTableName = N'" + timeTableClassNumber.TimeTableName + "' AND ClassNumber = '" + timeTableClassNumber.ClassNumber + "'";
+            db.Execute(sql, timeTableClassNumber);
         }
 
         /*public void UpdateTimeTableClassNumber(UpdateUserIdTimeTable _timeTableClassNumber)

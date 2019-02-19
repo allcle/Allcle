@@ -93,6 +93,9 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserMyGroup.cs" />
     <Compile Include="Models\UserTimeTable.cs" />
+    <Compile Include="ModifyInfo.xaml.cs">
+      <DependentUpon>ModifyInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ModifyInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SignUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

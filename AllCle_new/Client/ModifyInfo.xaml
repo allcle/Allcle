@@ -1,0 +1,197 @@
+﻿<Window x:Class="Client.ModifyInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="ModifyInfo" Height="600" Width="400" WindowStartupLocation="CenterScreen" Activated="Window_Activated" >
+    <Window.Resources>
+        <Style TargetType="TextBox" x:Key="pwbx">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <TextBox  Foreground="#FF7D7676" Margin="5 0 0 0"  Background="#FFEDE3E3" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Text="{TemplateBinding Text}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="incorrect">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border>
+                            <TextBlock FontSize="8" Foreground="Red" Padding="5 0 0 0 " VerticalAlignment="Center" Text="{TemplateBinding Text}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="title">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border>
+                            <TextBlock Text="{TemplateBinding Text}" Foreground="#FF7D7676" Background="White" FontSize="17"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0 0 0 10" Grid.Column="0" Grid.ColumnSpan="3"  Background="#FFEFC050"/>
+        <Border Grid.Row="0"  BorderThickness="0"  HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFEFC050">
+            <TextBlock Text="회원가입"  FontSize="20" Foreground="White"/>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column ="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Text="비밀번호" Style="{StaticResource title}"/>
+
+                <PasswordBox Name="curPW_pwx" Grid.Row="1" Margin="5,0,0,0" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3" LostFocus="curPW_pwx_LostFocus"/>
+                <TextBox Name="curPW_tbx" Grid.Row="1" Text="현재 비밀번호" Style="{StaticResource pwbx}" GotFocus="curPW_tbx_GotFocus"/>
+                
+                <TextBox Name="wrongCurPW_tbx" Grid.Row="2" Text="현재 비밀번호가 틀렸습니다." Style="{StaticResource incorrect}"/>
+
+                <TextBox Grid.Row="3" Text="비밀번호" Style="{StaticResource title}"/>
+
+                <PasswordBox Name="newPW_pwx" Grid.Row="4" Margin="5,0,0,0" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3" LostFocus="newPW_pwx_LostFocus"/>
+                <TextBox Name="newPW_tbx" Grid.Row="4" Style="{StaticResource pwbx}" GotFocus="newPW_tbx_GotFocus"/>
+
+                <TextBox Name="wrongNewPW_tbx" Grid.Row="5" Text="숫자와 영문자 조합으로 8글자 이상이어야 합니다." Style="{StaticResource incorrect}"/>
+
+                <PasswordBox Name="conPW_pwx"  Grid.Row="6" Margin="5,0,0,0" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3" LostFocus="conPW_pwx_LostFocus"/>
+                <TextBox Name="conPW_tbx" Text="비밀번호" Grid.Row="6" Style="{StaticResource pwbx}" GotFocus="conPW_tbx_GotFocus"/>
+
+                <TextBox Name="wrongConPW_tbx" Grid.Row="7" Text="두 비밀번호가 일치하지 않습니다." Style="{StaticResource incorrect}"/>
+
+                <TextBox Grid.Row="8" Text="학번" Style="{StaticResource title}"/>
+
+                <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="9" SelectedIndex="3" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                    <ComboBoxItem>16</ComboBoxItem>
+                    <ComboBoxItem>17</ComboBoxItem>
+                    <ComboBoxItem>18</ComboBoxItem>
+                    <ComboBoxItem>19</ComboBoxItem>
+                </ComboBox>
+
+                <TextBox Grid.Row="10" Text="단과대학" Style="{StaticResource title}"/>
+
+                <ComboBox x:Name="College_cbx" Grid.Row="11" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" DropDownClosed="College_cbx_DropDownClosed">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                    <ComboBoxItem>공과대학</ComboBoxItem>
+                    <ComboBoxItem>건축대학</ComboBoxItem>
+                    <ComboBoxItem>일반대학</ComboBoxItem>
+                </ComboBox>
+
+                <TextBox Grid.Row="12" Text="전공" Style="{StaticResource title}"/>
+
+                <ComboBox x:Name="Major_normal" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" ScrollViewer.CanContentScroll="False">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                    <ComboBoxItem>경영학부</ComboBoxItem>
+                    <ComboBoxItem>영어영문학과</ComboBoxItem>
+                    <ComboBoxItem>독어독문학과</ComboBoxItem>
+                    <ComboBoxItem>불어불문학과</ComboBoxItem>
+                    <ComboBoxItem>국어국문학과</ComboBoxItem>
+                    <ComboBoxItem>수학교육과</ComboBoxItem>
+                    <ComboBoxItem>국어교육과</ComboBoxItem>
+                    <ComboBoxItem>영어교육과</ComboBoxItem>
+                    <ComboBoxItem>역사교육과</ComboBoxItem>
+                    <ComboBoxItem>교육학과</ComboBoxItem>
+                    <ComboBoxItem>동양학과</ComboBoxItem>
+                    <ComboBoxItem>회화과</ComboBoxItem>
+                    <ComboBoxItem>판화과</ComboBoxItem>
+                    <ComboBoxItem>조소과</ComboBoxItem>
+                    <ComboBoxItem>목조형가구학과</ComboBoxItem>
+                    <ComboBoxItem>예술학과</ComboBoxItem>
+                    <ComboBoxItem>금속디자인학과</ComboBoxItem>
+                    <ComboBoxItem>도유유리과</ComboBoxItem>
+                    <ComboBoxItem>섬유미술패션디자인학과</ComboBoxItem>
+                    <ComboBoxItem>디자인학부</ComboBoxItem>
+                    <ComboBoxItem>법학부</ComboBoxItem>
+                    <ComboBoxItem>경제학부</ComboBoxItem>
+                </ComboBox>
+
+                <ComboBox x:Name="Major_engineer" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                    <ComboBoxItem>건설도시공학부</ComboBoxItem>
+                    <ComboBoxItem>전자전기공학부</ComboBoxItem>
+                    <ComboBoxItem>정보컴퓨터공학부</ComboBoxItem>
+                    <ComboBoxItem>신소재화공시스템공학부</ComboBoxItem>
+                    <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
+                </ComboBox>
+
+                <ComboBox x:Name="Major_architecture" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+                    <ComboBox.Background>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                            <GradientStop Color="#FFEDE3E3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
+                    <ComboBoxItem>건축학부</ComboBoxItem>
+                </ComboBox>
+
+            </Grid>
+            
+            
+            
+        </Grid>
+        <Button Grid.Row="2" FontSize="20" Content="수정하기" BorderThickness="0" Background="#FFEFC050" Foreground="White" Click="Button_Click"/>
+
+
+
+    </Grid>
+</Window>

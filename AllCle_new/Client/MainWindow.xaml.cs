@@ -1,23 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Forms;
-using System.Windows.Media.Animation;
-using System.Windows.Forms.VisualStyles;
 using System.Net;
 using System.Security.Cryptography;
 using System.IO;
@@ -149,14 +133,6 @@ namespace Client
                     try
                     {
                         Login_Encrypt(NewpostData);
-                        check_error = 0;
-                    }
-                    catch
-                    {
-                        check_error = 1;
-                    }
-                    if (check_error == 0)
-                    {
                         App.ID = ID_Box.Text;
                         App.guest = false;
                         ID_Box.Text = "아이디 입력";
@@ -168,7 +144,7 @@ namespace Client
                         ID_Box.Text = "";
                         PW_Box.Password = "";
                     }
-                    else if (check_error != 0)
+                    catch
                     {
                         // 새로운 암호 저장에 문제가 발생.
                         // 기존 암호로 저장하자.
@@ -183,7 +159,8 @@ namespace Client
                                 {
                                     Login_Encrypt(NewpostData2);
                                 }
-                                catch{
+                                catch
+                                {
                                     MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("비밀번호가 유실되었을 가능성이 큽니다. 비밀번호를 재 설정 하십시오..");
                                 }
 
@@ -212,7 +189,6 @@ namespace Client
         private void Login_Encrypt(String NewpostData)
         {
             String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
-
             HttpWebRequest httpWebRequest2 = (HttpWebRequest)WebRequest.Create(callUrl);// 인코딩 UTF-8
             byte[] sendData2 = UTF8Encoding.UTF8.GetBytes(NewpostData);
             httpWebRequest2.ContentType = "application/json; charset=UTF-8";

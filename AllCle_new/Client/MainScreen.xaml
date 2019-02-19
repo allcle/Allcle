@@ -1257,7 +1257,7 @@
                             Content="이미지로 저장" 
                             BorderThickness="0" Background="White"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Right" Padding="40 0 0 0"
+                            HorizontalAlignment="Center" Padding="40 0 0 0"
                             HorizontalContentAlignment="Right" Height="35"
                             Click="Save_Image_Click"
                             Style="{StaticResource roundedButton_gray}">

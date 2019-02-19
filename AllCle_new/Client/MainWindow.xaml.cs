@@ -49,9 +49,10 @@ namespace Client
 
         private void Geust_Login_Button_Click(object sender, RoutedEventArgs e)
         {
+            DefineGuestMajor DGM = new DefineGuestMajor();
             App.ID = "Guest";
             App.guest = true;
-            App.MS.Show();                                              //메인 화면 띄우기
+            DGM.Show();                                              //메인 화면 띄우기
             this.Hide();                                                //로그인창 hide
             Init();
         }
@@ -113,6 +114,10 @@ namespace Client
                 string college = result.College;
                 string major = result.Major;
 
+                string OldEncryptedkey = result.EncryptKey;
+                string OldEncryptedPW = result.Password;
+
+
                 if (encryptedPW == result.Password)      //기존꺼랑 비교
                 {
                     String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
@@ -128,11 +133,25 @@ namespace Client
                     // NewEncryptedPW, setkey업데이트
                     // String NewpostData = String.Format("Password={0}&EncryptKey={1}&Id={2}", NewEncryptedPW, setkey, result.Id);
                     String NewpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
-
-                    int check_error = 1;
                     try
                     {
-                        Login_Encrypt(NewpostData);
+                        try
+                        {
+                            Login_Encrypt(NewpostData);
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                System.Windows.MessageBox.Show("새 암호화된 비밀번호에 문제가 있어, 기존 비밀번호를 유지합니다.");
+                                String OldpostData = "{ \"Password\" : \"" + NewEncryptedPW + "\", \"EncryptKey\" : \"" + setkey + "\", \"Id\" : \"" + id + "\", \"YearOfEntry\" : \"" + yearofentry + "\", \"College\" : \"" + college + "\", \"Major\" : \"" + major + "\"}";
+                                Login_Encrypt(OldpostData);
+                            }
+                            catch
+                            {
+                                System.Windows.MessageBox.Show("비밀번호를 수정해야하려나요..?");
+                            }
+                        }
                         App.ID = ID_Box.Text;
                         App.guest = false;
                         ID_Box.Text = "아이디 입력";
@@ -150,6 +169,7 @@ namespace Client
                         // 기존 암호로 저장하자.
                         MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("서버 접속에 문제가 있습니다. 종료 후 다시 이용해주십시오.");
                         //메세지창 띄우기
+                        /*
                         if (messageBoxResult == MessageBoxResult.Yes)
                         {
                             try
@@ -164,8 +184,8 @@ namespace Client
                                     MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("비밀번호가 유실되었을 가능성이 큽니다. 비밀번호를 재 설정 하십시오..");
                                 }
 
-                                /*밑의 2줄이 try문 안에 있어야하는 기본 구문.*/
-                                /*위는 계정 정보가 에러뜨는 문제를 해결하기 위한 실험. 문제가 계속되면 180~187줄은 지워야된다.*/
+                                //밑의 2줄이 try문 안에 있어야하는 기본 구문.
+                                //위는 계정 정보가 에러뜨는 문제를 해결하기 위한 실험. 문제가 계속되면 180~187줄은 지워야된다.
                                 App.MS.Close();
                                 this.Close();
                             }
@@ -175,6 +195,7 @@ namespace Client
                                 this.Close();
                             }
                         }
+                        */
                     }
                 }
                 else

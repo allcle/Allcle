@@ -1,0 +1,47 @@
+﻿<Window x:Class="Client.DefineGuestMajor"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Client"
+      mc:Ignorable="d" 
+      Height="200" Width="400" WindowStartupLocation="CenterScreen" WindowStyle="None" Title="DefineGuestMajor">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#FFEFC050">
+            <TextBlock Text="AllCle Guest 전공, 학번 설정" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="0.15*"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ComboBox Name="hakbun_cbox" Grid.Column="0" SelectedIndex="0" VerticalAlignment="Center" DropDownClosed="hakbun_cbx_DropDownClosed">
+                <ComboBoxItem>19학번</ComboBoxItem>
+                <ComboBoxItem>18학번</ComboBoxItem>
+                <ComboBoxItem>17학번</ComboBoxItem>
+                <ComboBoxItem>16학번</ComboBoxItem>
+                <ComboBoxItem>15학번</ComboBoxItem>
+                <ComboBoxItem>14학번</ComboBoxItem>
+                <ComboBoxItem>13학번</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Name="hakbun_cbox_text" Grid.Column="0" Text="19학번" Visibility="Collapsed"/>
+
+
+            <ComboBox Name="major_cbox" Grid.Column="3" SelectedIndex="0" VerticalAlignment="Center" DropDownClosed="major_cbx_DropDownClosed">
+                <ComboBoxItem>공과대학</ComboBoxItem>
+                <ComboBoxItem>건축대학</ComboBoxItem>
+                <ComboBoxItem>일반대학</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Name="major_cbox_text" Grid.Column="3" Text="공과대학" Visibility="Collapsed"/>
+        </Grid>
+        <Button Grid.Row="2" Content="로그인" Margin ="10" Click="Button_Click"/>
+    </Grid>
+</Window>

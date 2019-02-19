@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+
 
 namespace Client
 {
@@ -76,53 +78,61 @@ namespace Client
         }
 
 
+
         private void Save_btn_Click(object sender, RoutedEventArgs e)       //수정
         {
-            ID_concern.Visibility = Visibility.Hidden;      // 처음엔 일단 숨기기
-            PW_corcenrn.Visibility = Visibility.Hidden;     //처음엔 일단 숨기기
-            PW_corcenrn2.Visibility = Visibility.Hidden;    // 처음엔 일단 숨기기
-            Regex regexPW = new Regex(@"(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$");     //비밀번호 정규식
-            string id = null;                                                           //id가 id + 이메일이라서 필요
-            Boolean foundMatch = regexPW.IsMatch(PW_Box.Password);
-            if (PW_Box.Password != PWCon_Box.Password)                     //비밀번호 strcmp
-                PW_corcenrn2.Visibility = Visibility.Visible;       //다르다고 경고
+            if (invisible2.Text == "check_success")
+            {
+                ID_concern.Visibility = Visibility.Hidden;      // 처음엔 일단 숨기기
+                PW_corcenrn.Visibility = Visibility.Hidden;     //처음엔 일단 숨기기
+                PW_corcenrn2.Visibility = Visibility.Hidden;    // 처음엔 일단 숨기기
+                Regex regexPW = new Regex(@"(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$");     //비밀번호 정규식
+                string id = null;                                                           //id가 id + 이메일이라서 필요
+                Boolean foundMatch = regexPW.IsMatch(PW_Box.Password);
+                if (PW_Box.Password != PWCon_Box.Password)                     //비밀번호 strcmp
+                    PW_corcenrn2.Visibility = Visibility.Visible;       //다르다고 경고
 
-            if (IdExists(ID_box.Text))                                          //이미 아이디가 존재하거나 이메일 형식이 아니다
-            {
-                ID_concern.Visibility = Visibility.Visible;
-                ID_box.Text = "";
-                ID_box.Focus();
-            }
-            else if (PW_Box.Password.Length < 8 || !foundMatch)
-            {
-                PW_corcenrn.Visibility = Visibility.Visible;
-            }
-            else if (PW_Box.Password == PWCon_Box.Password)
-            {
-                string major = "";
-                if (College_cbx.Text == "일반대학")
+                if (IdExists(ID_box.Text))                                          //이미 아이디가 존재하거나 이메일 형식이 아니다
                 {
-                    major = Major_normal.Text;
+                    ID_concern.Visibility = Visibility.Visible;
+                    ID_box.Text = "";
+                    ID_box.Focus();
                 }
-                else if (College_cbx.Text == "공과대학")
+                else if (PW_Box.Password.Length < 8 || !foundMatch)
                 {
-                    major = Major_engineer.Text;
+                    PW_corcenrn.Visibility = Visibility.Visible;
                 }
-                else if (College_cbx.Text == "건축대학")
+                else if (PW_Box.Password == PWCon_Box.Password)
                 {
-                    major = Major_architecture.Text;
+                    string major = "";
+                    if (College_cbx.Text == "일반대학")
+                    {
+                        major = Major_normal.Text;
+                    }
+                    else if (College_cbx.Text == "공과대학")
+                    {
+                        major = Major_engineer.Text;
+                    }
+                    else if (College_cbx.Text == "건축대학")
+                    {
+                        major = Major_architecture.Text;
+                    }
+                    if (email_cbx.Text == "직접입력")
+                        id = ID_box.Text + "@" + emailWrite_tbx.Text;
+                    else
+                        id = ID_box.Text + "@" + email_tbk.Text;
+                    PostUser(id, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
+                    System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
+                    this.Close();
                 }
-                if (email_cbx.Text == "직접입력")
-                    id = ID_box.Text + "@" + emailWrite_tbx.Text;
                 else
-                    id = ID_box.Text + "@" + email_tbk.Text;
-                PostUser(id, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
-                System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
-                this.Close();
+                {
+                    PWCon_Box.Focus();
+                }
             }
             else
             {
-                PWCon_Box.Focus();
+                System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
             }
         }
 
@@ -157,6 +167,26 @@ namespace Client
             if (PW_Box.Password.Length == 0)
             {
                 PW_TextBox.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Check_box_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (Check_email_input.Text == "인증번호")
+            {
+                Check_email_input.Foreground = Brushes.Black;
+                Check_email_input.TextAlignment = TextAlignment.Left;
+                Check_email_input.Text = "";
+            }
+        }
+
+        private void Check_box_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (Check_email_input.Text.Length == 0)
+            {
+                Check_email_input.Foreground = Brushes.Black;
+                Check_email_input.TextAlignment = TextAlignment.Left;
+                Check_email_input.Text = "인증번호";
             }
         }
 
@@ -211,5 +241,75 @@ namespace Client
             }
 
         }
+        private void email_check(object sender, EventArgs e)
+        {
+            if (ID_box.Text != "아이디")
+            {
+                string email = ID_box.Text + "@";
+                if (email_cbx.Text == "직접입력")
+                    email = email + emailWrite_tbx;
+                else
+                    email = email + email_tbk.Text;
+                MailMessage mail = new MailMessage("allcle@naver.com", email);
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.EnableSsl = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Host = "smtp.naver.com";
+                client.Credentials = new System.Net.NetworkCredential("allcle", "1q2w3e4r!");
+                mail.Subject = "올클에서 회원님의 ID 인증 번호를 보내드립니다.";
+
+                string tempPW = null;
+                Random rand = new Random();
+                int len = rand.Next(6, 10);
+                for (int i = 0; i < len; i++)
+                {
+                    tempPW += (char)rand.Next(48, 57);  // 랜덤으로 대문자 암호화키 생성
+                }
+                string setkey = null;
+                len = rand.Next(6, 10);
+                for (int i = 0; i < len; i++)
+                {
+                    setkey += (char)rand.Next(65, 122);  // 랜덤으로 대문자 암호화키 생성
+                }
+                mail.Body = "회원님의 인증번호는 " + tempPW + "입니다.";
+                try
+                {
+                    client.Send(mail);
+                    System.Windows.MessageBox.Show("이메일이 전송되었습니다. 전송된 인증번호를 입력해주십시오.");
+                    Check_email.Visibility = Visibility.Collapsed;
+                    invisible1.Text = tempPW;
+                    Check_email_num.Visibility = Visibility.Visible;
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "이메일이 전송되지 못했습니다. 다시 시도해주십시오.");
+                }
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("이메일을 입력해주십시오.");
+            }
+        }
+
+        private void insert_check_num(object sender, EventArgs e)
+        {
+            if (Check_email_input.Text == invisible1.Text)
+            {
+                Check_complete.Visibility = Visibility.Visible;
+                Check_email_num.Visibility = Visibility.Collapsed;
+                invisible2.Text = "check_success";
+            }
+            else
+            {
+                Check_email.Visibility = Visibility.Visible;
+                Check_email_num.Visibility = Visibility.Collapsed;
+                Check_complete.Visibility = Visibility.Collapsed;
+                invisible1.Text = "tempPW";
+                invisible2.Text = "check_fail";
+            }
+        }
+
     }
 }

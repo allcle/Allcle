@@ -143,7 +143,6 @@ C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\Client.pdb
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\Newtonsoft.Json.dll
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\Newtonsoft.Json.xml
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client.csprojAssemblyReference.cache
-C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DeleteSubject.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\MainScreen.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\MainWindow.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\SignUp.g.cs
@@ -151,7 +150,6 @@ C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\App.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client_Content.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client_MarkupCompile.cache
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\Client_MarkupCompile.lref
-C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DeleteSubject.baml
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\MainScreen.baml
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\MainWindow.baml
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\SignUp.baml
@@ -171,3 +169,14 @@ C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.baml
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.g.cs
 C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.baml
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\source\images\Add_white.png
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\source\images\Delete_white.png
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\bin\Debug\source\images\Modify_white.png
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DelSubInTable.g.cs
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.g.cs
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.g.cs
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DelSubInTable.baml
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.baml
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.baml
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.g.cs
+C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.baml

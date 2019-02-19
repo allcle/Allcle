@@ -61,9 +61,9 @@ namespace Server.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete]
-        public void Delete([FromBody]DelNameClassNum delNameClassNum)
+        public void Delete([FromBody]TimeTableClassNumber timeTableClassNumber)
         {
-            _repo.DeleteSubjectInTimeTable(delNameClassNum);
+            _repo.DeleteSubjectInTimeTable(timeTableClassNumber);
         }
     }
 }

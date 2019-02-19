@@ -34,7 +34,7 @@ namespace Server.Repository
             return db.Query<string>(sql).ToList();
         }
 
-        public void PostSubjectToMyGroup(DelNameClassNum _myGroupClassNumber)
+        public void PostSubjectToMyGroup(MyGroupClassNumber _myGroupClassNumber)
         {
             string sql = "Insert Into MyGroupClassNumber (ID, MyGroupName, ClassNumber) Values (@ID, @MyGroupName, @ClassNumber)";
             db.Execute(sql, _myGroupClassNumber);
@@ -43,7 +43,7 @@ namespace Server.Repository
         public bool GetClassNumber(string ID, string MyGroupName, string ClassNumber)
         {
             string sql = "Select * From MyGroupClassNumber Where Id ='" + ID + "' and MyGroupName = N'" + MyGroupName + "' and ClassNumber = '" + ClassNumber + "'";
-            int num = this.db.Query<DelNameClassNum>(sql).Count();
+            int num = this.db.Query<MyGroupClassNumber>(sql).Count();
             if (num == 1)
                 return true;
             else
@@ -51,10 +51,10 @@ namespace Server.Repository
         }
 
 
-        public void DeleteSubjectInMyGroup(DelNameClassNum delNameClassNum)
+        public void DeleteSubjectInMyGroup(MyGroupClassNumber myGroupClassNumber)
         {
-            string sql = "DELETE FROM MyGroupClassNumber WHERE ID = '" + delNameClassNum.ID + "' AND MyGroupName = N'" + delNameClassNum.Name + "' AND ClassNumber = '" + delNameClassNum.ClassNumber + "'";
-            db.Execute(sql);
+            string sql = "DELETE FROM MyGroupClassNumber WHERE ID = '" + myGroupClassNumber.ID + "' AND MyGroupName = N'" + myGroupClassNumber.MyGroupName + "' AND ClassNumber = '" + myGroupClassNumber.ClassNumber + "'";
+            db.Execute(sql, myGroupClassNumber);
         }
 
 

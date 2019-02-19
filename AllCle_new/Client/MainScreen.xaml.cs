@@ -1,32 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Forms;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Client.Models;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using System.Reflection;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Media.Animation;
-using System.Threading;
 
 namespace Client
 {
@@ -88,6 +76,7 @@ namespace Client
         string urlMyGroupClassNumber = @"https://allcleapp.azurewebsites.net/api/MyGroupClassNumber";       //저장된 MyGroup의 과목들
         string urlABEEK = @"https://allcleapp.azurewebsites.net/api/ABEEK";             
         string urlEngNormal = @"https://allcleapp.azurewebsites.net/api/EngNormal";
+        string urlUser = @"https://allcleapp.azurewebsites.net/api/Users";
         string url = null;  //json으로 쓰일 url
 
         public MainScreen()
@@ -102,46 +91,58 @@ namespace Client
             InitDB();
             tabActive = false;
             myGroup_btn = false;
-            GetUserTimeTable();
-            TableList.ItemsSource = userTimeTable;
+            RefreshTimeTableList();
             RefreshMyGroup();           //마이그룹 새로고침
             UserId.Text = App.ID.Substring(0, App.ID.LastIndexOf("@"));
             if (!App.guest)
                 InitUserInfo();
             else if (App.guest)
                 GuestLogIn();
-            if(userTimeTable.Count() == 0)  //시간표가 하나도 없음
-            {
-                AddTimeTable();
-            }
+            
         }
 
 
         private void InitUserInfo()
         {
-            url = @"https://allcleapp.azurewebsites.net/api/Users/" + App.ID;
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
-            byte[] sendData = new byte[0];
-            httpWebRequest.ContentType = "application/json; charset=UTF-8";
-            httpWebRequest.Method = "POST";
-            httpWebRequest.ContentLength = sendData.Length;
-            Stream requestStream = httpWebRequest.GetRequestStream();
-            requestStream.Write(sendData, 0, sendData.Length);
-            requestStream.Close();
-            HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
-            user = JsonConvert.DeserializeObject<User>(streamReader.ReadToEnd());
-            streamReader.Close();
-            httpWebResponse.Close();
+            try
+            {
+                url = urlUser + "/" + App.ID;
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);// 인코딩 UTF-8
+                byte[] sendData = new byte[0];
+                httpWebRequest.ContentType = "application/json; charset=UTF-8";
+                httpWebRequest.Method = "POST";
+                httpWebRequest.ContentLength = sendData.Length;
+                Stream requestStream = httpWebRequest.GetRequestStream();
+                requestStream.Write(sendData, 0, sendData.Length);
+                requestStream.Close();
+                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream(), Encoding.GetEncoding("UTF-8"));
+                user = JsonConvert.DeserializeObject<User>(streamReader.ReadToEnd());
+                streamReader.Close();
+                httpWebResponse.Close();
+            }
+            catch
+            {
+
+            }
 
             UserAdmissionYear.Text = "학번 : " + user.YearOfEntry;
             UserMajor.Text = user.Major;
 
             GetUserTimeTable();
-            if (userTimeTable.Count() != 0)
+            try
             {
-                //TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
-                //GetTimeTableClassNumber(userTimeTable[0].NO);
+                TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
+                groupName = userTimeTable[0].TimeTableName;
+                GetTimeTableClassNumber(userTimeTable[0].TimeTableName);
+                RefreshTimeTable();
+            }
+            catch
+            {
+                AddTimeTable();
+                GetUserTimeTable();
+                TableEdit_txtbox.Text = userTimeTable[0].TimeTableName;
+                groupName = userTimeTable[0].TimeTableName;
                 GetTimeTableClassNumber(userTimeTable[0].TimeTableName);
                 RefreshTimeTable();
             }
@@ -258,7 +259,6 @@ namespace Client
                 return tempSubjects;
             else
             {
-                Console.WriteLine(fromToInt + " ~ " + toToInt);
                 if (toToInt <= fromToInt)
                 {
                     System.Windows.MessageBox.Show("숫자를 잘못설정하였습니다");
@@ -337,7 +337,6 @@ namespace Client
             tempStrings = TimeInList(usersSubjectsList);
             for (int i = 0; i < tempStrings.Count; i++)
             {
-                Console.WriteLine(tempStrings[i] + "  ");
                 for (int j = 0; j < 8; j++)
                     tempSubjects = tempSubjects.Where(s => !s.Times[j].Contains(tempStrings[i])).ToList();
             }
@@ -528,36 +527,42 @@ namespace Client
         {
             List<Subject> result = new List<Subject>();
             result = SearchLR(subjectList);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
         private void SearchLeft()
         {
             List<Subject> result = new List<Subject>();
             result = SearchLeft(subjectList);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
         private void SearchLeft(string type)
         {
             List<Subject> result = new List<Subject>();
             result = SearchLeft(subjectList,type);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
         private void SearchRight()
         {
             List<Subject> result = new List<Subject>();
             result = SearchRight(subjectList);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
         private void SearchRight(string type)
         {
             List<Subject> result = new List<Subject>();
             result = SearchRight(subjectList, type);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
         private void SearchMajor(string type)
         {
             List<Subject> result = new List<Subject>();
             result = SearchMajor(subjectList, type);
+            resultSubtject = result;
             DataListView_All.ItemsSource = result;
         }
 
@@ -818,68 +823,132 @@ namespace Client
     
         private void GetUserTimeTable()
         {
-            url = urlUserTimeTable + "/" + App.ID;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
+            try
+            {
+                url = urlUserTimeTable + "/" + App.ID;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                userTimeTable = JsonConvert.DeserializeObject<List<UserTimeTable>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
         private void GetTimeTableClassNumber(String TimeTableName)
         {
-            url = urlTimeTableClassNumber + "/" + App.ID + "/" + TimeTableName;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            timeTableClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
+            try
+            {
+                url = urlTimeTableClassNumber + "/" + App.ID + "/" + TimeTableName;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                timeTableClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
         private void GetUserMyGroup()
         {
-            url = urlUserMyGroup + "/" + App.ID;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            userMyGroup = JsonConvert.DeserializeObject<List<UserMyGroup>>(Unicode);
+            try
+            {
+                url = urlUserMyGroup + "/" + App.ID;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                userMyGroup = JsonConvert.DeserializeObject<List<UserMyGroup>>(Unicode);
+            }
+            catch
+            {
+
+            }
+       
         }
         private void GetmyGroupClassNumber(string MyGroupName)
         {
-            url = urlMyGroupClassNumber + "/" + App.ID + "/" + MyGroupName;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            myGroupClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
+            try
+            {
+                url = urlMyGroupClassNumber + "/" + App.ID + "/" + MyGroupName;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                myGroupClassNumber = JsonConvert.DeserializeObject<List<string>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
 
         private void GetNormalCommon()  //공통교양 가져오기
         {
-            url = urlType + "/normal_common";
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            typeClassNumsLeft = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            try
+            {
+                url = urlType + "/normal_common";
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                typeClassNumsLeft = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
         private void GetNormalGeneral() //일반교양 가져오기
         {
-            url = urlType + "/normal_general";
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            typeClassNumsRight = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            try
+            {
+                url = urlType + "/normal_general";
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                typeClassNumsRight = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
         private void GetMajor()
         {
-            url = urlType + "/major";
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            typeClassNumsMajor = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            try
+            {
+                url = urlType + "/major";
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                typeClassNumsMajor = JsonConvert.DeserializeObject<List<TypeClassNum>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
 
         private void GetEngineerABEEK()
         {
-            url = urlABEEK;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            aBEEKs = JsonConvert.DeserializeObject<List<ABEEK>>(Unicode);
+            try
+            {
+                url = urlABEEK;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                aBEEKs = JsonConvert.DeserializeObject<List<ABEEK>>(Unicode);
+            }
+            catch
+            {
+
+            }
         }
         private void GetEngineerNormal()
         {
-            url = urlEngNormal;
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            engNormals = JsonConvert.DeserializeObject<List<EngNormal>>(Unicode);
+            try
+            {
+                url = urlEngNormal;
+                var json = new WebClient().DownloadData(url);
+                string Unicode = Encoding.UTF8.GetString(json);
+                engNormals = JsonConvert.DeserializeObject<List<EngNormal>>(Unicode);
+            }
+            catch
+            {
+
+            }
 
         }
         
@@ -967,11 +1036,7 @@ namespace Client
         }
 
 
-        private void RefreshMyGroup()       //마이그룹 새로고침
-        {
-            GetUserMyGroup();
-            SetUserMyGroup();
-        }
+       
         private void SetUserMyGroup()   //MyGroup 불러오고, 화면에 세팅
         {
             TextBlock[] myGroupTbk = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk,  };
@@ -996,50 +1061,17 @@ namespace Client
                 grids[i].Background = (Brush)bc.ConvertFrom(gridtListBack);
             groupName = null;
         }
-        private void SaveTimeTable()    //시간표의 과목 저장
+
+        private void RefreshMyGroup()       //마이그룹 새로고침
         {
-            url = urlTimeTableClassNumber;
-            GetTimeTableClassNumber(tableName);
-            for (int i = 0; i < timeTableClassNumber.Count; i++)
-            {
-                for(int j=0;j< usersSubjectsList.Count;j++)
-                {                               
-                    if (usersSubjectsList[j].ClassNumber.Equals(timeTableClassNumber[i]))
-                        continue;
-                    else
-                    {
-                        string NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"" + tableName + "\", \"classNumber\" : \"" + timeTableClassNumber[i] + "\"}";
-                        Console.WriteLine(NewpostData);
-                        Connect(url, NewpostData, "DELETE");
-                    }
-                }
-            }
-            for (int i=0;i< usersSubjectsList.Count; i++)
-            {
-                if (timeTableClassNumber.Contains(usersSubjectsList[i].ClassNumber))
-                    continue;
-                else
-                {
-                    string NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"" + tableName + "\", \"classNumber\" : \"" + usersSubjectsList[i].ClassNumber + "\"}";
-                    Console.WriteLine(NewpostData);
-                    Connect(url, NewpostData, "POST");
-                }              
-            }
+            GetUserMyGroup();
+            SetUserMyGroup();
         }
-
-        private void AddTimeTable() //시간표 추가
+        private void RefreshTimeTableList()
         {
-            url = urlUserTimeTable;
-            String now = DateTime.Now.ToString("MMddHHmmss");       //날짜
-            String NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"시간표" + now + "\", \"saveTime\" : \"" + now + "\", \"editTime\" : \"" + now + "\"}";
-            Connect(url, NewpostData, "POST");
-
             GetUserTimeTable();
             TableList.ItemsSource = userTimeTable;
         }
-
-
-
         private void RefreshTimeTable() //시간표 갱신
         {
             Type brushesType = typeof(Brushes);
@@ -1119,101 +1151,7 @@ namespace Client
             } //User의 과목들을 색칠, 2차원 배열에 넣기
         }
 
-        private void DeleteSubjectInTimeTable(string _dayAndPeriod)//매개변수 시간에 있는 과목 삭제
-        {
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time1 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time2 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time3 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time4 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time5 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time6 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time7 == _dayAndPeriod));
-            usersSubjectsList.Remove(usersSubjectsList.Find(x => x.Time8 == _dayAndPeriod));
-        }  
-        
-        private void AddSubjectToTimeTable()
-        {
-            bool totalAbleToPut = false;
-            int index = DataListView_All.SelectedIndex;
-            int period1 = 0; string day1 = null;
-            int period2 = 0; string day2 = null;
-            int period3 = 0; string day3 = null;
-            int period4 = 0; string day4 = null;
-            int period5 = 0; string day5 = null;
-            int period6 = 0; string day6 = null;
-            int period7 = 0; string day7 = null;
-            int period8 = 0; string day8 = null;
-
-            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
-
-            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
-
-            if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
-            {
-                string[] time = new string[] { resultSubtject[index].Time1, resultSubtject[index].Time2, resultSubtject[index].Time3, resultSubtject[index].Time4, resultSubtject[index].Time5, resultSubtject[index].Time6, resultSubtject[index].Time7, resultSubtject[index].Time8 };
-
-                if (time[0] != "")
-                {
-                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
-                    daylist[0] = time[0].Substring(0, 1);
-                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
-                    else
-                    {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
-                }
-
-                for (int i = 1; i < 8; i++)
-                {
-                    if (time[i] != "" && totalAbleToPut == true)
-                    {
-                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
-                        daylist[i] = time[i].Substring(0, 1);
-                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
-                        else
-                        {
-                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                            totalAbleToPut = false;
-                        }
-                    }
-                }
-            }
-
-            if (totalAbleToPut == true) //과목을 넣을 수 있다면
-            {
-                usersSubjectsList.Add(new Subject()
-                {
-                    Grade = resultSubtject[index].Grade,
-                    deparment = resultSubtject[index].deparment,
-                    ClassNumber = resultSubtject[index].ClassNumber,
-                    ClassName = resultSubtject[index].ClassName,
-                    CreditCourse = resultSubtject[index].CreditCourse,
-                    Professor = resultSubtject[index].Professor,
-                    강의시간 = resultSubtject[index].강의시간,
-                    Time1 = resultSubtject[index].Time1,
-                    Time2 = resultSubtject[index].Time2,
-                    Time3 = resultSubtject[index].Time3,
-                    Time4 = resultSubtject[index].Time4,
-                    Time5 = resultSubtject[index].Time5,
-                    Time6 = resultSubtject[index].Time6,
-                    Time7 = resultSubtject[index].Time7,
-                    Time8 = resultSubtject[index].Time8,
-                }); //과목추가
-                RefreshTimeTable();
-            }
-        }
-
+       
         private void AddMyGroup()       //그룹추가 함수
         {
             Grid[] grids = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
@@ -1229,7 +1167,14 @@ namespace Client
             else
                 return;
         }
-
+        private void AddTimeTable() //시간표 추가
+        {
+            url = urlUserTimeTable;
+            String now = DateTime.Now.ToString("MMddHHmmss");       //날짜
+            String NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"시간표" + now + "\", \"saveTime\" : \"" + now + "\", \"editTime\" : \"" + now + "\"}";
+            Connect(url, NewpostData, "POST");
+            RefreshTimeTableList();
+        }
         private void AddSubjectToMyGroup()
         {
             url = urlMyGroupClassNumber;
@@ -1242,20 +1187,68 @@ namespace Client
                 string Unicode = Encoding.UTF8.GetString(json);
                 if (Unicode == "true")
                 {
-                    System.Windows.MessageBox.Show("해당 과목은 이미 존재합니다.");
+                    System.Windows.MessageBox.Show("해당 과목은" + groupName + "에 이미 존재합니다.");
                     return;
                 }
                 url = urlMyGroupClassNumber;
                 string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"MyGroupName\" : " + "\"" + groupName + "\"" + ", \"ClassNumber\" : \"" + ClassNumber + "\"}";
                 Connect(url, NewpostData, "POST");  //마이그룹 추가
+                string tempGroupName = groupName;
                 RefreshMyGroup();           //마이그룹 새로고침
+                Grid[] grids = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
+                TextBlock[] textBlocks = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk, };
+                System.Windows.Controls.ListView[] listViews = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst, Group3_lst, Group4_lst, Group5_lst, Group6_lst, Group7_lst, Group8_lst, Group9_lst };
+                Style style = this.FindResource("AddXbox_lst") as Style;
+                Style style2 = this.FindResource("AddXbox_lst2") as Style;
+                BrushConverter bc = new BrushConverter();
+                for (int i = 0; i < 9; i++)
+                {
+                    grids[i].Background = (Brush)bc.ConvertFrom(gridtListBack);
+                    listViews[i].Style = style2;
+                    if (textBlocks[i].Text == tempGroupName)
+                    {
+                        grids[i].Background = (Brush)bc.ConvertFrom(selectGridListBack);
+                        listViews[i].Style = style;
+                    }
+                }
+                groupName = tempGroupName;
             }
             catch
             {
                 System.Windows.MessageBox.Show("그룹을 선택해주세요.");
             }
         }
-
+        private void AddSubjectToTimeTable(Subject subject)
+        {
+            for (int k = 0; k< 8; k++)
+            {
+                if(subject.Times[k].Length>0)       //시간이 0값이 아니다
+                {
+                    for (int i = 0; i < usersSubjectsList.Count; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (usersSubjectsList[i].Times[j].Equals(subject.Times[k]))
+                            {
+                                System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            url = urlTimeTableClassNumber;
+            string NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"" + tableName + "\", \"classNumber\" : \"" + subject.ClassNumber + "\"}";
+            Connect(url, NewpostData, "POST");
+            usersSubjectsList.Clear();
+            GetTimeTableClassNumber(tableName);
+            for (int i = 0; i < timeTableClassNumber.Count; i++)
+            {
+                usersSubjectsList.AddRange(subjectList.Where(s => s.ClassNumber.Equals(timeTableClassNumber[i])).ToList());
+            }
+            RefreshTimeTable();
+        }
+        
         private void DelSubjectInMyGroup(object sender)
         {
             System.Windows.Controls.Button btn = sender as System.Windows.Controls.Button;
@@ -1263,9 +1256,60 @@ namespace Client
             string sub = subject.ClassNumber;
             string newPostData = "{ \"id\" : \"" + App.ID + "\", \"myGroupName\" : \"" + groupName + "\", \"classNumber\" : \"" + sub + "\"}";
             url = urlMyGroupClassNumber;
-            Console.WriteLine(newPostData);
             Connect(url, newPostData, "DELETE");
+            string tempGroupName = groupName;
             RefreshMyGroup();           //마이그룹 새로고침
+            Grid[] grids = new Grid[] { Group1_grd, Group2_grd, Group3_grd, Group4_grd, Group5_grd, Group6_grd, Group7_grd, Group8_grd, Group9_grd };
+            TextBlock[] textBlocks = new TextBlock[] { Group1Name_tbk, Group2Name_tbk, Group3Name_tbk, Group4Name_tbk, Group5Name_tbk, Group6Name_tbk, Group7Name_tbk, Group8Name_tbk, Group9Name_tbk, };
+            System.Windows.Controls.ListView[] listViews = new System.Windows.Controls.ListView[] { Group1_lst, Group2_lst, Group3_lst, Group4_lst, Group5_lst, Group6_lst, Group7_lst, Group8_lst, Group9_lst };
+            Style style = this.FindResource("AddXbox_lst") as Style;
+            Style style2 = this.FindResource("AddXbox_lst2") as Style;
+            BrushConverter bc = new BrushConverter();
+            for (int i = 0; i < 9; i++)
+            {
+                grids[i].Background = (Brush)bc.ConvertFrom(gridtListBack);
+                listViews[i].Style = style2;
+                if (textBlocks[i].Text == tempGroupName)
+                {
+                    grids[i].Background = (Brush)bc.ConvertFrom(selectGridListBack);
+                    listViews[i].Style = style;
+                }
+            }
+            groupName = tempGroupName;
+        }
+        private void DeleteSubjectInTimeTable(string _dayAndPeriod)//매개변수 시간에 있는 과목 삭제
+        {
+            url = urlTimeTableClassNumber;
+            for (int j = 0; j < usersSubjectsList.Count(); j++)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    if (usersSubjectsList[j].Times[i].Equals(_dayAndPeriod))
+                    {
+                        string NewpostData = "{ \"id\" : \"" + App.ID + "\", \"timeTableName\" : \"" + tableName + "\", \"classNumber\" : \"" + usersSubjectsList[j].ClassNumber + "\"}";
+                        Connect(url, NewpostData, "DELETE");
+                        usersSubjectsList.Clear();
+                        GetTimeTableClassNumber(tableName);
+                        for (int l = 0; l < timeTableClassNumber.Count; l++)
+                        {
+                             usersSubjectsList.AddRange(subjectList.Where(s => s.ClassNumber.Equals(timeTableClassNumber[l])).ToList());
+                        }
+                        RefreshTimeTable();
+                        return;
+                    }
+                }
+            }
+            return;
+        }
+
+        private void ChangeTimeTableName()
+        {
+            url = urlUserTimeTable + "/name";
+            String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"NewTiemTableName\" : \"" + TableEdit_txtbox.Text + "\", \"OldTimeTableName\" : \"" + tableName + " \"}";
+            Connect(url, NewpostData, "PUT");
+           // tableName = TableEdit_txtbox.Text;
+            GetUserTimeTable();
+            TableList.ItemsSource = userTimeTable;
         }
 
         private void Search()
@@ -1300,86 +1344,31 @@ namespace Client
                 }
                 return;               
             }
-
-
-            bool totalAbleToPut = false;
-            int index = DataListView_All.SelectedIndex;
-            int period1 = 0; string day1 = null;
-            int period2 = 0; string day2 = null;
-            int period3 = 0; string day3 = null;
-            int period4 = 0; string day4 = null;
-            int period5 = 0; string day5 = null;
-            int period6 = 0; string day6 = null;
-            int period7 = 0; string day7 = null;
-            int period8 = 0; string day8 = null;
-
-            string[] daylist = new string[] { day1, day2, day3, day4, day5, day6, day7, day8 };
-
-            int[] _period = new int[] { period1, period2, period3, period4, period5, period6, period7, period8 };
-
-            if (DataListView_All.SelectedItems.Count == 1) //리스트에서 클릭하면
+            else
             {
-                string[] time = new string[] { resultSubtject[index].Time1, resultSubtject[index].Time2, resultSubtject[index].Time3, resultSubtject[index].Time4, resultSubtject[index].Time5, resultSubtject[index].Time6, resultSubtject[index].Time7, resultSubtject[index].Time8 };
-
-                if (time[0] != "")
+                if (DataListView_All.SelectedItems.Count == 1)
                 {
-                    _period[0] = Int32.Parse(time[0].Substring(1, time[0].Length - 1));
-                    daylist[0] = time[0].Substring(0, 1);
-                    if (daylist[0] == "월" && TimeTableDB[_period[0], 1].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "화" && TimeTableDB[_period[0], 2].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "수" && TimeTableDB[_period[0], 3].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "목" && TimeTableDB[_period[0], 4].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "금" && TimeTableDB[_period[0], 5].ableToPut == true) totalAbleToPut = true;
-                    else if (daylist[0] == "토" && TimeTableDB[_period[0], 6].ableToPut == true) totalAbleToPut = true;
-                    else
+                    int index = DataListView_All.SelectedIndex;
+                    Subject subject = new Subject()
                     {
-                        System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                        totalAbleToPut = false;
-                    }
+                        Grade = resultSubtject[index].Grade,
+                        deparment = resultSubtject[index].deparment,
+                        ClassNumber = resultSubtject[index].ClassNumber,
+                        ClassName = resultSubtject[index].ClassName,
+                        CreditCourse = resultSubtject[index].CreditCourse,
+                        Professor = resultSubtject[index].Professor,
+                        강의시간 = resultSubtject[index].강의시간,
+                        Time1 = resultSubtject[index].Time1,
+                        Time2 = resultSubtject[index].Time2,
+                        Time3 = resultSubtject[index].Time3,
+                        Time4 = resultSubtject[index].Time4,
+                        Time5 = resultSubtject[index].Time5,
+                        Time6 = resultSubtject[index].Time6,
+                        Time7 = resultSubtject[index].Time7,
+                        Time8 = resultSubtject[index].Time8
+                    };
+                    AddSubjectToTimeTable(subject);
                 }
-
-                for (int i = 1; i < 8; i++)
-                {
-                    if (time[i] != "" && totalAbleToPut == true)
-                    {
-                        _period[i] = Int32.Parse(time[i].Substring(1, time[i].Length - 1));
-                        daylist[i] = time[i].Substring(0, 1);
-                        if (daylist[i] == "월" && TimeTableDB[_period[i], 1].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "화" && TimeTableDB[_period[i], 2].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "수" && TimeTableDB[_period[i], 3].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "목" && TimeTableDB[_period[i], 4].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "금" && TimeTableDB[_period[i], 5].ableToPut == true) totalAbleToPut = true;
-                        else if (daylist[i] == "토" && TimeTableDB[_period[i], 6].ableToPut == true) totalAbleToPut = true;
-                        else
-                        {
-                            System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                            totalAbleToPut = false;
-                        }
-                    }
-                }
-            }
-
-            if (totalAbleToPut == true) //과목을 넣을 수 있다면
-            {
-                usersSubjectsList.Add(new Subject()
-                {
-                    Grade = resultSubtject[index].Grade,
-                    deparment = resultSubtject[index].deparment,
-                    ClassNumber = resultSubtject[index].ClassNumber,
-                    ClassName = resultSubtject[index].ClassName,
-                    CreditCourse = resultSubtject[index].CreditCourse,
-                    Professor = resultSubtject[index].Professor,
-                    강의시간 = resultSubtject[index].강의시간,
-                    Time1 = resultSubtject[index].Time1,
-                    Time2 = resultSubtject[index].Time2,
-                    Time3 = resultSubtject[index].Time3,
-                    Time4 = resultSubtject[index].Time4,
-                    Time5 = resultSubtject[index].Time5,
-                    Time6 = resultSubtject[index].Time6,
-                    Time7 = resultSubtject[index].Time7,
-                    Time8 = resultSubtject[index].Time8,
-                }); //과목추가
-                RefreshTimeTable();
             }
         }
 
@@ -1511,7 +1500,6 @@ namespace Client
                     }
                 }
             }
-
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed;
 
         }
@@ -1592,7 +1580,6 @@ namespace Client
             if (diagResult == true)
             {
                 DeleteSubjectInTimeTable(day_time[week - 1, period - 1]);
-                RefreshTimeTable(); //새로고침
             }
             schedule[week - 1, period - 1].Visibility = Visibility.Collapsed; 
         }
@@ -1606,7 +1593,6 @@ namespace Client
                 GetTimeTableClassNumber(tableName);
                 TableEdit_txtbox.Text = tableName;
                 usersSubjectsList.Clear();
-
                 for (int i = 0; i < timeTableClassNumber.Count; i++)
                 {
                     usersSubjectsList.AddRange(subjectList.Where(s => s.ClassNumber.Equals(timeTableClassNumber[i])).ToList());
@@ -1618,46 +1604,7 @@ namespace Client
                 
             }
         }
-
-        private void ShowSubjectInTimeTable(string tableName)       //삭제예정
-        {
-            // 해당 테이블이름, 아이디에 해당하는 내용 출력
-            // 서버에서 데이터 가져오고
-            url = urlTimeTableClassNumber + "/" + App.ID + "/" + tableName;
-            
-            var json = new WebClient().DownloadData(url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            System.Windows.MessageBox.Show(Unicode);
-
-            // 시간표 UI 한번 초기화 하고
-            // InitDB();
-
-            // 서버에서 가져온 내용 출력
-            // 학수번호 갯수만큼 반복하면서
-            // 학수번호로 sql 때려서 저 정보들 가져와서 넣기
-            /*
-            usersSubjectsList.Add(new Subject()
-            {
-                NO = resultSubtject[index].NO,
-                Grade = resultSubtject[index].Grade,
-                ClassNumber = resultSubtject[index].ClassNumber,
-                ClassName = resultSubtject[index].ClassName,
-                CreditCourse = resultSubtject[index].CreditCourse,
-                Professor = resultSubtject[index].Professor,
-                강의시간 = resultSubtject[index].강의시간,
-                Time1 = resultSubtject[index].Time1,
-                Time2 = resultSubtject[index].Time2,
-                Time3 = resultSubtject[index].Time3,
-                Time4 = resultSubtject[index].Time4,
-                Time5 = resultSubtject[index].Time5,
-                Time6 = resultSubtject[index].Time6,
-                Time7 = resultSubtject[index].Time7,
-                Time8 = resultSubtject[index].Time8,
-            }); //과목추가
-            RefreshTimeTable();
-            */
-        }
-
+        
         private void tab_Click(object sender, RoutedEventArgs e)
         {
             MyGroup_grd.Visibility = Visibility.Collapsed;
@@ -1863,16 +1810,13 @@ namespace Client
             }
         }
 
-        private void TableEdit_txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void TableEdit_txtbox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)   //수정요망
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 if (userTimeTable.Count() != 0)
                 {
-                    url = urlUserTimeTable + "/name";
-                    String NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"saveTime\" : \"0\", \"editTime\" : \"0\"}";
-                    GetUserTimeTable();
-                    TableList.ItemsSource = userTimeTable;
+                    ChangeTimeTableName();
                 }
             }
         }
@@ -1881,121 +1825,7 @@ namespace Client
         {
             AddTimeTable();
         }
-
-        private void Save_Schedule_Click(object sender, RoutedEventArgs e)
-        {
-            SaveTimeTable();
-            /*string check_url = "";
-            string insert_url = "";
-            string update_url = "";
-            check_url = urlUserTimeTable + "/" + App.ID + "/TimeTableName/" + TableEdit_txtbox.Text;
-            var json = new WebClient().DownloadData(check_url);
-            string Unicode = Encoding.UTF8.GetString(json);
-            if (Unicode == "[]")
-            {
-                // 해당 데이터가 존재하지 않는다! 새로 저장하기
-                insert_url = urlUserTimeTable;
-                String now = DateTime.Now.ToString("MMddHHmmss");
-                //String NewpostData = "{ \"ID\" : '" + App.ID + "', \"NO\" : \"" + now + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
-                String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"SaveTime\" : \"" + now + "\", \"EditTime\" : \"" + now + "\"}";
-                Connect(insert_url, NewpostData1, "POST");
-            }
-            else
-            {
-                // 해당 데이터가 이미 존재한다! edittime만 갱신하기
-                String EditTime = DateTime.Now.ToString("MMddHHmmss");
-                //update_url = urlUserTimeTable + "/" + App.ID + "/update_edittime/" + TableEdit_txtbox.Text + "/EditTime/" + EditTime;
-                update_url = "http://allcleapp.azurewebsites.net/api/UserTimeTable";
-                String NewpostData2 = "{ \"EditTime\" : '" + EditTime + "', \"ID\" : \"" + App.ID + "\", \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\"}";
-                Connect(update_url, NewpostData2, "PUT"); // 여기서 에러 발생!
-            }
-
-            GetUserTimeTable();
-            TableList.ItemsSource = userTimeTable;
-
-            // 리스트 위에 있는 과목들도 저장해야됨
-            // 얘네는 TimeTableClass DB에 저장해야됨
-            Save_Schedule_Subject_Click();*/
-        }
-
-        private void Save_Schedule_Subject_Click()
-        {;
-            // 시간표 이름에 맞춰서 UI에 등록된 과목들 순차적으로 저장
-            /* TextBlock[,] _schedule = new TextBlock[,]
-             {
-                 {mon1, mon2, mon3, mon4, mon5, mon6, mon7, mon8, mon9, mon10, mon11, mon12, mon13},
-                 {tue1, tue2, tue3, tue4, tue5, tue6, tue7, tue8, tue9, tue10, tue11, tue12, tue13},
-                 {wed1, wed2, wed3, wed4, wed5, wed6, wed7, wed8, wed9, wed10, wed11, wed12, wed13},
-                 {thu1, thu2, thu3, thu4, thu5, thu6, thu7, thu8, thu9, thu10, thu11, thu12, thu13},
-                 {fri1, fri2, fri3, fri4, fri5, fri6, fri7, fri8, fri9, fri10, fri11, fri12, fri13},
-                 {sat1, sat2, sat3, sat4, sat5, sat6, sat7, sat8, sat9, sat10, sat11, sat12, sat13},
-             };
-             string[,] day_time = new string[,]
-              {
-                 {"월1", "월2", "월3", "월4", "월5", "월6", "월7", "월8", "월9", "월10", "월11", "월12", "월13"},
-                 {"화1", "화2", "화3", "화4", "화5", "화6", "화7", "화8", "화9", "화10", "화11", "화12", "화13"},
-                 {"수1", "수2", "수3", "수4", "수5", "수6", "수7", "수8", "수9", "수10", "수11", "수12", "수13"},
-                 {"목1", "목2", "목3", "목4", "목5", "목6", "목7", "목8", "목9", "목10", "목11", "목12", "목13"},
-                 {"금1", "금2", "금3", "금4", "금5", "금6", "금7", "금8", "금9", "금10", "금11", "금12", "금13"},
-                 {"토1", "토2", "토3", "토4", "토5", "토6", "토7", "토8", "토9", "토10", "토11", "토12", "토13"}
-              };
-             for (int i = 0; i < 6; i++)
-             {
-                 for (int j=0; j<13; j++)
-                 {
-                     if (_schedule[i, j].Text != "")
-                     {
-                         // 강의시간, 강좌명, 강사 나오니까 이걸로 ClassNumber select
-                         String[] str = _schedule[i, j].Text.Split('\n');
-                         String classname = str[0];
-                         String temp_classTeach = str[1];
-                         String classTeach = "";
-                         String classtime = day_time[i, j];
-
-                         String[] parsing_classTeach = temp_classTeach.Split(' ');
-                         for(int k = 0; k<parsing_classTeach.Length; k++)
-                         {
-                             classTeach = classTeach + "_" + parsing_classTeach[k];
-                         }
-
-                         string ClassNumber_url = urlBase + "/" + classname + "/" + classTeach + "/" + classtime;
-                         var json = new WebClient().DownloadData(ClassNumber_url);
-                         string temp_classnumber = Encoding.UTF8.GetString(json);
-                         string[] temp = temp_classnumber.Split('"');
-                         string classnumber = temp[7];
-
-                         /*
-                          * 현재로서는 불필요한 부분. 이 부분을 예외처리로 대신함
-                         // TimeTableClassNumber Table에 해당 ClassNumber 있는지 확인
-                         string CheckClassNumber = urlTimeTableClassNumber + "/" + App.ID + "/" + TableEdit_txtbox.Text + "/" + classnumber;
-                         var Check_ClassNumber_json = new WebClient().DownloadData(CheckClassNumber);
-                         string Check_ClassNumber_Unicode = Encoding.UTF8.GetString(Check_ClassNumber_json);
-                         */
-            /*
-            try
-            {
-                // 해당 classnumber가 없는 경우 삽입.
-                // 여기서 에러 발생. 현재 저장만 하면 된다..
-                string insert_ClassNumber_url = urlTimeTableClassNumber;
-                String ClassNumber_postData = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + classnumber + "\"}";
-                connect(insert_ClassNumber_url, ClassNumber_postData, "POST");
-            }
-            catch
-            {
-                // 이미 데이터가 존재하는 경우
-            }
-        }
-    }
-}
-
-*/
-            // 강의시간, 강좌명, 강사 이용해서 학수번호 출력
-            // 얻은 학수번호를 밑의 ClassNumber 변수에 저장
-
-            //String url = urlTimeTableClassNumber;
-            //String NewpostData1 = "{ \"ID\" : '" + App.ID + "', \"TimeTableName\" : \"" + TableEdit_txtbox.Text + "\", \"ClassNumber\" : \"" + ClassNumber + "\"}";
-            //connect(url, NewpostData1, "POST");
-        }
+        
         
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -2080,7 +1910,7 @@ namespace Client
             for(int i=0;i<9;i++)
                 if(panel.Name == button[i].Name)
                 {
-                    string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"MyGroupName\" : \"" + textBlocks[i].Text + "\"}";
+                    string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"Name\" : \"" + textBlocks[i].Text + "\"}";
                     Connect(url, NewpostData, "DELETE");
                     break;
                 }
@@ -2092,7 +1922,30 @@ namespace Client
 
             DelSubjectInMyGroup(sender);
         }
-        
+
+        private void TimeDelete_btn_Click(object sender, RoutedEventArgs e)
+        {
+            url = urlUserTimeTable;
+            string NewpostData = "{ \"ID\" : \"" + App.ID + "\", \"Name\" : \"" + tableName + "\"}";
+            Console.WriteLine(NewpostData);
+            Connect(url, NewpostData, "DELETE");
+            RefreshTimeTableList();
+            usersSubjectsList.Clear();
+            RefreshTimeTable();
+        }
+
+        private void TimeEdit_btn_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTimeTableName();
+        }
+
+        private void UserInfoEdit_btn_Click(object sender, RoutedEventArgs e)
+        {
+            ModifyInfo modifyInfo = new ModifyInfo();
+            modifyInfo.Show();
+        }
+
+
         // 시간표 정보(이름, 수강 과목 등) 수정 시 On update cascade해놨으니까 UserTimeTable만 업데이트하고, TimeTableClassNumber는 바로 insert하면 된다.
     }
 }

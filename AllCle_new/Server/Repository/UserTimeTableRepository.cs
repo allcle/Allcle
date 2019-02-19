@@ -29,7 +29,7 @@ namespace Server.Repository
 
         public List<UserTimeTable> GetUserTimeTables(string _userId)
         {
-            string sql = "Select * From UserTimeTable Where ID = N'" + _userId + "'";
+            string sql = "Select * From UserTimeTable Where ID = N'" + _userId + "' ORDER BY SaveTime ASC ";
             return this.db.Query<UserTimeTable>(sql).ToList();
         }
 
@@ -68,8 +68,8 @@ namespace Server.Repository
         }
         public void DeleteTimeTable(Del del)
         {
-            string sql = "DELETE FROM UserTimeTable WHERE ID = '" + del.ID + "' AND MyGroupName = N'" + del.Name + "'";
-            db.Execute(sql);
+            string sql = "DELETE FROM UserTimeTable WHERE ID = '" + del.ID + "' AND TimeTableName = N'" + del.Name + "'";
+            db.Execute(sql,del);
         }
     }
 }

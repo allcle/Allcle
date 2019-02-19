@@ -1,23 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Client.Models;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
@@ -29,11 +15,9 @@ namespace Client
 
     public partial class SignUp : Window
     {
-        bool first = true;
         public SignUp()
         {
             InitializeComponent();
-            first = true;
         }
         public string callUrl = "http://allcleapp.azurewebsites.net/api/Users";
         public string Encrypt(string strToEncrypt, string strKey)

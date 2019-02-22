@@ -49,12 +49,6 @@ namespace Client
         string gridtListBack = "#FFD3D3D3";
         string selectGridListBack = "#FFF0C05A";
 
-
-
-
-
-
-
         /*색 리스트*/
         User user = new User();
         bool tabActive;             //tab bar active or not
@@ -93,7 +87,14 @@ namespace Client
             myGroup_btn = false;
             RefreshTimeTableList();
             RefreshMyGroup();           //마이그룹 새로고침
-            UserId.Text = App.ID.Substring(0, App.ID.LastIndexOf("@"));
+            try
+            {
+                UserId.Text = App.ID.Substring(0, App.ID.LastIndexOf("@"));
+            }
+            catch
+            {
+                UserId.Text = "Guest";
+            }
             if (!App.guest)
                 InitUserInfo();
             else if (App.guest)
@@ -171,8 +172,8 @@ namespace Client
         private void GuestLogIn()
         {
             UserId.Text = "Guest";
-            UserAdmissionYear.Text = "Guest";
-            UserMajor.Text = "Guest";
+            UserAdmissionYear.Text = App.guest_hakbun;
+            UserMajor.Text = App.guest_major;
         }
         private List<Subject> SearchByWord(List<Subject> subjects)//검색함수
         {

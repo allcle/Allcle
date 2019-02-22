@@ -27,6 +27,8 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.5*"/>
                 <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.3*"/>
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.5*"/>
                 <RowDefinition Height="0.3*"/>
@@ -68,28 +70,33 @@
 
 
             </Grid>
-            
-            
-            <Border x:Name="ID_concern" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+            <TextBox Name="invisible1" Text="tempPW" FontSize="15" Grid.Row="3" Grid.Column="0" Margin="4,0,1,0"  Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus" Background="#FFEDE3E3" Opacity="0"/>
+            <TextBox Name="invisible2" Text="check_fail" FontSize="15" Grid.Row="3" Grid.Column="0" Margin="4,0,1,0"  Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="ID_box_GotFocus" LostFocus="ID_box_LostFocus" Background="#FFEDE3E3" Opacity="0"/>
+            <TextBox Name="Check_email_input" Text="인증번호" FontSize="15" Grid.Row="3" Grid.Column="0" Margin="4,0,1,0"  Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="Check_box_GotFocus" LostFocus="Check_box_LostFocus" Background="#FFEDE3E3"/>
+            <Button x:Name="Check_email" Content="인증 번호 전송" Width="130" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="0" FontSize="15" BorderThickness="0" Click="email_check" Background="#FFEFC050" Foreground="White" Height="23" VerticalAlignment="Bottom" Visibility="Visible"/>
+            <Button x:Name="Check_email_num" Content="인증 번호 입력" Width="130" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="0" FontSize="15" BorderThickness="0" Click="insert_check_num" Background="#FFEFC050" Foreground="White" Height="23" VerticalAlignment="Bottom" Visibility="Collapsed"/>
+            <Button x:Name="Check_complete" Content="인증 완료" Width="130" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="0" FontSize="15" BorderThickness="0" Click="insert_check_num" Background="#FFEFC050" Foreground="White" Height="23" VerticalAlignment="Bottom" Visibility="Collapsed"/>
+
+            <Border x:Name="ID_concern" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
                 <TextBlock Text="*이미 존재하는 아이디입니다" Foreground="Red" Background="White" FontSize="8"/>
             </Border>
-            <Border Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Border Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="비밀번호" Foreground="#FF7D7676" Background="White" FontSize="17"/>
             </Border>
-            <PasswordBox x:Name="PW_Box"  Grid.Row="4" Margin="5,0,0,0" LostFocus="PW_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3"/>
-            <TextBox x:Name="PW_TextBox" Text="비밀번호" FontSize="15" Grid.Row="4" Margin="5,0,0,0" Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus" Background="#FFEDE3E3" Padding="0,0,0,3"/>
-            <Border x:Name="PW_corcenrn" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+            <PasswordBox x:Name="PW_Box"  Grid.Row="6" Margin="5,0,0,0" LostFocus="PW_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3"/>
+            <TextBox x:Name="PW_TextBox" Text="비밀번호" FontSize="15" Grid.Row="6" Margin="5,0,0,0" Foreground="#FF7D7676" BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PW_TextBox_GotFocus" Background="#FFEDE3E3" Padding="0,0,0,3"/>
+            <Border x:Name="PW_corcenrn" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
                 <TextBlock Text="*비밀번호는 영문자, 숫자를 섞어서 8글자 이상" Foreground="Red" Background="White" FontSize="8"/>
             </Border>
-            <PasswordBox x:Name="PWCon_Box"  Grid.Row="6"  LostFocus="PWCon_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Margin="5,0,0,0" Background="#FFEDE3E3"/>
-            <TextBox x:Name="PWCon_TextBox" Text="비밀번호 확인" FontSize="15" Grid.Row="6" Margin="5,0,0,0" Foreground="#FF7D7676"  BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus" Background="#FFEDE3E3"/>
-            <Border x:Name="PW_corcenrn2" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
+            <PasswordBox x:Name="PWCon_Box"  Grid.Row="8"  LostFocus="PWCon_Box_LostFocus" BorderThickness="0" VerticalContentAlignment="Center" Margin="5,0,0,0" Background="#FFEDE3E3"/>
+            <TextBox x:Name="PWCon_TextBox" Text="비밀번호 확인" FontSize="15" Grid.Row="8" Margin="5,0,0,0" Foreground="#FF7D7676"  BorderThickness="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="PWCon_TextBox_GotFocus" Background="#FFEDE3E3"/>
+            <Border x:Name="PW_corcenrn2" Grid.Row="9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="Hidden">
                 <TextBlock Text="*비밀번호가 다릅니다" Foreground="Red" Background="White" FontSize="8"/>
             </Border>
-            <Border Grid.Row="8" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Border Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="학번" Foreground="#FF7D7676" Background="White" FontSize="17"/>
             </Border>
-            <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="9" SelectedIndex="3" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
+            <ComboBox x:Name="YearOfEntry_cbx" Grid.Row="11" SelectedIndex="3" FontSize="15" Foreground="#FF7D7676" BorderThickness="0">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -101,10 +108,10 @@
                 <ComboBoxItem>18</ComboBoxItem>
                 <ComboBoxItem>19</ComboBoxItem>
             </ComboBox>
-            <Border Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Border Grid.Row="12" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="단과대학" Foreground="#FF7D7676" Background="White" FontSize="17"/>
             </Border>
-            <ComboBox x:Name="College_cbx" Grid.Row="11" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" DropDownClosed="College_cbx_DropDownClosed">
+            <ComboBox x:Name="College_cbx" Grid.Row="13" SelectedIndex="2" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" DropDownClosed="College_cbx_DropDownClosed">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -115,10 +122,10 @@
                 <ComboBoxItem>건축대학</ComboBoxItem>
                 <ComboBoxItem>일반대학</ComboBoxItem>
             </ComboBox>
-            <Border Grid.Row="12" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Border Grid.Row="14" HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock Text="전공" Foreground="#FF7D7676" Background="White" FontSize="17"/>
             </Border>
-            <ComboBox x:Name="Major_normal" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" ScrollViewer.CanContentScroll="False">
+            <ComboBox x:Name="Major_normal" Grid.Row="15" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" ScrollViewer.CanContentScroll="False">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -149,7 +156,7 @@
                 <ComboBoxItem>경제학부</ComboBoxItem>
             </ComboBox>
 
-            <ComboBox x:Name="Major_engineer" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+            <ComboBox x:Name="Major_engineer" Grid.Row="14" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -163,7 +170,7 @@
                 <ComboBoxItem>기계시스템디자인공학과</ComboBoxItem>
             </ComboBox>
 
-            <ComboBox x:Name="Major_architecture" Grid.Row="13" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
+            <ComboBox x:Name="Major_architecture" Grid.Row="14" SelectedIndex="0" FontSize="15" Foreground="#FF7D7676" BorderThickness="0" Visibility="Collapsed">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>

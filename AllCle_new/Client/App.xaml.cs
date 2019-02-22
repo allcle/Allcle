@@ -9,8 +9,10 @@ namespace Client
     {
         public static MainWindow MW = new MainWindow();
         public static MainScreen MS = new MainScreen();
-        
+
         public static string ID;
+        public static string guest_major;
+        public static string guest_hakbun;
         public static bool first;
         public static bool guest;
         public static bool deleteSubject;

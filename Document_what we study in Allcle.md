@@ -12,16 +12,18 @@
     + 각 UI 구현 기술 기록하자.
     + Reflection을 이용해 객체를 통해 클래스의 정보를 분석하여, 반복되는 메소드 획일화
     + DataGrid 등으로 반복되는 UI와 기능들에 대해 Template 사용
+    + rounded Button, textbox with specific background 등을 위한 Style 사용  
     + binding 사용하여 컨트롤의 source 값에 필요한 데이터만 넣어서 로직 처리
     + ListView control customizing 등 기능 구현. 
     + Definition으로 UI 비율 설계
-    + ComboBoxItem, Grid, List, button, Trigger등의 UI 객체 생성
-    + Mouseover 등의 UI 메소드 사용
+    + ComboBoxItem, Grid, Listview, button, Stackpanel 등의 UI 객체 생성
+    + IsMouseOver, IsChecked 등의 Property Value의 trigger를 통한 setter, 즉 xaml 내의 이벤트 처리 사용
+    + C# wpf의 고질적 문제인 Listview 내의 checkbox 혹은 button의 이벤트 처리결과 해당 Row의 값을 return 받음
   * JSON을 활용하여 Client와 Server간의 데이터 주고 받기
  
 2. Database
   * Microsoft SQL Server. Azure를 활용하여 클라우드 서버에 업로드
-  * Relational Database Table 설계. 테이블 n개 정규화 몇차까지?
+  * Relational Database Table 설계. 테이블 9개, 정규화는 
   * 3-tier 방식의 안전한 구조
   
 3. Server
@@ -31,8 +33,8 @@
     + http://allcleapp.azurewebsites.net/api/ + (서버 통신 경로)
     + url 암호화 예정
   * Azure 클라우드 서버에 게시하여 로컬이 아닌 어디서든 서버 이용하도록 설정 – paas
-  * Rest API, Socket stream
-    + GET, POST, PUT
+  * Rest API
+    + GET, POST, PUT, DELETE
     + http 상태 메시지를 응용해서 결과에 대한 처리 구현
     
 4. Tool & Language
@@ -45,7 +47,7 @@
   * 크롤링 및 파싱
   
 7. 깃허브
-  * master계정 별도로, 디자인과 2명의 개발자
+  * master계정 별도로, 디자이너 1명과 2명의 개발자
   * Pull Request, Merge, Branch, Commit, Git, Bash 등에 대한 이해
   * .gitignore
   * 빌어먹을 git conflict 해결 경험 및 git을 이용한 코드 변경 중 발생한 문제점 추적 등의 경험

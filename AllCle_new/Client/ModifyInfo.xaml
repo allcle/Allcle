@@ -89,7 +89,7 @@
                 <TextBox Grid.Row="3" Text="비밀번호" Style="{StaticResource title}"/>
 
                 <PasswordBox Name="newPW_pwx" Grid.Row="4" Margin="5,0,0,0" BorderThickness="0" VerticalContentAlignment="Center" Background="#FFEDE3E3" LostFocus="newPW_pwx_LostFocus"/>
-                <TextBox Name="newPW_tbx" Grid.Row="4" Style="{StaticResource pwbx}" GotFocus="newPW_tbx_GotFocus"/>
+                <TextBox Name="newPW_tbx" Text="비밀번호" Grid.Row="4" Style="{StaticResource pwbx}" GotFocus="newPW_tbx_GotFocus"/>
 
                 <TextBox Name="wrongNewPW_tbx" Grid.Row="5" Text="숫자와 영문자 조합으로 8글자 이상이어야 합니다." Style="{StaticResource incorrect}"/>
 

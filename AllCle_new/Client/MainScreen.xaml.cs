@@ -21,6 +21,8 @@ namespace Client
     /// <summary>
     /// MainScreen.xaml에 대한 상호 작용 논리
     /// </summary>
+
+    
     public partial class MainScreen : Window
     {
         static HttpClient client = new HttpClient();
@@ -43,7 +45,7 @@ namespace Client
         List<TypeClassNum> typeClassNumsRight = new List<TypeClassNum>();       //일반교양 선택
         List<TypeClassNum> typeClassNumsMajor = new List<TypeClassNum>();       //전공
 
-
+        private List<UserMyGroup> userMyGroupsChecked = new List<UserMyGroup>();        //유저가 체크한 그룹
 
         string[] br = { "#FFCFCFD6", "#FFB1D3D2", "#FF8BC6C1", "#FF2FA5B8", "#FFF4AFA1", "#FFF7B990", "#FF86C26D", "#FF6DE182", "#FFEDE8AD" };
         string gridtListBack = "#FFD3D3D3";
@@ -62,6 +64,9 @@ namespace Client
             public string professor;
             public bool ableToPut;
         }
+        public string YearOfEntry;
+        public string College;
+        public string Major;
         TableSubjects[,] TimeTableDB = new TableSubjects[14, 7]; //12교시*일주일 2차원 배열
         string urlType = @"https://allcleapp.azurewebsites.net/api/Type";                                   //과목들 or 과목 분류 가져오기   
         string urlUserTimeTable = @"https://allcleapp.azurewebsites.net/api/UserTimeTable";             //유저의 시간표 리스트를 위한 기본 url
@@ -81,7 +86,7 @@ namespace Client
         private void Window_Activated(object sender, EventArgs e)
         {
             GetSubjects();
-            DataListView_All.ItemsSource = subjectList;
+            DataListView_All.ItemsSource = resultSubtject;
             InitDB();
             tabActive = false;
             myGroup_btn = false;
@@ -101,7 +106,6 @@ namespace Client
                 GuestLogIn();
             
         }
-
 
         private void InitUserInfo()
         {
@@ -128,7 +132,10 @@ namespace Client
             }
 
             UserAdmissionYear.Text = "학번 : " + user.YearOfEntry;
+            this.YearOfEntry = user.YearOfEntry;
             UserMajor.Text = user.Major;
+            this.Major = user.Major;
+            this.College = user.College;
 
             GetUserTimeTable();
             try
@@ -605,42 +612,42 @@ namespace Client
             }
             else if (major.Text == "사범대학")
             {
-                if (major_language.Text == "교직과(서울)")
+                if (major_teach.Text == "교직과(서울)")
                     SearchMajor("사대공통");
-                else if (major_language.Text == "수학교육과")
+                else if (major_teach.Text == "수학교육과")
                     SearchMajor("수교");
-                if (major_language.Text == "국어교육과")
+                if (major_teach.Text == "국어교육과")
                     SearchMajor("국교");
-                else if (major_language.Text == "영어교육과")
+                else if (major_teach.Text == "영어교육과")
                     SearchMajor("영교");
-                if (major_language.Text == "역사교육과")
+                if (major_teach.Text == "역사교육과")
                     SearchMajor("역교");
-                else if (major_language.Text == "교육학과")
+                else if (major_teach.Text == "교육학과")
                     SearchMajor("교육");
             }
             else if (major.Text == "미술대학")
             {
-                if (major_language.Text == "전공공통")
+                if (major_art.Text == "전공공통")
                     SearchMajor("미대공통");
-                else if (major_language.Text == "동양학과")
+                else if (major_art.Text == "동양학과")
                     SearchMajor("동양");
-                else if (major_language.Text == "회화과")
+                else if (major_art.Text == "회화과")
                     SearchMajor("회화");
-                else if (major_language.Text == "판화과")
+                else if (major_art.Text == "판화과")
                     SearchMajor("판화");
-                else if (major_language.Text == "조소과")
+                else if (major_art.Text == "조소과")
                     SearchMajor("조소");
-                else if (major_language.Text == "목조형가구학과")
+                else if (major_art.Text == "목조형가구학과")
                     SearchMajor("목조");
-                else if (major_language.Text == "예술학과")
+                else if (major_art.Text == "예술학과")
                     SearchMajor("예술");
-                else if (major_language.Text == "금속디자인학과")
+                else if (major_art.Text == "금속디자인학과")
                     SearchMajor("금디");
-                else if (major_language.Text == "도유유리과")
+                else if (major_art.Text == "도유유리과")
                     SearchMajor("도유");
-                else if (major_language.Text == "섬유미술패션디자인학과")
+                else if (major_art.Text == "섬유미술패션디자인학과")
                     SearchMajor("섬디");
-                else if (major_language.Text == "디자인학부")
+                else if (major_art.Text == "디자인학부")
                     SearchMajor("디자인");
             }
             else if (major.Text == "건축대학")
@@ -1232,7 +1239,7 @@ namespace Client
                             if (usersSubjectsList[i].Times[j].Equals(subject.Times[k]))
                             {
                                 System.Windows.MessageBox.Show("이미 그 시간에 과목이 있습니다");
-                                return;
+                                return ;
                             }
                         }
                     }
@@ -1252,7 +1259,7 @@ namespace Client
         
         private void DelSubjectInMyGroup(object sender)
         {
-            System.Windows.Controls.Button btn = sender as System.Windows.Controls.Button;
+            Button btn = sender as Button;
             Subject subject = btn.DataContext as Subject;
             string sub = subject.ClassNumber;
             string newPostData = "{ \"id\" : \"" + App.ID + "\", \"myGroupName\" : \"" + groupName + "\", \"classNumber\" : \"" + sub + "\"}";
@@ -1328,6 +1335,18 @@ namespace Client
             else
                 System.Windows.MessageBox.Show("유저 정보 error in search_btn_clic");
         }
+
+        private void GroupResult()
+        {
+            GetUserMyGroup();
+            GroupResult_grd.Visibility = Visibility.Visible; //그룹목록 1,1 보이게
+            DataListView_All.SetValue(Grid.ColumnSpanProperty, 1); //과목 리스트 span 줄이기
+            MyGroup_grd.Visibility = Visibility.Collapsed; //그룹명, 그 내용있는 왼쪽 리스트 안 보이게
+            TimeTable_grd.Visibility = Visibility.Visible;//시간표 보이게
+            myGroup_btn = false;
+            GroupList_lst.ItemsSource = userMyGroup;
+        }
+
 
 
         private void Search_btn_Click(object sender, RoutedEventArgs e) //검색 버튼 눌렀을때
@@ -1826,8 +1845,7 @@ namespace Client
         {
             AddTimeTable();
         }
-        
-        
+         
         private void MyGroup_btn_Click(object sender, RoutedEventArgs e)
         {
             list_grid.Visibility = Visibility.Visible;
@@ -1920,7 +1938,6 @@ namespace Client
 
         private void DelSubjectInMyGroup_btn_Click(object sender, RoutedEventArgs e)
         {
-
             DelSubjectInMyGroup(sender);
         }
 
@@ -1944,6 +1961,41 @@ namespace Client
         {
             ModifyInfo modifyInfo = new ModifyInfo();
             modifyInfo.Show();
+        }
+
+        private void ShowResult_btn_Click(object sender, RoutedEventArgs e)
+        {
+            GroupResult();
+        }
+    
+        private void GroupList_lst_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (UserMyGroup item in e.RemovedItems)
+                userMyGroupsChecked.Remove(item);
+            foreach (UserMyGroup item in e.AddedItems)
+                userMyGroupsChecked.Add(item);
+            List<Subject> subjects = new List<Subject>();
+            foreach (UserMyGroup item in userMyGroupsChecked)
+            {
+                GetmyGroupClassNumber(item.MyGroupName);
+                foreach(string classNum in myGroupClassNumber)
+                {
+                    subjects.AddRange(subjectList.Where(s => s.ClassNumber.Equals(classNum)).ToList());
+                }
+            }
+            subjects = subjects.Distinct().ToList();
+            resultSubtject = subjects;
+            DataListView_All.ItemsSource = subjects;
+        }
+
+        private void RemoveGroupResult_btn_Click(object sender, RoutedEventArgs e)
+        {
+            GroupResult_grd.Visibility = Visibility.Collapsed; //그룹목록 1,1 안 보이게
+            DataListView_All.SetValue(Grid.ColumnSpanProperty, 2); //과목 리스트 span 늘리기
+            MyGroup_grd.Visibility = Visibility.Collapsed; //그룹명, 그 내용있는 왼쪽 리스트 안 보이게
+            TimeTable_grd.Visibility = Visibility.Visible;//시간표 보이게
+            tabActive = true;
+            myGroup_btn = false;
         }
 
 

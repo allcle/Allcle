@@ -278,7 +278,7 @@
             <TextBox x:Name="ID_Box" Text="아이디 입력" Grid.Row="2" Foreground="Gray" Background="White" 
                      FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 0 0 10" HorizontalContentAlignment="Left" 
                      VerticalContentAlignment="Center" BorderThickness="0" LostFocus="ID_Box_LostFocus" 
-                     GotFocus="ID_Box_GotFocus"/>
+                     GotFocus="ID_Box_GotFocus" KeyDown="ID_Box_KeyDown"/>
             <TextBox x:Name="PW_Box_Text" Text="비밀번호 입력" Grid.Row="3" Foreground="Gray" Background="White" 
                      FontSize="15" FontWeight="Light" Padding="10 0 0 0" Margin="0 2 0 8" HorizontalContentAlignment="Left" 
                      VerticalContentAlignment="Center" BorderThickness="0" Visibility="Visible"

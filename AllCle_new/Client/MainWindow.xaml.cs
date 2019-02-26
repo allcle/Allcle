@@ -120,7 +120,6 @@ namespace Client
 
                 if (encryptedPW == result.Password)      //기존꺼랑 비교
                 {
-                    String callUrl = "http://allcleapp.azurewebsites.net/api/Users";
                     string setkey = null;
                     Random rand = new Random();
                     int len = rand.Next(6, 10);
@@ -226,9 +225,9 @@ namespace Client
             httpWebResponse2.Close();
         }
 
-        private void PW_Box_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void PW_Box_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 Login_PW();
             }
@@ -269,6 +268,14 @@ namespace Client
             //PW_Box.Visibility = Visibility.Visible;
             PW_Box.Opacity = 100;
             PW_Box_Text.Opacity = 0;
+        }
+
+        private void ID_Box_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+
+            }
         }
         //    <!--PW_Box_Text에 올라올때, 무조건 PW_Box를 보이게하고, PW_Box_Text를 안보이게-->
         //    <!--PW_Box에서 나갈 때 PW_Box.text==""이면 PW_Box를 숨기고, PW_Box_Text를 보이게-->

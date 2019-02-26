@@ -21,6 +21,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="button_border" Property="Background" Value="red"/>
+                                <Setter TargetName="button_border" Property="Cursor" Value="Hand"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -40,6 +41,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter TargetName="button_border" Property="Background" Value="red"/>
+                                <Setter TargetName="button_border" Property="Cursor" Value="Hand"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -69,7 +71,7 @@
                                 Stroke="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                Data="M 3,3  4,4  5,3  4,4 Z"/>
                             <!--화살표 모양-->
                         </Grid>
                     </ControlTemplate>
@@ -206,7 +208,7 @@
                                 <DataTemplate >
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="{Binding ClassName}"/>
-                                        <Label Content="{Binding ClassNumber}"/>
+                                        <TextBox Text="{Binding ClassNumber}" BorderThickness="0"/>
                                         <Label Content="{Binding 강의시간}"/>
                                         <Label Content="{Binding LectureRoom}"/>
                                         <Button Name="DelSubjectInMyGroup_btn" Content="X" Background="White" BorderThickness="0" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext.ShowCustomer}" Click="DelSubjectInMyGroup_btn_Click"/>
@@ -244,7 +246,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
 
 
 
@@ -333,6 +334,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="168"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Background="#FFF0F0F0">
                 <TextBlock Text="과목담기" Foreground="#FF606060" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -599,7 +601,7 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <CheckBox Name="rdo_mon" Grid.Column="0" Content="월" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <CheckBox Name="rdo_mon" Content="월" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <CheckBox Name="rdo_tue" Content="화" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -641,6 +643,11 @@
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Image Source="source\images\search_btn.png"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
@@ -648,8 +655,8 @@
                 </Grid>
             </Grid>
             <ListView x:Name="DataListView_All" 
-                          Grid.Row="2" MinHeight="0" 
-                          BorderThickness="0" ItemsSource="{Binding aList}" 
+                          Grid.Row="2" Grid.RowSpan="2" MinHeight="0" 
+                          BorderThickness="0" ItemsSource="{Binding aList}"  
                           MouseDoubleClick="DataListView_All_MouseDoubleClick">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
@@ -657,9 +664,6 @@
                         <Setter Property="Height" Value="22"/>
                     </Style>
                 </ListView.Resources>
-                <ListView.Effect>
-                    <DropShadowEffect Opacity="0.5" Direction="0"/>
-                </ListView.Effect>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Style.Triggers>
@@ -687,6 +691,30 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+            <Grid Name="GroupResult_grd" Grid.Row="3" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0" BorderThickness="0" Background="#FFF0F0F0">
+                    <TextBlock Text="그룹 목록" Foreground="#FF606060" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <Button Name="RemoveGroupResult_btn" Grid.Row="0" Grid.Column="1" Content="X" FontSize="21" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0" Click="RemoveGroupResult_btn_Click"/>
+                <ListView Name="GroupList_lst" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectedItem="{Binding CurrentCustomerToBeShown}" BorderThickness="0" SelectionChanged="GroupList_lst_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name="GroupSel_chk" Content="{Binding MyGroupName}" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem},Path=IsSelected}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
         </Grid>
         <Grid Name="MainView_grd"  Grid.Column="1">
             <Grid.RowDefinitions>
@@ -714,6 +742,7 @@
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter TargetName="tab_off_img" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="tab_on_img" Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -732,6 +761,7 @@
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter TargetName="MyGroup_off_img" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="MyGroup_on_img" Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -750,6 +780,7 @@
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter TargetName="Graduation_off_img" Property="Visibility" Value="Collapsed"/>
                                     <Setter TargetName="Graduation_on_img" Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -1252,12 +1283,12 @@
                         <ColumnDefinition Width="152"/>
                         <ColumnDefinition Width="152"/>
                     </Grid.ColumnDefinitions>
-                    <Button  Grid.Column="1"
+                    <Button  Grid.Column="2"
                             x:Name="TimeTableSaveImage_btn" 
                             Content="이미지로 저장" 
                             BorderThickness="0" Background="White"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Center" Padding="40 0 0 0"
+                            HorizontalAlignment="Center" Padding="10 0 10 0"
                             HorizontalContentAlignment="Right" Height="35"
                             Click="Save_Image_Click"
                             Style="{StaticResource roundedButton_gray}">
@@ -1299,21 +1330,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group1Name_tbk" FontSize="20" Text="1" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName1_btn">
+                                <Button Grid.Column="2" Name="ModName1_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup1_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup1_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1331,21 +1363,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group2Name_tbk" FontSize="20" Text="2" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName2_btn">
+                                <Button Grid.Column="2" Name="ModName2_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup2_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup2_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1362,21 +1395,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                               <Border Grid.Column="1">
                                     <TextBlock Name="Group3Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName3_btn">
+                                <Button Grid.Column="2" Name="ModName3_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup3_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup3_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1393,21 +1427,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group4Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName4_btn">
+                                <Button Grid.Column="2" Name="ModName4_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup4_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup4_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1424,21 +1459,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group5Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName5_btn">
+                                <Button Grid.Column="2" Name="ModName5_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup5_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup5_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1455,21 +1491,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                 <Border Grid.Column="1">
                                     <TextBlock Name="Group6Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName6_btn">
+                                <Button Grid.Column="2" Name="ModName6_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup6_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup6_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1486,21 +1523,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group7Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName7_btn">
+                                <Button Grid.Column="2" Name="ModName7_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup7_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup7_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1517,21 +1555,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group8Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName8_btn">
+                                <Button Grid.Column="2" Name="ModName8_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup8_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup8_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1548,21 +1587,22 @@
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="30"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0">
+                                <Border Grid.Column="1">
                                     <TextBlock Name="Group9Name_tbk" FontSize="20" Text="3" Padding="15 0 0 0"/>
                                 </Border>
-                                <Button Grid.Column="1" Name="ModName9_btn">
+                                <Button Grid.Column="2" Name="ModName9_btn">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Modify_white.png"></Image>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                                <Button Grid.Column="2" Name="DelGroup9_btn" Click="DelMyGroup_Click">
+                                <Button Grid.Column="3" Name="DelGroup9_btn" Click="DelMyGroup_Click">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Image Source="source\images\Delete_white.png"></Image>
@@ -1580,7 +1620,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Name="AddGroup_btn" Content="그룹 추가하기" Background="White" Margin="5 5 30 5" Style="{StaticResource roundedButton_gray}" Click="AddGroup_btn_Click"/>
-                    <Button Grid.Column="1" Name="ShowResult_btn" Content="결과보기" Background="#FFF0C05A" Margin="30 5 5 5" Style="{StaticResource roundedButton_yellow}"/>
+                    <Button Grid.Column="1" Name="ShowResult_btn" Content="결과보기" Background="#FFF0C05A" Margin="30 5 5 5" Style="{StaticResource roundedButton_yellow}" Click="ShowResult_btn_Click"/>
                 </Grid>
             </Grid>
 

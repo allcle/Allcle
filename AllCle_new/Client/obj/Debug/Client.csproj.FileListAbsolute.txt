@@ -180,3 +180,5 @@ C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ForgetPassword.bam
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\ModifyInfo.baml
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.g.cs
 C:\Users\한인수\Desktop\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.baml
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.g.cs
+C:\Users\user\Desktop\git\Allcle\AllCle_new\Client\obj\Debug\DefineGuestMajor.baml

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="DelSubInTable" Height="400" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True">
+        Title="DelSubInTable" Height="200" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True">
     <Window.Background>
         <SolidColorBrush Opacity="0.5"/>
     </Window.Background>
@@ -16,7 +16,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="button_border" CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
+                        <Border x:Name="button_border" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="0" Margin="{TemplateBinding Margin}">
                             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -30,7 +30,7 @@
         </Style>
     </Window.Resources>
 
-    <Border CornerRadius="40" Background="Gray">
+    <Border CornerRadius="20" Background="Gray">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
@@ -41,20 +41,20 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Border Grid.Row="1">
-                <TextBlock Name="SubjectName_Tbk" Text="'전공기초영어' 과목을" FontSize="30" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Name="SubjectName_Tbk" Text="'전공기초영어' 과목을" FontSize="11" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Border Grid.Row="2">
-                <TextBlock Text="시간표에서 삭제하시겠습니까?" FontSize="30" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="시간표에서 삭제하시겠습니까?" FontSize="11" FontWeight="SemiBold" Foreground="white" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Name="Cancel_btn" Grid.Column="0" Content="취소" Foreground="White" FontSize="20" FontWeight="SemiBold" Background="#FF404040" Style="{StaticResource roundedButton}" Margin="20 0 10 0" Click="Cancel_btn_Click">
+                <Button Name="Cancel_btn" Grid.Column="0" Content="취소" Foreground="White" FontSize="10" FontWeight="SemiBold" Background="#FF404040" Style="{StaticResource roundedButton}" Margin="20 0 10 0" Click="Cancel_btn_Click">
 
                 </Button>
-                <Button Name="Confirm_btn" Grid.Column="1" Content="확인" Foreground="White" FontSize="20" FontWeight="SemiBold" Background="#FFF0C05A" Style="{StaticResource roundedButton}" Margin="10 0 20 0" Click="Confirm_btn_Click">
+                <Button Name="Confirm_btn" Grid.Column="1" Content="확인" Foreground="White" FontSize="10" FontWeight="SemiBold" Background="#FFF0C05A" Style="{StaticResource roundedButton}" Margin="10 0 20 0" Click="Confirm_btn_Click">
                 </Button>
             </Grid>
         </Grid>

@@ -10,6 +10,7 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/add.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/add_white.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/allclelogo.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/delete_white.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_off.png")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("source/images/graduation_on.png")]

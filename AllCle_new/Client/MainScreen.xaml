@@ -20,7 +20,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="button_border" Property="Background" Value="red"/>
+                                <Setter TargetName="button_border" Property="Background" Value="#FFFFFF61"/>
                                 <Setter TargetName="button_border" Property="Cursor" Value="Hand"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -40,7 +40,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="button_border" Property="Background" Value="red"/>
+                                <Setter TargetName="button_border" Property="Background" Value="#FFFFFF61"/>
                                 <Setter TargetName="button_border" Property="Cursor" Value="Hand"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -283,24 +283,15 @@
                 <Border Grid.Row="3" Margin="10,0,10,5">
                     <Button x:Name="UserInfoEdit_btn" Content="회원정보수정" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
                             BorderThickness="0" Style="{StaticResource roundedButton_yellow}" Click="UserInfoEdit_btn_Click">
-                        <Button.BitmapEffect>
-                            <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
-                        </Button.BitmapEffect>
                     </Button>
                 </Border>
                 <Border Grid.Row="4" Margin="10,0,10,5">
                     <Button x:Name="Logout_btn" Content="로그아웃" Foreground="gray" Background="#FFFFC53D" Grid.Row="2" Grid.Column="0" 
                             BorderThickness="0" Click="Logout_btn_Click" Style="{StaticResource roundedButton_yellow}">
-                        <Button.BitmapEffect>
-                            <DropShadowBitmapEffect Color="Black" Direction="0" ShadowDepth="1" Opacity="0.5"/>
-                        </Button.BitmapEffect>
                     </Button>
                 </Border>
             </Grid>
             <Border  Grid.Row="1" Background="#FFF0C05A" BorderThickness="0" Margin="0" VerticalAlignment="Center">
-                <Border.Effect>
-                    <DropShadowEffect Opacity="0.5" Direction="70" ShadowDepth="1" BlurRadius="3" />
-                </Border.Effect>
                 <TextBlock x:Name="tabBarTimeTable" Text="시간표" Foreground="gray" FontSize="20" Margin="0,0,0,0" 
                            FontFamily="Malgun Gothic" Background="#FFF0C05A"/>
             </Border>
@@ -317,7 +308,7 @@
                                 <Setter Property="Background" Value="Yellow"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Background" Value="Red"/>
+                                <Setter Property="Background" Value="Yellow"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -843,8 +834,7 @@
                                         <Style TargetType="Border">
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="true">
-                                                    <Setter Property="BorderBrush" Value="Red"/>
-                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
@@ -863,8 +853,7 @@
                                         <Style TargetType="Border">
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="true">
-                                                    <Setter Property="BorderBrush" Value="Red"/>
-                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
@@ -883,8 +872,7 @@
                                         <Style TargetType="Border">
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="true">
-                                                    <Setter Property="BorderBrush" Value="Red"/>
-                                                    <Setter Property="BorderThickness" Value="2"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>

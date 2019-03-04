@@ -42,6 +42,6 @@
             </ComboBox>
             <TextBlock Name="major_cbox_text" Grid.Column="3" Text="공과대학" Visibility="Collapsed"/>
         </Grid>
-        <Button Grid.Row="2" Content="로그인" Margin ="10" Click="Button_Click"/>
+        <Button Grid.Row="2" Content="로그인" Margin ="10" BorderThickness="0" Click="Button_Click"/>
     </Grid>
 </Window>

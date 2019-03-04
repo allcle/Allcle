@@ -210,7 +210,7 @@
                             </Trigger>
                             <Trigger Property="IsFocused" Value="true">
                                 <Setter TargetName="PW_Cover" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="blue"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#ffff6060"/>
                                 <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="true">
@@ -238,7 +238,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="true">
                                 <Setter Property="BorderThickness" TargetName="border" Value="2"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="blue"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#ffff6060"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

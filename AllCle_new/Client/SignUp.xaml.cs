@@ -123,7 +123,7 @@ namespace Client
                         id = ID_box.Text + "@" + email_tbk.Text;
                     PostUser(id, PW_Box.Password, YearOfEntry_cbx.Text, College_cbx.Text, major);
                     System.Windows.MessageBox.Show("회원가입이 완료되었습니다");
-                    this.Close();
+                    this.Hide();
                 }
                 else
                 {

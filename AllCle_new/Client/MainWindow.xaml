@@ -263,7 +263,7 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Image Source="source\images\add.png" Margin="40">
+            <Image Source="source\images\AllCleLogo.png" Margin="40">
                 <Image.OpacityMask>
                     <RadialGradientBrush  Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
                         <GradientStop Color="#ffffffff" Offset="1" />

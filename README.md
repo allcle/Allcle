@@ -7,6 +7,7 @@ haninsoo9989@gmail.com / dlrmswn95@gmail.com
 
 ### 개요
 * Collaborater : <b> 한인수 </b>, <b> 이근주 </b>
+  + https://github.com/his9989
   + https://github.com/GeunJuLEE
 * belong to Allcle develop Team
   + https://github.com/allcle

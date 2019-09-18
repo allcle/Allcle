@@ -1,12 +1,12 @@
 # Allcle
 
 #### ============================================================
-Copyright ⓒ 2019.09.17 Han-InSoo and Lee-GeunJu  belong to Allcle dev team
+Copyright ⓒ 2019.09.17 Han-InSoo and Lee-GeunJu  belong to Allcle dev team </br>
 haninsoo9989@gmail.com / dlrmswn95@gmail.com
 #### ============================================================
 
 ### 개요
-* Collaborater : HIS, IGJ
+* Collaborater : <b> 한인수 </b>, <b> 이근주 </b>
   + https://github.com/GeunJuLEE
 * belong to Allcle develop Team
   + https://github.com/allcle
